@@ -7,18 +7,17 @@ import {useParams} from 'react-router-dom'
 
   
 
-function Letter(){
+function Letter(props){
+    console.log('letter##');
+    console.log(props);
     
     let { id } = useParams();
     
     return (
-
-        <>
-        <h1> LETTER </h1>
-
-        <h2>ID was {id} </h2>
-            
-        </>
+        <div style={{padding: '30px'}}>sdSAFDSF  sdfasdfasdsdfsdf
+        asdfasdfasdfasdf
+        asdfasdfasdfasdfasdfasdf
+        asdfasdfasdfasdfasdfasdfasd</div>
     );
 }
 

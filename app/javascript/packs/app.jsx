@@ -5,6 +5,9 @@ import Letter from '../packs/letter.jsx'
 import Feedback from '../packs/feedback.jsx'
 import Home from '../packs/home.jsx'
 import Story from '../packs/story.jsx'
+import Header from '../packs/header'
+
+import GlobalStyles from "./global"
 
 import {
     BrowserRouter as Router,
@@ -54,28 +57,26 @@ function App(stuff){
     console.log(stuff.story.title);
     return (
         <Router>
+            <GlobalStyles/>
+                <Header />
+                
+                <Switch>
+
+                    <Route exact path="/" render={ (props) => <Home {...props} wtf={stuff.story} payload={stuff.payload} />}/>
+
+                    <Route path="/letter" component={Letter} />
+                    
+                    <Route path="/feedback" component={Feedback} />
+                    
+                    <Route path="/story" componet={Story} />
+                        
+
+                    <Route path="/blog/:id" component={Letter} />
+                    
+                        
+                    
+                </Switch>
             
-            <Switch>
-                <Route path="/letter">
-                    <Letter />
-                </Route>
-                <Route path="/feedback">
-                    <Feedback />
-                </Route>
-                <Route path="/story">
-                    <Story />
-                </Route>
-
-                <Route path="/:id" >
-
-                    <Letter />
-                
-                </Route>
-                <Route path="/">
-                    <Home wtf={stuff.story} payload={stuff.payload}    />
-                </Route>
-                
-            </Switch>
         </Router>
     );
 }

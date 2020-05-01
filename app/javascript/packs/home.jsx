@@ -43,9 +43,9 @@ const Div = styled.div`
 
 `;
 
-function Home({wtf, payload}){
+function Home(props){
     console.log("hooome =>" + slugify('thsd sdsd sdfsd'))
-    console.log(wtf.body)
+    console.log(props)
     
     return (
         
@@ -62,10 +62,10 @@ function Home({wtf, payload}){
                 <Div>new Story</Div>
             </Link>
             
-            {wtf.map((info, index) => (
+            {props.wtf.map((info, index) => (
                 
                 
-                <Link key={index} to={'/' + slugify(info.title) }>
+                <Link key={index} to={'/blog/' + slugify(info.title) }>
                     <Div >
                         <h1> {info.title} </h1>
 
