@@ -1,23 +1,30 @@
 import React, {useEffect, useState, useRef} from 'react';
 import styled, { ThemeProvider } from 'styled-components';
-import NewForm from '../packs/form.jsx'
+
+import {useParams} from 'react-router-dom'
+import { instanceOf } from 'prop-types';
+  
+
+const StorySection = styled.section`
+
+    width:100%;
+    height: 350px;
+    border: 1px solid orange;
 
 
+`;
+  
 
-
-function Story(){
+function Story(props){
     
-    
-    
+    console.log("SSSSSSS");
+    console.log(props);
     return (
+        <StorySection>
+           
+            <img src={props.image} style={{width: "100%"}} />
 
-        <>
-        <h1> STORY FORM </h1>
-
-        <NewForm  />
-        
-       </>     
-        
+        </StorySection>
     );
 }
 

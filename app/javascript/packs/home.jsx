@@ -1,8 +1,9 @@
 import React, {useEffect, useState, useRef} from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 
-import Letter from '../packs/letter.jsx'
-import Feedback from '../packs/feedback.jsx'
+//import Letter from '../packs/letter.jsx'
+//import Feedback from '../packs/feedback.jsx'
+//import Admin from '../packs/admin.jsx'
 import Story from '../packs/story.jsx'
 
 import slugify from 'react-slugify'
@@ -34,14 +35,7 @@ const Wrapper = styled.div`
 `;
 
 
-const Div = styled.div`
 
-    width:100%;
-    height: 350px;
-    background-color: pink;
-
-
-`;
 
 function Home(props){
     console.log("hooome =>" + slugify('thsd sdsd sdfsd'))
@@ -53,38 +47,22 @@ function Home(props){
         
         <Wrapper>
             <Link to="/feedback">
-                <Div>Feedback inner</Div>
+                <Story>Feedback inner</Story>
             </Link>
             <Link to="/letter">
-                <Div>inner Leter</Div>
+                <Story>inner Leter</Story>
             </Link>
-            <Link to="/story">
-                <Div>new Story</Div>
+            <Link to="/ziploker">
+                <Story>new Story (from home.jsx)</Story>
             </Link>
             
-            {props.wtf.map((info, index) => (
-                
-                
-                <Link key={index} to={'/blog/' + slugify(info.title) }>
-                    <Div >
-                        <h1> {info.title} </h1>
-
-                        <h3> {info.keywords} </h3>
-                        <h3> {index}</h3>
-                        <h3> {info.id}</h3>
-                        <p> {info.body} </p>
-                    
-                    
-                    
-                    </Div>
-                </Link>
-                
-                
-                
-                
-                
-               
-            ))}
+        {props.wtf.map((info, index) => (
+            
+            
+            <Link key={index} to={'/blog/' + slugify(info.title) }>
+                <Story info={info} image={props.image}/>
+            </Link>
+        ))}
 
             
         </Wrapper>  

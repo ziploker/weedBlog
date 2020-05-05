@@ -42,6 +42,9 @@ const OptionWrapper = styled.div`
 `;
 
 
+const formData = new FormData();
+
+
 
 function NewForm(props) {
 
@@ -54,6 +57,9 @@ function NewForm(props) {
     keywords: '',
     //phoneIsFocused: false,
     body: '',
+
+
+    image: []
     //emailIsFocused: false,
     //company: '',
     //companyIsFocused: false,
@@ -73,6 +79,19 @@ function NewForm(props) {
     e.preventDefault();
     
     if (validForm()) {
+
+
+     
+     
+     formData.append('event[title]', state.title);
+     formData.append('event[keywords]', state.keywords);
+     formData.append('event[body]', state.body);
+     
+     formData.append('test', "69");
+
+
+     console.log(formData);
+
       
       //get token for form submission
       const csrf = document.querySelector("meta[name='csrf-token']").getAttribute("content");  
@@ -84,14 +103,13 @@ function NewForm(props) {
           'X-CSRF-Token': csrf
         },
         method: 'POST',
-        data: { 
-          event: {
-            title: state.title,
-            keywords: state.keywords,
-            body: state.body,
+        data: 
+          formData,
+          contentType: false,
+          processData: false
             
-          }
-        },
+          
+        ,
         success: function(data) {
           //props.handleAdd(data);
           setState({
@@ -100,6 +118,8 @@ function NewForm(props) {
             title: '',
             keywords: '',
             body: '',
+
+            image: null
             //company: '',
             //zip:  '',
             //message: '',
@@ -173,6 +193,13 @@ function NewForm(props) {
 
   }
 
+  const handleImageChange = event => {
+
+    console.log("chd");
+    console.log(event.target);
+    formData.append('event[image]', event.target.files[0]);
+  }
+
   const { focussed, value, error, label } = state;
   const { id, type, locked } = props;
   //const fieldClassName = `field ${(locked ? focussed : focussed || value) && 'focussed'}`;
@@ -181,7 +208,7 @@ function NewForm(props) {
   return(
 
     <FormWrapper>
-      <Form className="form-inline" onSubmit={handleAdd} >
+      <Form className="form-inline" onSubmit={handleAdd} enctype="multipart/form-data" >
         
         
         <div className="field" >
@@ -223,14 +250,14 @@ function NewForm(props) {
         
           <input type="file"
                 index={3}
-                
+                accept="image/*"
                 className="form-control"
                 name="image"
                 //focus="phoneIsFocused"
                 //placeholder="tags keywords etc..."
                 
-                value={state.image}
-                onChange={handleChange} 
+                
+                onChange={handleImageChange} 
                 
               
                 />

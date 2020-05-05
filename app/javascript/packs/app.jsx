@@ -4,7 +4,7 @@ import styled, { ThemeProvider } from 'styled-components';
 import Letter from '../packs/letter.jsx'
 import Feedback from '../packs/feedback.jsx'
 import Home from '../packs/home.jsx'
-import Story from '../packs/story.jsx'
+import Admin from '../packs/admin.jsx'
 import Header from '../packs/header'
 
 import GlobalStyles from "./global"
@@ -58,17 +58,18 @@ function App(stuff){
     return (
         <Router>
             <GlobalStyles/>
+                
                 <Header />
                 
                 <Switch>
 
-                    <Route exact path="/" render={ (props) => <Home {...props} wtf={stuff.story} payload={stuff.payload} />}/>
-
+                    <Route exact path="/" render={ (props) => <Home {...props} wtf={stuff.story} payload={stuff.payload} image={stuff.image}/>}/>
+                    <Route exact path="/ziploker/add" component={Admin} />
                     <Route path="/letter" component={Letter} />
                     
                     <Route path="/feedback" component={Feedback} />
                     
-                    <Route path="/story" componet={Story} />
+                   
                         
 
                     <Route path="/blog/:id" component={Letter} />
