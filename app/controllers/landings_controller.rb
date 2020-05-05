@@ -34,4 +34,3 @@ class LandingsController < ApplicationController
         end
     end
 end
-user
