@@ -1,6 +1,10 @@
 {
   "name": "weedBlog",
   "private": true,
+  "engines": {
+    "node": "13.12.x",
+    "yarn": "1.21.x"
+  },
   "dependencies": {
     "@babel/preset-react": "^7.9.4",
     "@rails/actioncable": "^6.0.0",
