@@ -9,10 +9,40 @@ const StorySection = styled.section`
 
     width:100%;
     height: 350px;
-    border: 1px solid orange;
+    //border: 1px solid orange;
+    
+    
+    border-bottom: 1px solid orange;
 
 
 `;
+
+
+const StoryImage = styled.img`
+
+    width:100%;
+    border-top-left-radius: 69px;
+    border-top-right-radius: 17px;
+
+
+`;
+
+const StoryInfo = styled.h1`
+
+    margin: 0px;
+    padding: 0px;
+
+    text-align: start;
+
+
+`;
+
+const StoryBody = styled.p`
+
+    sdfsdfsdfsdf.sdfsdfwd sdfsdfsd sdfsdfsdfs sdfsdfsdfsdf
+
+`;
+  
   
 
 function Story(props){
@@ -22,7 +52,17 @@ function Story(props){
     return (
         <StorySection>
            
-            <img src={props.image} style={{width: "100%"}} />
+            <StoryImage src={props.image}  />
+            <StoryInfo >
+
+            {props.info ? props.info.keywords : null}
+
+            </StoryInfo>
+            <StoryBody >
+
+                {props.info ? props.info.title :  null }
+
+            </StoryBody>
 
         </StorySection>
     );
