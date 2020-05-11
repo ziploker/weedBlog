@@ -19,7 +19,7 @@ const Wrapper = styled.div`
 
     display: grid;
     grid-template-columns: minmax(200px, 700px);
-    grid-gap: 10px;
+    grid-gap: 20px;
     justify-content: center;
 
     @media screen and (min-width: 750px){
@@ -46,23 +46,15 @@ function Home(props){
 
         
         <Wrapper>
-            <Link to="/feedback">
-                <Story>Feedback inner</Story>
-            </Link>
-            <Link to="/letter">
-                <Story>inner Leter</Story>
-            </Link>
-            <Link to="/ziploker">
-                <Story>new Story (from home.jsx)</Story>
-            </Link>
-            
-        {props.wtf.map((info, index) => (
             
             
-            <Link key={index} to={'/blog/' + slugify(info.title) }>
-                <Story info={info} image={props.image}/>
-            </Link>
-        ))}
+            {props.wtf.map((info, index) => (
+                
+                
+                <Link key={index} to={'/blog/' + slugify(info.title) }>
+                    <Story info={info} image={props.image}/>
+                </Link>
+            ))}
 
             
         </Wrapper>  

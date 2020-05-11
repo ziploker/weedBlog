@@ -23,6 +23,7 @@ a, a:active, a:focus{
     font-family: 'Ubuntu', sans-serif;
     overflow-x: hidden;
     /*overflow-y: scroll;*/
+    padding: 0px 10px 0px;
     
 }
   }
