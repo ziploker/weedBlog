@@ -12,8 +12,11 @@ class LandingsController < ApplicationController
         
         @story = Story.all
 
+        @googleGeoApi = Rails.application.credentials.dig(:google, :geoapi)
         
 
+        
+        #puts "google api is = " + @googleGeoApi
         
 
         #@image = "http://localhost.com/" + @image
@@ -25,12 +28,12 @@ class LandingsController < ApplicationController
 
         #@image = rails_blob_url(lastStory.image, only_path: true) if lastStory.image.attached?
 
-        if @story.count > 0 
+        ##if @story.count > 0 
 
-            lastStory = Story.last
+        ##    lastStory = Story.last
         
-            @image = lastStory.image.service_url&.split("?")&.first 
-            @imagelong = lastStory.image.service_url 
-        end
+        ##    @image = lastStory.image.service_url&.split("?")&.first 
+        ##    @imagelong = lastStory.image.service_url 
+        ##end
     end
 end

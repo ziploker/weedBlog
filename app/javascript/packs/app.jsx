@@ -6,6 +6,10 @@ import Feedback from '../packs/feedback.jsx'
 import Home from '../packs/home.jsx'
 import Admin from '../packs/admin.jsx'
 import Header from '../packs/header'
+import LookupSection from '../packs/lookupSection.jsx'
+import Footer from '../packs/footer.jsx'
+
+import '../../assets/stylesheets/sticky.scss'
 
 import GlobalStyles from "./global"
 
@@ -45,7 +49,7 @@ const Div = styled.div`
 
 `;
 
-function App(stuff){
+function App({story}){
     //const [story, setStory] = React.useState({
 
         //story: JSON.stringify(props.story)
@@ -53,23 +57,53 @@ function App(stuff){
         
     
       //})
+
+    
+    const [isSticky, setSticky] = useState(false);
+    const ref = useRef(null);
+    const handleScroll = () => {
+
+        //console.log(ref.current.getBoundingClientRect() )
+        
+        //setSticky(ref.current.getBoundingClientRect().top <= -90);
+
+
+        if (document.body.scrollTop > 70 || document.documentElement.scrollTop > 70) {
+            //document.getElementById("header").style.fontSize = "30px";
+
+          } else {
+            //document.getElementById("header").style.fontSize = "90px";
+          }
+        
+    };
+
+    useEffect(() => {
+        window.addEventListener('scroll', handleScroll);
+
+        return () => {
+            window.removeEventListener('scroll', () => handleScroll);
+        };
+    },[]);
+    
     console.log("appp")
-    console.log(stuff.story.title);
+    console.log(story.title);
     return (
         <Router>
             <GlobalStyles/>
                 
-                <Header />
+                    
+                <Header/>
+                
                 
                 <Switch>
 
-                    <Route exact path="/" render={ (props) => <Home {...props} wtf={stuff.story} payload={stuff.payload} image={stuff.image}/>}/>
-                    <Route exact path="/ziploker/add" component={Admin} />
+                    <Route exact path="/" render={ (props) => <Home {...props} story={story} />}/>
+                    <Route exact path="/ziploker" component={Admin} />
                     <Route path="/letter" component={Letter} />
                     
                     <Route path="/feedback" component={Feedback} />
                     
-                   
+                
                         
 
                     <Route path="/blog/:id" component={Letter} />
@@ -77,10 +111,14 @@ function App(stuff){
                         
                     
                 </Switch>
-            
+
+                <LookupSection/>
+
+                <Footer/>
+                
         </Router>
     );
 }
 
 
-export default stuff => <App {...stuff} />;
+export default story => <App {...story} />;

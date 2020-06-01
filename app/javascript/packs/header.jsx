@@ -1,7 +1,9 @@
-import react from 'react'
-import Logo from '../../assets/images/logoPlaceholder.svg'
+import React, {useEffect, useState} from 'react'
+import Logo from '../../assets/images/logoPlaceholder.jpg'
 import styled from 'styled-components';
 import {Link} from 'react-router-dom';
+
+import useDocumentScrollThrottled from './useDocumentScrollThrottled.jsx'
 
 const HeaderWrapper = styled.header`
 
@@ -13,10 +15,27 @@ const HeaderWrapper = styled.header`
     width: 100%;
     margin-bottom: 25px;
 
-
+    background-color: gray;
     
    
     padding: 0px 8%;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1;
+
+    transform: translateY(0);
+    transition: all 0.3s ease;
+
+    &.shadow {
+        box-shadow: 0 9px 9px -9px rgba(0, 0, 0, 0.13);
+    }
+
+    &.hidden {
+        transform: translateY(-110%);
+        //height: 50px;
+    }
    
 
 `;
@@ -111,16 +130,49 @@ const OptionLink = styled(Link)`
 
 
 
-import React from 'react'
+
 
 function Header() {
+
+
+    const [shouldHideHeader, setShouldHideHeader] = useState(false);
+    const [shouldShowShadow, setShouldShowShadow] = useState(false);
+    
+
+    const MINIMUM_SCROLL = 80;
+    const TIMEOUT_DELAY = 400;
+
+    useDocumentScrollThrottled(callbackData => {
+        const { previousScrollTop, currentScrollTop } = callbackData;
+        const isScrolledDown = previousScrollTop < currentScrollTop;
+        const isMinimumScrolled = currentScrollTop > MINIMUM_SCROLL;
+       
+        setShouldShowShadow(currentScrollTop > 2);
+
+        setTimeout(() => {
+        setShouldHideHeader(isScrolledDown && isMinimumScrolled);
+        }, TIMEOUT_DELAY);
+    });
+
+
+
+
+
+
+    const shadowStyle = shouldShowShadow ? 'shadow' : '';
+    const hiddenStyle = shouldHideHeader ? 'hidden' : '';
+
+
+
+
+
     return (
-        <HeaderWrapper>
+        <HeaderWrapper className={`header ${hiddenStyle} ${shadowStyle}`}>
             
             
                 
             <HomeLink to='/'>
-                <img style={{height: '100%'}}src={Logo}/>
+                <img style={{height: '100%', color: "#ffa680"}}src={Logo}/>
             </HomeLink>
             
             
@@ -153,4 +205,4 @@ function Header() {
 
 
 
-export default props => <Header {...props} />
+export default props => <Header {...props}  />

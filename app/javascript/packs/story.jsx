@@ -3,11 +3,23 @@ import styled, { ThemeProvider } from 'styled-components';
 
 import {useParams} from 'react-router-dom'
 import { instanceOf } from 'prop-types';
+
+
+import {
+    
+    FacebookShareButton,
+    FacebookIcon,
+    TwitterShareButton,
+    TwitterIcon,
+    WhatsappShareButton,
+    WhatsappIcon,
+  
+} from "react-share";
   
 
 const StorySection = styled.section`
 
-    width:100%;
+    max-width:450px;
     //height: 350px;
     //border: 1px solid orange;
     
@@ -16,14 +28,14 @@ const StorySection = styled.section`
     //border-top-left-radius: 17px;
     //border-top-right-radius: 17px;
 
-
+    
     display: grid;
     grid-template-rows: 30% 2em 1fr;  
 
     grid-template-areas:
-        "picture"
+        "body"
         "grayArea"
-        "body";
+        "picture";
 
 
 `;
@@ -34,20 +46,18 @@ const StoryImageWrapper = styled.div`
     border-top-left-radius: 17px;
     border-top-right-radius: 17px;
 
-    grid-area: 1 / 1 / 3 / 2; 
+    
+    grid-area: picture;
     
     
     
    
     
-    background: rgba(255,255,255,0);
-    background: -moz-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,0.6) 60%, rgba(255,255,255,0.98) 98%, rgba(255,255,255,1) 100%);
-    background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(255,255,255,0)), color-stop(60%, rgba(255,255,255,0.6)), color-stop(98%, rgba(255,255,255,0.98)), color-stop(100%, rgba(255,255,255,1)));
-    background: -webkit-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,0.6) 60%, rgba(255,255,255,0.98) 98%, rgba(255,255,255,1) 100%);
-    background: -o-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,0.6) 60%, rgba(255,255,255,0.98) 98%, rgba(255,255,255,1) 100%);
-    background: -ms-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,0.6) 60%, rgba(255,255,255,0.98) 98%, rgba(255,255,255,1) 100%);
-    background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.6) 60%, rgba(255,255,255,0.98) 98%, rgba(255,255,255,1) 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ffffff', GradientType=0 );
+    
+    
+
+    
+    
 
 
 
@@ -55,12 +65,25 @@ const StoryImageWrapper = styled.div`
 const StoryImage = styled.img`
 
     width:100%;
+    height: 100%;
     border-top-left-radius: 17px;
     border-top-right-radius: 17px;
     position: relative;
     
     z-index: -20;
 
+    
+
+
+`;
+
+const LeftWrapper = styled.div`
+
+
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    width: 100%;
 
 `;
 
@@ -75,8 +98,8 @@ const StoryInfoWrapper = styled.div`
     text-align: start;
 
     display: flex;
-    justify-content: start;
-    align-items: end;
+    justify-content: space-between;
+    align-items: center;
 
     
 
@@ -88,25 +111,73 @@ const StoryInfo = styled.h3`
     
     margin: 0px;
     padding: 0px;
-    font-size: .7em;
-    padding-left: 14px;
+    font-size: .5em;
+    padding-left: 10px;
+    color: #818080;
+
+
+`;
+
+const StoryShareButtons = styled.div`
+
+    
+    display: flex;
+    justify-content: space-between;
+
     
 
+
+`;
+
+
+const StoryTags = styled.div`
+
+    
+    width: 80px;
+    height: 25px;
+    border-radius: 4px;
+    background-color: orange;
+    opacity: .6;
+    
+
+
+`;
+
+const Tag = styled.h3`
+
+    
+   color: white;
+   margin: 0px;
+    text-align: center;
+    line-height: 25px;
+    font-size: .7em;
+    
+
+
+`;
+
+const StoryBodyWrapper = styled.div`
+
+    
+    text-align: center;
 
 `;
 
 const StoryBody = styled.h1`
 
-    font-size: 2.6em;
     
+    font-weight: 700;
     grid-area: body;
     margin: 0px;
-    padding: 0px;
-    padding-left: 19px;
-    padding-right: 19px;
+    padding: 10px 11px 11px 11px;
+    
     
 
 `;
+
+
+
+
   
   
 
@@ -121,20 +192,41 @@ function Story(props){
                 <StoryImage src={props.info ? props.info.url : null}  />
             </StoryImageWrapper>
             
+            
+            
             <StoryInfoWrapper >
+                
+                
+                <StoryShareButtons>
+                    <FacebookShareButton children={<FacebookIcon size={25} round={false} borderRadius={17} />} url={"www.420.com"} style={{marginRight: "3px"}} />
+                    <TwitterShareButton children={<TwitterIcon size={25} round={false} borderRadius={17}/>} url={"www.420.com"} style={{marginRight: "3px"}}/>
+                    <WhatsappShareButton children={<WhatsappIcon size={25} round={false} borderRadius={17}/>} url={"www.420.com"} />
+                </StoryShareButtons>
 
                 <StoryInfo>
 
                     {props.info ? props.info.date : "nada"}
+                    
                 </StoryInfo>
+            
+
+                <StoryTags>
+                    <Tag>
+                        {props.info ? props.info.topic : null}
+                    </Tag>
+                </StoryTags>
 
             </StoryInfoWrapper>
             
-            <StoryBody >
+            
+            
+            <StoryBodyWrapper>
+                <StoryBody >
 
-                {props.info ? props.info.title :  null }
+                    {props.info ? props.info.title :  null }
 
-            </StoryBody>
+                </StoryBody>
+            </StoryBodyWrapper>
 
         </StorySection>
     );

@@ -20,10 +20,17 @@ a, a:active, a:focus{
   
   body {
     
-    font-family: 'Ubuntu', sans-serif;
+    font-family: 'Roboto', sans-serif;
     overflow-x: hidden;
+    
     /*overflow-y: scroll;*/
     padding: 0px 10px 0px;
+    font-size: calc(14px + (26 - 14) * ((100vw - 300px) / (1600 - 300)));
+    line-height: calc(1.3em + (1.5 - 1.2) * ((100vw - 300px)/(1600 - 300)));
+    background-color: #f9f6ef;
+
+    padding: 0px;
+    margin: 0px;
     
 }
   }

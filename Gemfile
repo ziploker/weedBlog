@@ -2,11 +2,12 @@ source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '2.6.5'
-
+gem 'hash_dot'
 gem 'image_processing', '~> 1.2'
-
+gem 'httparty'
 gem "aws-sdk-s3", require: false
-
+gem 'pry-rails', :group => :development
+gem 'typhoeus', '~> 1.1'
 gem 'react_on_rails', '11.1.4'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 6.0.2', '>= 6.0.2.2'

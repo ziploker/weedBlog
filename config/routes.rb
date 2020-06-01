@@ -8,7 +8,8 @@ Rails.application.routes.draw do
 
 
   resources :stories
-
+  post '/lookup', to: 'lookups#incomming'
+  
   root to: 'landings#index'
 
   match '*path', to: 'landings#index', via: :all

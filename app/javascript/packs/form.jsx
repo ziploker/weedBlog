@@ -55,6 +55,7 @@ function NewForm(props) {
     title: '',
     //nameIsFocused: false,
     keywords: '',
+    topic: '',
     //phoneIsFocused: false,
     body: '',
 
@@ -85,11 +86,12 @@ function NewForm(props) {
      
      formData.append('event[title]', state.title);
      formData.append('event[keywords]', state.keywords);
+     formData.append('event[topic]', state.topic);
      formData.append('event[body]', state.body);
      
-     formData.append('test', "69");
+     
 
-
+     console.log("formdata from handle add");
      console.log(formData);
 
       
@@ -117,23 +119,14 @@ function NewForm(props) {
             //focussed: (props.focussed) || false,
             title: '',
             keywords: '',
+            topic: '',
             body: '',
 
             image: null
-            //company: '',
-            //zip:  '',
-            //message: '',
-            //error: props.error || ''
+            
           });
           alert('Upload worked');
-          //var e = document.getElementById('select');
-          //console.log("eeeeeeeeeee is = " + e.value);
           
-          //if (e.value != 'null') {
-          // e.style.color = 'white';
-          //} else {
-          // e.style.color = 'green';
-         // }
     
         },
         error: function(xhr, status, error) {
@@ -147,7 +140,7 @@ function NewForm(props) {
 
   
   const validForm = () => {
-    if (state.title && state.keywords &&
+    if (state.title && state.keywords && state.topic &&
         state.body ) {
       return true;
     } else {
@@ -155,16 +148,9 @@ function NewForm(props) {
     }
   }
 
-  //handleChange = e => {
-  //  var input_name = e.target.name;
-  //  var value = e.target.value;
-
-  //  console.log("input_name is " + input_name)
-  //  console.log("value is " + value)
-  //  this.setState({ [input_name] : value });
-  //}
-
+  
   const handleChange = event => {
+    console.log("handle change from form")
     console.log(event)
 
     const v = event.target.value;
@@ -246,6 +232,25 @@ function NewForm(props) {
           
         </div>
 
+
+        <div className="field">
+        
+          <input type="text"
+                
+                
+                className="form-control"
+                name="topic"
+                //focus="phoneIsFocused"
+                placeholder="Local or National etc.."
+                
+                value={state.topic}
+                onChange={handleChange} 
+                
+              
+                />
+          
+        </div>
+
        <div className="field">
         
           <input type="file"
@@ -295,12 +300,7 @@ function NewForm(props) {
 //const ReCaptcha = styled.div``;
 
 
-const handleAdd = (event) => {
-  //var events = this.state.events;
-  //events.push(event);
-  //this.setState({ events: events });
-  console.log(event);
-}
+
 
 
 

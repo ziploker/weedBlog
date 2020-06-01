@@ -21,10 +21,20 @@ const Wrapper = styled.div`
     grid-template-columns: minmax(200px, 700px);
     grid-gap: 20px;
     justify-content: center;
+    justify-items: center;
+    margin-top: 90px;
 
     @media screen and (min-width: 750px){
+        grid-template-columns: 1fr 1fr;
+        grid-gap: 20px;
+        justify-content: center;
+        //justify-items: center;
+        
+    }
+
+    @media screen and (min-width: 1111px){
         grid-template-columns: minmax(245px, 400px) minmax(245px, 400px) minmax(245px, 400px);
-        grid-gap: 10px;
+        grid-gap: 20px;
         justify-content: center;
         //justify-items: center;
         
@@ -37,9 +47,8 @@ const Wrapper = styled.div`
 
 
 
-function Home(props){
-    console.log("hooome =>" + slugify('thsd sdsd sdfsd'))
-    console.log(props)
+function Home({story}){
+    
     
     return (
         
@@ -48,12 +57,12 @@ function Home(props){
         <Wrapper>
             
             
-            {props.wtf.map((info, index) => (
+            {story.map((info, index) => (
                 
                 
-                <Link key={index} to={'/blog/' + slugify(info.title) }>
-                    <Story info={info} image={props.image}/>
-                </Link>
+                <div key={index}>
+                    <Story info={info} />
+                </div>
             ))}
 
             
@@ -66,3 +75,6 @@ function Home(props){
 
 
 export default props => <Home {...props} />;
+
+
+//<Link key={index} to={'/blog/' + slugify(info.title) }>
