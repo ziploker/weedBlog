@@ -9,7 +9,7 @@ class LookupsController < ApplicationController
   require './lib/web_scraper.rb'
   require 'nokogiri'
   require 'httparty'
-  require 'net/http'
+  require 'pry'
 
     
   
