@@ -63,7 +63,7 @@ function App({story}){
     const ref = useRef(null);
     const handleScroll = () => {
 
-        //console.log(ref.current.getBoundingClientRect() )
+        //consomle.log(ref.current.getBoundingClientRect() )
         
         //setSticky(ref.current.getBoundingClientRect().top <= -90);
 
@@ -95,8 +95,10 @@ function App({story}){
                 <Header/>
                 
                 <LookupSection/>
+                
                 <Switch>
 
+                    
                     <Route exact path="/" render={ (props) => <Home {...props} story={story} />}/>
                     <Route exact path="/ziploker" component={Admin} />
                     <Route path="/letter" component={Letter} />
@@ -111,7 +113,7 @@ function App({story}){
                         
                     
                 </Switch>
-
+                
                 
 
                 <Footer/>
