@@ -1,15 +1,15 @@
 
 
 class LookupsController < ApplicationController
-  
+  require 'pry'
   require 'httparty'
   require 'json'
   require 'hash_dot'
 
   require './lib/web_scraper.rb'
   require 'nokogiri'
-  require 'httparty'
-  require 'pry'
+  
+  
 
     
   

@@ -6,6 +6,7 @@ gem 'hash_dot'
 gem 'image_processing', '~> 1.2'
 gem 'httparty'
 gem "aws-sdk-s3", require: false
+gem 'pry', '~> 0.10.3'
 gem 'pry-rails', :group => :development
 gem 'typhoeus', '~> 1.1'
 gem 'react_on_rails', '11.1.4'
