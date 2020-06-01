@@ -94,7 +94,7 @@ function App({story}){
                     
                 <Header/>
                 
-                
+                <LookupSection/>
                 <Switch>
 
                     <Route exact path="/" render={ (props) => <Home {...props} story={story} />}/>
@@ -112,7 +112,7 @@ function App({story}){
                     
                 </Switch>
 
-                <LookupSection/>
+                
 
                 <Footer/>
                 
