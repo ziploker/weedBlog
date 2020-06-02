@@ -1,7 +1,7 @@
 
 
 class LookupsController < ApplicationController
-  require 'pry'
+  #require 'pry'
   require 'httparty'
   require 'json'
   require 'hash_dot'
