@@ -6,7 +6,7 @@ class LookupsController < ApplicationController
   require 'json'
   require 'hash_dot'
 
-  require './lib/web_scraper.rb'
+  #require './lib/web_scraper.rb'
   require 'nokogiri'
   
   
@@ -343,27 +343,33 @@ class LookupsController < ApplicationController
 
       senateSite = "flsenate.gov"
       houseSite = "myfloridahouse.gov"
-      puts "https://www.googleapis.com/customsearch/v1?q=#{search_phrase_encoded}&cx=003645805095083477600%3Aspconqqnalh&siteSearch=#{senateSite}&key=#{@googleGeoApi}"
-      thc = HTTParty.get("https://www.googleapis.com/customsearch/v1?q=#{search_phrase_encoded}&cx=003645805095083477600%3Aspconqqnalh&siteSearch=#{houseSite}&key=#{@googleGeoApi}")
+      puts "https://www.googleapis.com/customsearch/v1?q=#{search_phrase_encoded}&cx=003645805095083477600%3Agmzwtwcebd3&siteSearch=#{senateSite}&key=#{@googleGeoApi}"
+      thc = HTTParty.get("https://www.googleapis.com/customsearch/v1?q=#{search_phrase_encoded}&cx=003645805095083477600%3Agmzwtwcebd3&siteSearch=#{senateSite}&key=#{@googleGeoApi}")
     
-      theLink = thc["items"][0]["link"]
+      if thc["searchInformation"]["totalResults"] != "0"
+        theLink = thc["items"][0]["link"]
 
 
-      doc = HTTParty.get(theLink)
-     
-      @parse_page = Nokogiri::HTML(doc)
-
-      puts "=================nokogiri parse results====================="
-      #puts @parse_page
+        doc = HTTParty.get(theLink)
       
-      selector = "//a[starts-with(@href, \"mailto:\")]/@href"
+        @parse_page = Nokogiri::HTML(doc)
 
-      nodes = @parse_page.xpath selector
+        puts "=================nokogiri parse results====================="
+        #puts @parse_page
+        
+        selector = "//a[starts-with(@href, \"mailto:\")]/@href"
 
-      address = nodes.collect {|n| n.value[7..-1]}
+        nodes = @parse_page.xpath selector
 
-      puts address
-      
+        address = nodes.collect {|n| n.value[7..-1]}
+
+        puts address
+
+        sendToFrontEnd["#{whereIsSenate}"]["email"] = address
+       
+      else
+        puts "there were no match results"
+      end
       
     end
     
