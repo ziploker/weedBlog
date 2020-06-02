@@ -7,7 +7,7 @@ gem 'image_processing', '~> 1.2'
 gem 'httparty'
 gem "aws-sdk-s3", require: false
 gem 'pry', '~> 0.10.3'
-gem 'pry-rails', :group => :development
+#gem 'pry-rails', :group => :development
 gem 'typhoeus', '~> 1.1'
 gem 'react_on_rails', '11.1.4'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
@@ -37,8 +37,8 @@ gem 'bootsnap', '>= 1.4.2', require: false
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  #gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
-  
+  gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+
 end
 
 group :development do
