@@ -63,6 +63,7 @@ function LookupResults(props) {
         {console.log("inResults")}
         {console.log(props.results)}
         
+        
         <img src={props.results.one ? props.results.one.image : placeholder} style={{width: "143px", height: "200px"}}/>
         <h2>{props.results.one ? props.results.one.party : ""}</h2>
         <h1>{props.results.one ? props.results.one.name : "Name"}</h1>

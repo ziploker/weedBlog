@@ -109,7 +109,7 @@ class LookupsController < ApplicationController
 
 
     #object to be sent to frontend
-    sendToFrontEnd = {"one" => {"name" => "", "firstName" => "", "lastName" => "", "image" => "", "id" => "", "email" => "", "chamber" => "", "party" => ""}, "two" => {"name" => "", "firstName" => "", "lastName" => "", "image" => "", "id" => "", "email" => "", "chamber" => "", "party" => ""}}
+    sendToFrontEnd = {"one" => {"name" => "", "firstName" => "", "lastName" => "", "image" => "", "id" => "", "email" => "", "chamber" => "", "party" => "", "parent" => ""}, "two" => {"name" => "", "firstName" => "", "lastName" => "", "image" => "", "id" => "", "email" => "", "chamber" => "", "party" => "", "parent" => ""}}
 
 
     #disable any views being rendered
@@ -175,6 +175,7 @@ class LookupsController < ApplicationController
     sendToFrontEnd["one"]["image"] =  primaryOpenStatesResponse.data.people.edges[0].node.image
     sendToFrontEnd["one"]["id"] =  primaryOpenStatesResponse.data.people.edges[0].node.id
     sendToFrontEnd["one"]["chamber"] =  primaryOpenStatesResponse.data.people.edges[0].node.chamber[0].organization.name
+    sendToFrontEnd["one"]["parent"] =  primaryOpenStatesResponse.data.people.edges[0].node.chamber[0].organization.parent.name
 
     sendToFrontEnd["two"]["name"] =  primaryOpenStatesResponse.data.people.edges[1].node.name
     sendToFrontEnd["two"]["firstName"] =  primaryOpenStatesResponse.data.people.edges[1].node.givenName
@@ -182,7 +183,8 @@ class LookupsController < ApplicationController
     sendToFrontEnd["two"]["image"] =  primaryOpenStatesResponse.data.people.edges[1].node.image
     sendToFrontEnd["two"]["id"] =  primaryOpenStatesResponse.data.people.edges[1].node.id
     sendToFrontEnd["two"]["chamber"] =  primaryOpenStatesResponse.data.people.edges[1].node.chamber[0].organization.name
-    
+    sendToFrontEnd["two"]["parent"] =  primaryOpenStatesResponse.data.people.edges[1].node.chamber[0].organization.parent.name
+
     primaryOpenStatesResponse.data.people.edges[0].node.contactDetails.each do |object|
       
       if object.type === "email"
@@ -208,8 +210,12 @@ class LookupsController < ApplicationController
     puts sendToFrontEnd
     puts "=====================end: update hash with results from query =================="
     
-    
-    
+    puts "return if results are not from florida"
+
+    if sendToFrontEnd["one"]["parent"] != "Florida Legislature" && sendToFrontEnd["two"]["parent"] != "Florida Legislature"
+      render json: sendToFrontEnd.to_json
+      return
+    end
     
 
     #get openstates query 2of3 and convert it to json
@@ -457,7 +463,9 @@ class LookupsController < ApplicationController
 
         puts address
 
-        sendToFrontEnd["#{whereIsHouse}"]["email"] = address
+        puts address.class.to_s
+
+        sendToFrontEnd["#{whereIsHouse}"]["email"] = address[0]
 
         
       end
