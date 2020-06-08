@@ -167,9 +167,8 @@ function Header() {
 
 
     return (
-        <HeaderWrapper className={`header ${hiddenStyle} ${shadowStyle}`}>
-            
-            
+        //<HeaderWrapper className={`header ${hiddenStyle} ${shadowStyle}`}>
+        <HeaderWrapper>
                 
             <HomeLink to='/'>
                 <img style={{height: '100%', color: "#ffa680"}}src={Logo}/>

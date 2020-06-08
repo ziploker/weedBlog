@@ -21,7 +21,22 @@ const Section = styled.section`
 
 `;
 
-
+const FormWrapper = styled.div`
+  width: 100%;
+  max-width: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  //padding: 20px;
+  grid-column: 1 / -1
+  justify-self: start;
+  align-self: start;
+  justify-items: start;
+  max-height: ${ props => props.showForm.toString() == "true" ? "100%" : "0"};
+  opacity: ${ props => props.showForm.toString() == "true" ? "1" : "0"};
+  transition: opacity 2s, display 2s;
+  transition-timing-function: ease-in;
+`;
 const Form = styled.form`
 
   display: grid;
@@ -32,18 +47,12 @@ const Form = styled.form`
   
   //grid-gap: 1.5rem;
   //height: 175px;
-  max-width: 450px;
-
-`;
-
-
-const FormWrapper = styled.div`
   width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  //padding: 20px;
+
 `;
+
+
+
 
 const OptionWrapper = styled.div`
 
@@ -55,13 +64,13 @@ const formData = new FormData();
 
 
 
+
+
+
+
 function Lookup(props) {
 
     
-    
-    
-   
-  
   const handleAdd = e => {
 
     
@@ -102,8 +111,11 @@ function Lookup(props) {
       .then(data => {
         
         
-        console.log(data.one.name)
-        props.setResults(data)
+        
+        props.setShowForm(false);
+        props.setResults(data);
+
+        
         
         
       })
@@ -132,7 +144,8 @@ function Lookup(props) {
   
   return(
 
-    <FormWrapper>
+    <FormWrapper showForm={props.showForm}>
+      
       <Form className="form-inline" onSubmit={handleAdd}  >
         
         
@@ -181,6 +194,7 @@ function Lookup(props) {
         <Spinner name='wave' color='orange' />
       </Form>
 
+      <h1>{props.showForm.toString()}</h1>
       
     </FormWrapper>
   )

@@ -94,7 +94,7 @@ function App({story}){
                     
                 <Header/>
                 
-                <LookupSection/>
+                
                 
                 <Switch>
 
@@ -113,7 +113,7 @@ function App({story}){
                         
                     
                 </Switch>
-                
+                <LookupSection/>
                 
 
                 <Footer/>

@@ -46,6 +46,13 @@ class LookupsController < ApplicationController
               label
             }
             chamber: currentMemberships(classification: [\"upper\", \"lower\"]) {
+
+              post {
+                label
+                division{
+                  name
+                }
+              }
               organization {
                 name
                 classification
@@ -109,7 +116,7 @@ class LookupsController < ApplicationController
 
 
     #object to be sent to frontend
-    sendToFrontEnd = {"one" => {"name" => "", "firstName" => "", "lastName" => "", "image" => "", "id" => "", "email" => "", "chamber" => "", "party" => "", "parent" => ""}, "two" => {"name" => "", "firstName" => "", "lastName" => "", "image" => "", "id" => "", "email" => "", "chamber" => "", "party" => "", "parent" => ""}}
+    sendToFrontEnd = {"one" => {"name" => "", "firstName" => "", "lastName" => "", "image" => "", "id" => "", "email" => "", "chamber" => "", "party" => "", "parent" => "", "district" => "", "fullDistrict" => ""}, "two" => {"name" => "", "firstName" => "", "lastName" => "", "image" => "", "id" => "", "email" => "", "chamber" => "", "party" => "", "parent" => "", "district" => "", "fullDistrict" => ""}}
 
 
     #disable any views being rendered
@@ -169,25 +176,31 @@ class LookupsController < ApplicationController
 
 
     #update the hash thatll be sent to front end
-    sendToFrontEnd["one"]["name"] =  primaryOpenStatesResponse.data.people.edges[0].node.name
+
+    sendToFrontEnd["one"]["name"] =  primaryOpenStatesResponse.data.people.edges[0].node.name.gsub('\\"', '')
     sendToFrontEnd["one"]["firstName"] =  primaryOpenStatesResponse.data.people.edges[0].node.givenName
     sendToFrontEnd["one"]["lastName"] =  primaryOpenStatesResponse.data.people.edges[0].node.familyName
     sendToFrontEnd["one"]["image"] =  primaryOpenStatesResponse.data.people.edges[0].node.image
     sendToFrontEnd["one"]["id"] =  primaryOpenStatesResponse.data.people.edges[0].node.id
     sendToFrontEnd["one"]["chamber"] =  primaryOpenStatesResponse.data.people.edges[0].node.chamber[0].organization.name
     sendToFrontEnd["one"]["parent"] =  primaryOpenStatesResponse.data.people.edges[0].node.chamber[0].organization.parent.name
+    sendToFrontEnd["one"]["district"] =  primaryOpenStatesResponse.data.people.edges[0].node.chamber[0].post.label
+    sendToFrontEnd["one"]["fullDistrict"] =  primaryOpenStatesResponse.data.people.edges[0].node.chamber[0].post.division.name
 
-    sendToFrontEnd["two"]["name"] =  primaryOpenStatesResponse.data.people.edges[1].node.name
+
+    sendToFrontEnd["two"]["name"] =  primaryOpenStatesResponse.data.people.edges[1].node.name.gsub('\\"', '')
     sendToFrontEnd["two"]["firstName"] =  primaryOpenStatesResponse.data.people.edges[1].node.givenName
     sendToFrontEnd["two"]["lastName"] =  primaryOpenStatesResponse.data.people.edges[1].node.familyName
     sendToFrontEnd["two"]["image"] =  primaryOpenStatesResponse.data.people.edges[1].node.image
     sendToFrontEnd["two"]["id"] =  primaryOpenStatesResponse.data.people.edges[1].node.id
     sendToFrontEnd["two"]["chamber"] =  primaryOpenStatesResponse.data.people.edges[1].node.chamber[0].organization.name
     sendToFrontEnd["two"]["parent"] =  primaryOpenStatesResponse.data.people.edges[1].node.chamber[0].organization.parent.name
+    sendToFrontEnd["two"]["district"] =  primaryOpenStatesResponse.data.people.edges[1].node.chamber[0].post.label
+    sendToFrontEnd["two"]["fullDistrict"] =  primaryOpenStatesResponse.data.people.edges[1].node.chamber[0].post.division.name
 
     primaryOpenStatesResponse.data.people.edges[0].node.contactDetails.each do |object|
       
-      if object.type === "email"
+      if object.type === "email" && object.value.exclude?("%") && object.value.include?("@flsenate.gov") || object.value.include?("@myfloridahouse.gov")
         
         sendToFrontEnd["one"]["email"] =  object.value
         break
@@ -197,7 +210,7 @@ class LookupsController < ApplicationController
 
     primaryOpenStatesResponse.data.people.edges[1].node.contactDetails.each do |object|
       
-      if object.type === "email"
+      if object.type === "email" && object.value.exclude?("%") && object.value.include?("@flsenate.gov") || object.value.include?("@myfloridahouse.gov")
         
         sendToFrontEnd["two"]["email"] =  object.value
         break
@@ -393,8 +406,8 @@ class LookupsController < ApplicationController
       puts "sendToFrontEnd[two][chamber] = " + sendToFrontEnd["two"]["chamber"].to_s
     
       
-      puts "find out of house is in one or two"
-      #findout if House is in one or two
+      
+      #set "whereIsHouse" variable
       whereIsHouse = ""
       if sendToFrontEnd["one"]["email"].blank? && sendToFrontEnd["one"]["chamber"] === "House"
         whereIsHouse = "one"
@@ -409,8 +422,15 @@ class LookupsController < ApplicationController
       if sendToFrontEnd["#{whereIsHouse}"]["firstName"] != "" && sendToFrontEnd["#{whereIsHouse}"]["lastName"] != "" && hasWhiteSpace( sendToFrontEnd["#{whereIsHouse}"]["firstName"]) == nil && hasWhiteSpace(sendToFrontEnd["#{whereIsHouse}"]["lastName"]) == nil
         
         puts "trying to build house email with first and lastName"  
-        houseEmail = sendToFrontEnd["#{whereIsHouse}"]["firstName"]+ "." +sendToFrontEnd["#{whereIsHouse}"]["lastName"]+ "@myfloridahouse.gov"
-        sendToFrontEnd["#{whereIsHouse}"]["email"] = houseEmail
+        
+        
+        #if first name has space get first part, before the space
+        if sendToFrontEnd["#{whereIsHouse}"]["firstName"].split(" ").length > 1
+          houseEmail = sendToFrontEnd["#{whereIsHouse}"]["firstName"].split(" ")[0] + "." +sendToFrontEnd["#{whereIsHouse}"]["lastName"]+ "@myfloridahouse.gov"
+        else
+          houseEmail = sendToFrontEnd["#{whereIsHouse}"]["firstName"]+ "." +sendToFrontEnd["#{whereIsHouse}"]["lastName"]+ "@myfloridahouse.gov"
+        end
+          sendToFrontEnd["#{whereIsHouse}"]["email"] = houseEmail
       
       
       
@@ -423,10 +443,16 @@ class LookupsController < ApplicationController
         
         houseEmail = sendToFrontEnd["#{whereIsHouse}"]["name"].split(" ")[0]+ "." +sendToFrontEnd["#{whereIsHouse}"]["name"].split(" ")[2]+ "@myfloridahouse.gov"
         sendToFrontEnd["#{whereIsHouse}"]["email"] = houseEmail
-       
+      
+      #if name has a middle name with two double quotes
+      elsif sendToFrontEnd["#{whereIsHouse}"]["name"].count('"') == 2  
         
-      
-      
+        puts "name in here is = " + sendToFrontEnd["#{whereIsHouse}"]["name"]
+        puts sendToFrontEnd["#{whereIsHouse}"]["name"].class.to_s
+        
+        houseEmail = sendToFrontEnd["#{whereIsHouse}"]["name"].split(" ")[0] + "." + sendToFrontEnd["#{whereIsHouse}"]["name"].split(" ")[sendToFrontEnd["#{whereIsHouse}"]["name"].split(" ").length - 1]+ "@myfloridahouse.gov"
+        sendToFrontEnd["#{whereIsHouse}"]["email"] = houseEmail
+
       #if fullname consists from just first and last
       elsif sendToFrontEnd["#{whereIsHouse}"]["name"].split(" ").length == 2
         puts "trying to build house email with full name"
@@ -435,25 +461,27 @@ class LookupsController < ApplicationController
         sendToFrontEnd["#{whereIsHouse}"]["email"] = houseEmail
       else
         puts "build house email with scraper"
+        
 
-        @name = sendToFrontEnd["#{whereIsHouse}"]["name"]
+        @name = sendToFrontEnd["#{whereIsHouse}"]["name"].to_s
+
+        #@name = @name.gsub /"/, ''
+        #@name = @name.split(" ")[0] + " " + @name.split(" ")[@name.split(" ").length - 1]
 
         search_phrase_encoded = URI::encode(@name)
 
-        senateSite = "flsenate.gov"
-        houseSite = "myfloridahouse.gov"
-        #puts "https://www.googleapis.com/customsearch/v1?q=#{search_phrase_encoded}&cx=003645805095083477600%3A7hraibewjhe&siteSearch=lobbytools.com&key=#{@googleGeoApi}"
+        
+        puts "https://www.googleapis.com/customsearch/v1?q=#{search_phrase_encoded}&cx=003645805095083477600%3A7hraibewjhe&siteSearch=lobbytools.com&key=#{@googleGeoApi}"
         thc = HTTParty.get("https://www.googleapis.com/customsearch/v1?q=#{search_phrase_encoded}&cx=003645805095083477600%3A7hraibewjhe&siteSearch=lobbytools.com&key=#{@googleGeoApi}")
       
         theLink = thc["items"][0]["link"]
-
 
         doc = HTTParty.get(theLink)
       
         @parse_page = Nokogiri::HTML(doc)
 
         puts "=================nokogiri parse results====================="
-        #puts @parse_page
+        puts @parse_page
         
         selector = "//a[starts-with(@href, \"mailto:\")]/@href"
 
@@ -463,8 +491,6 @@ class LookupsController < ApplicationController
 
         puts address
 
-        puts address.class.to_s
-
         sendToFrontEnd["#{whereIsHouse}"]["email"] = address[0]
 
         
@@ -472,7 +498,7 @@ class LookupsController < ApplicationController
       
      
 
-      puts "house email created done"
+      puts "house email scraper done, email results below"
       puts "email one is = " + sendToFrontEnd["one"]["email"].to_s
       puts "email two is = " + sendToFrontEnd["two"]["email"].to_s
     
@@ -484,10 +510,8 @@ class LookupsController < ApplicationController
     puts sendToFrontEnd.to_json
     @sendToFrontEnd = sendToFrontEnd.to_json
 
-    puts "-----uuuuu"
-    puts @googleGeoApi
-    puts sendToFrontEnd["one"]["name"]
-
+    puts "end ========== about to send to frontend"
+    
     render json: @sendToFrontEnd
 
   	

@@ -4,7 +4,8 @@ import styled, { ThemeProvider } from 'styled-components';
 const Footer_Wrapper = styled.div`
 
     background: purple;
-    height: 250px;
+    height: 175px;
+    margin-top: 50px;
     
 
 
