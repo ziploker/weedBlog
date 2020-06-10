@@ -14,6 +14,7 @@ import ResultCardTwo from './resultCardTwo.jsx'
 const Lookup_Section_Wrapper = styled.div`
 
     display: grid;
+    grid-gap: 25px;
     grid-template-columns: minmax(150px, 450px);
     //grid-template-rows: 90px minmax(min-content, 360px) minmax(min-content, 360px);
     justify-content: center;
@@ -30,6 +31,7 @@ const Lookup_Section_Wrapper = styled.div`
     @media screen and (min-width: 750px){
         
         display: grid;
+        grid-gap: 25px;
         //grid-template-rows: minmax(min-content, 360px) minmax(min-content, 360px);
         grid-template-columns: minmax(min-content, 400px) minmax(min-content, 400px);
         grid-template-areas:

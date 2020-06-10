@@ -23,19 +23,21 @@ const Section = styled.section`
 
 const FormWrapper = styled.div`
   width: 100%;
-  max-width: 300px;
-  display: flex;
+  max-width: 350px;
+  
   justify-content: center;
   align-items: center;
-  //padding: 20px;
-  grid-column: 1 / -1
-  justify-self: start;
-  align-self: start;
-  justify-items: start;
+  justify-self: center;
+  
+  grid-column-start: 1;
+  grid-column-end: -1;
+  justify-self: center;
+  align-self: center;
+  justify-items: center;
   max-height: ${ props => props.showForm.toString() == "true" ? "100%" : "0"};
   opacity: ${ props => props.showForm.toString() == "true" ? "1" : "0"};
-  transition: opacity 2s, display 2s;
-  transition-timing-function: ease-in;
+  //transition: opacity 2s, display 2s;
+  //transition-timing-function: ease-in;
 `;
 const Form = styled.form`
 
@@ -48,6 +50,13 @@ const Form = styled.form`
   //grid-gap: 1.5rem;
   //height: 175px;
   width: 100%;
+
+
+
+  background: #F9F9F9;
+  padding: 25px;
+  
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
 
 `;
 
@@ -148,12 +157,30 @@ function Lookup(props) {
       
       <Form className="form-inline" onSubmit={handleAdd}  >
         
+        <h3 style={{
+          display: "block",
+          
+          fontWeight: "300",
+          marginBottom: "10px"
+
+
+        }}>Colorlib Contact Form</h3>
         
-        <div className="field" style={{width: "100%"}}>
+        <div style={{
+          
+          width: "100%",
+          border: "medium none !important",
+          margin: "0 0 10px",
+          minWidth: "100%",
+          padding: "50"
+  
+          
+          
+          }} >
         
-          <input type="text"
+          <input type="text" 
             
-            
+            tabindex="1" required autofocus
             className="form-control"
             name="address"
             
@@ -167,11 +194,21 @@ function Lookup(props) {
 
         
         
-        <div className="field" style={{width: "100%"}} >
+        <div style={{
+          
+          width: "100%",
+          border: "medium none !important",
+          margin: "0 0 10px",
+          minWidth: "100%",
+          padding: "50"
+  
+          
+          
+          }} >
         
           <input type="text"
                 
-                
+                tabindex="2" required autofocus
                 className="form-control"
                 name="zipcode"
                 //focus="phoneIsFocused"
@@ -194,7 +231,7 @@ function Lookup(props) {
         <Spinner name='wave' color='orange' />
       </Form>
 
-      <h1>{props.showForm.toString()}</h1>
+     
       
     </FormWrapper>
   )
