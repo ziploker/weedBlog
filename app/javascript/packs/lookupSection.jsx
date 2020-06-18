@@ -6,6 +6,8 @@ import LookupForm from '../packs/lookupForm.jsx'
 import ResultCardOne from './resultCardOne.jsx'
 import ResultCardTwo from './resultCardTwo.jsx'
 
+import ResetButton from './newSearchButton.jsx'
+
 
 
 
@@ -14,29 +16,35 @@ import ResultCardTwo from './resultCardTwo.jsx'
 const Lookup_Section_Wrapper = styled.div`
 
     display: grid;
-    grid-gap: 25px;
-    grid-template-columns: minmax(150px, 450px);
+    //grid-gap: 25px;
+    //padding: 25px;
+    grid-template-columns: minmax(150px, 1fr);
     //grid-template-rows: 90px minmax(min-content, 360px) minmax(min-content, 360px);
     justify-content: center;
     justify-items: center;
     grid-template-areas:
             
+            "title"
+            "subTitle"
             "form"
             "results1"
             "results2";
 
 
     margin-top: 25px;
+    background-color: #F9F9F9;
 
     @media screen and (min-width: 750px){
         
         display: grid;
-        grid-gap: 25px;
-        //grid-template-rows: minmax(min-content, 360px) minmax(min-content, 360px);
+        //grid-gap: 25px;
+        grid-template-rows: minmax(min-content, max-content) minmax(min-content, max-content) minmax(min-content, max-content);
         grid-template-columns: minmax(min-content, 400px) minmax(min-content, 400px);
         grid-template-areas:
             
-            
+            "title title"
+            "subTitle subTitle"
+            "form form"
             "results1 results2";
             
         
@@ -51,20 +59,7 @@ const Lookup_Section_Wrapper = styled.div`
 
 
 
-const Two = styled.div`
 
-  background: red;
-  
-  justify-content: center;
-  align-items: center;
-  justify-items: center;
-  grid-area:results2;
-  width: 100%;
-  display: ${s => s.toString() == "true" ? "none" : "grid"};
-  
-
-
-`;
 
 function Look_Up_Section (props) {
 
@@ -73,20 +68,26 @@ function Look_Up_Section (props) {
     const [showForm, setShowForm] = React.useState( true )
     const [results, setResults] = React.useState( {"one":{"name":"Annette Taddeo","firstName":"Annette","lastName":"Taddeo","image":"http://www.flsenate.gov/PublishedContent/Senators/2018-2020/Photos/s40_5331.jpg","id":"ocd-person/ea190b03-d1ca-4d75-89c7-dca745386db7","email":"taddeo.annette.web@flsenate.gov","chamber":"Senate","party":"Democrat","parent":"Florida Legislature","district":"40","fullDistrict":"Florida State Senate district 40"},"two":{"name":"Juan Alfonso Fernandez-Barquin","firstName":"","lastName":"","image":"https://www.myfloridahouse.gov//FileStores/Web/Imaging/Member/4709.jpg","id":"ocd-person/a8c88fee-1915-4907-ae37-5755c4bff446","email":"JuanF.Barquin@myfloridahouse.gov","chamber":"House","party":"Republican","parent":"Florida Legislature","district":"119","fullDistrict":"Florida State House district 119"}} );
     const [minimalResults, setMinimalResults] = React.useState ({})
-    const [percent, setPercent] = React.useState ( 0 );
-    const [percentOpacity, setPercentOpacity] = React.useState (0)
+    const [buttonDisabled, setButtonDisabled] = React.useState ( false)
+    const [showStatus, setShowStatus] = React.useState (false)
+    const [showStatusBar, setShowStatusBar] = React.useState (false)
+    const [showStatusCheck, setShowStatusCheck] = React.useState (false)
+    const [status, setStatus] = React.useState ("...may take up to 60 seconds")
+    const [currentSearchTerm, setCurrentSearchTerm] = React.useState ('')
     const [formInfo, setFormInfo] = React.useState({
 
         
-        address: '',
+        address: ''
         //nameIsFocused: false,
-        zipcode: '',
+        
         
 
     })
 
     const handleChange = event => {
         console.log("handle change from lookup")
+        
+
         console.log(event)
     
         const v = event.target.value;
@@ -103,6 +104,35 @@ function Look_Up_Section (props) {
         //return onChange(id, value);
       }
 
+
+      const handleChange2 = event => {
+        console.log("handle change 222")
+        console.log(currentSearchTerm)
+        console.log(event)
+        console.log(showStatusBar)
+
+        
+    
+        if (currentSearchTerm != event){
+
+          console.log("innnn")
+
+          setShowStatus(false)
+          setShowStatusCheck(false)
+          
+          
+          console.log(showStatusBar)
+          
+        } 
+        
+        
+        setFormInfo({ 
+          
+          address: event
+        });
+        //return onChange(id, value);
+      }
+
     return (
 
         <>
@@ -113,12 +143,15 @@ function Look_Up_Section (props) {
             
             <Lookup_Section_Wrapper>
 
-                
-                <LookupForm showForm={showForm} setShowForm={setShowForm} setMinimalResults={setMinimalResults} handleChange={handleChange} setPercentOpacity={setPercentOpacity} percentOpacity={percentOpacity} percent={percent} setPercent={setPercent} formInfo={formInfo} setFormInfo={setFormInfo} setResults={setResults} style={{gridArea: "form"}}/>
+                <h1 style={{gridArea: "title", padding: "25px 10px 10px 10px", lineHeight: "1.5em", textAlign: "center"}}> Find your Florida State Legistlators </h1>
+                <h2 style={{gridArea: "subTitle", padding: "25px", lineHeight: "1.5em", textAlign: "center"}}> ...and send them a preformated messages </h2>
+                <LookupForm showStatusCheck={showStatusCheck} setShowStatusCheck={setShowStatusCheck} status={status} setStatus={setStatus} currentSearchTerm={currentSearchTerm} setCurrentSearchTerm={setCurrentSearchTerm} showStatus={showStatus} setShowStatus={setShowStatus} showStatusBar={showStatusBar} setShowStatusBar={setShowStatusBar} buttonDisabled={buttonDisabled} setButtonDisabled={setButtonDisabled} showForm={showForm} setShowForm={setShowForm} setMinimalResults={setMinimalResults} handleChange={handleChange} handleChange2={handleChange2}formInfo={formInfo} setFormInfo={setFormInfo} setResults={setResults} style={{gridArea: "form"}}/>
 
                 <ResultCardOne showForm={showForm} results={results} />
 
                 <ResultCardTwo showForm={showForm} results={results} />
+
+                <ResetButton showForm={showForm} setShowForm={setShowForm}/>
                 
             </Lookup_Section_Wrapper>
         

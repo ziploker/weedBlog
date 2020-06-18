@@ -4,7 +4,7 @@ import styled, { ThemeProvider } from 'styled-components';
 
 const ResultCardWrapper = styled.div`
 
-  
+  //padding-bottom: 50px;
   
   justify-content: center;
   align-items: center;
@@ -12,16 +12,18 @@ const ResultCardWrapper = styled.div`
   width: 100%;
   display: grid;
   grid-area: results1;
-  max-height: ${ props => props.showForm.toString() == "true" ? "0px" : "100%"};
-  opacity: ${ props => props.showForm.toString() == "true" ? "0" : "1"};
-  transition: opacity 2s, display 2s;
-  transition-timing-function: ease-in;
+  //max-height: ${ props => props.showForm.toString() == "true" ? "0px" : "100%"};
+  //opacity: ${ props => props.showForm.toString() == "true" ? "0" : "1"};
+  //transition: opacity .4s;
+  //transition-timing-function: ease-out;
 
 
-  background: ${ props => props.results.one.party == "Democrat" ? "#dde0ff" : "#ffd1d1"};
-  padding: 25px;
+  background: ${ props => props.results.one.party == "Democrat" ? "#F9F9F9" : "#F9F9F9"};
+  //padding: 25px;
   
-  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+  //box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+
+  //border-right: 1px solid gray;
   
   
   

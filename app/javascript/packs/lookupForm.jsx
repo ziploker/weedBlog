@@ -2,24 +2,16 @@ import React, {Component, useEffect, useState, useRef} from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import $ from 'jquery';
-//import lilDownArrow from '../../../../'
-//import '../components/fix.js'
+import greenCheck from '../../assets/images/greenCheck.png'
+import PlacesAutocomplete, {
+  geocodeByAddress,
+  getLatLng,
+} from 'react-places-autocomplete';
 
-import Progress from './progressBar/progressBar.jsx'
 
 var Spinner = require('react-spinkit');
 
 
-const Section = styled.section`
-
-    //background: rgb(136,189,188);
-    //background: radial-gradient(circle, rgba(136,189,188,1) 0%, rgba(158,190,189,0.9612044646960347) 41%);
-    background: #F7C562;
-    //height: 100vh;
-    min-height: 400px;
-    position: relative;
-
-`;
 
 const FormWrapper = styled.div`
   width: 100%;
@@ -29,75 +21,157 @@ const FormWrapper = styled.div`
   align-items: center;
   justify-self: center;
   
-  grid-column-start: 1;
-  grid-column-end: -1;
+  grid-area: form;
   justify-self: center;
   align-self: center;
   justify-items: center;
   max-height: ${ props => props.showForm.toString() == "true" ? "100%" : "0"};
   opacity: ${ props => props.showForm.toString() == "true" ? "1" : "0"};
-  //transition: opacity 2s, display 2s;
-  //transition-timing-function: ease-in;
+  transition: opacity .4s;
+  transition-timing-function: ease-out;
 `;
+
+
 const Form = styled.form`
 
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: 90%;
+  grid-template-areas:
+    "input"
+    "button"
+    "status";
   justify-content: center;
-  justify-items: center;
-  //grid-auto-rows: minmax(min-content, max-content);
   
-  //grid-gap: 1.5rem;
-  //height: 175px;
   width: 100%;
-
-
+  margin-bottom: 20px;
+  grid-area: form;
 
   background: #F9F9F9;
-  padding: 25px;
+  //padding: 25px;
   
-  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+  //box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
 
 `;
 
 
 
 
-const OptionWrapper = styled.div`
 
-
-`;
 
 
 const formData = new FormData();
 
 
 
+const Button = styled.button`
+
+  width: 100%;
+  grid-area: button;
+  background-color: #FFA500;
+  border: none;
+  cursor: pointer;
+  color: black;
+  
+
+  &:disabled{
+    opacity: .6;
+    //cursor: not-allowed;
+    background-color: #eae6de;
+    &:hover{
+
+      background-color: #FFA500;
+        opacity: .6;
+        background-color: #eae6de;
+        
+      }
+
+  
+  }
+  
+`;
+
+  const StatusHolder = styled.div`
+
+    grid-area: status;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    padding: 10px;
 
 
+  `;
+  const StatusBar = styled.div`
+  
+  
+    
+  
+    max-height: ${ props => props.showStatus.toString() == "true" ? "100%" : "0px"};
+    opacity: ${ props => props.showStatus.toString() == "true" ? "1" : "0"};
+    transition: opacity .4s;
+    transition-timing-function: ease-out;
+  `;
 
+  const StatusSpinner = styled.div`
+    
+    
+    
+    max-height: ${ props => props.showStatusBar.toString() == "true" ? "100%" : "0px"};
+    opacity: ${ props => props.showStatusBar.toString() == "true" ? "1" : "0"};
+    transition: opacity .4s;
+    transition-timing-function: ease-out;
+  `;
+  const CheckMark = styled.img`
+    
+    
+    
+    max-height: ${ props => props.showStatusCheck.toString() == "true" ? "100%" : "0px"};
+    opacity: ${ props => props.showStatusCheck.toString() == "true" ? "1" : "0"};
+    transition: opacity .4s;
+    transition-timing-function: ease-out;
+`;
 
 function Lookup(props) {
+
+
+
+  
+
+ 
+
+  const searchOptions = {
+    componentRestrictions: { country: ['us'] }
+  }
+
+
+  const handleSelect = address => {
+    console.log("inHandleSelecr")
+    geocodeByAddress(address)
+      .then(results => getLatLng(results[0]))
+      .then(latLng => console.log('Success', latLng))
+      .catch(error => console.error('Error', error));
+  };
 
     
   const handleAdd = e => {
 
-    
+   
     
     e.preventDefault();
     
     if ( validForm() ) {
       
+      console.log(e);
       
+      props.setCurrentSearchTerm(props.formInfo.address)
       
-     
-      props.setPercentOpacity(1)
+      props.setStatus('....may take up to 60 seconds')
+      props.setShowStatus(true)
+      props.setShowStatusBar(true)
      
       formData.append('event[address]', props.formInfo.address);
-      formData.append('event[zipcode]', props.formInfo.zipcode);
+      //formData.append('event[zipcode]', props.formInfo.zipcode);
       const csrf = document.querySelector("meta[name='csrf-token']").getAttribute("content");  
      
-          
           
       fetch('/lookup', {
       
@@ -107,8 +181,8 @@ function Lookup(props) {
         
         body: JSON.stringify(
           {"lookup" : {
-            "address" : props.formInfo.address,
-            "zipcode" : props.formInfo.zipcode
+            "address" : props.formInfo.address
+            //"zipcode" : props.formInfo.zipcode
           }}),
       
         headers: {
@@ -121,7 +195,9 @@ function Lookup(props) {
         
         
         
-        props.setShowForm(false);
+        props.setStatus("Search Complete!!")
+        props.setShowStatusBar(false)
+        props.setShowStatusCheck(true)
         props.setResults(data);
 
         
@@ -150,90 +226,173 @@ function Lookup(props) {
   
   
   
-  
   return(
 
-    <FormWrapper showForm={props.showForm}>
+    
+
+    
       
       <Form className="form-inline" onSubmit={handleAdd}  >
         
-        <h3 style={{
-          display: "block",
-          
-          fontWeight: "300",
-          marginBottom: "10px"
+        
+        
+        
 
-
-        }}>Colorlib Contact Form</h3>
+        <PlacesAutocomplete
+          value={props.formInfo.address}
+          onChange={props.handleChange2}
+          onSelect={handleSelect}
+          searchOptions={searchOptions}
+        >
         
-        <div style={{
-          
-          width: "100%",
-          border: "medium none !important",
-          margin: "0 0 10px",
-          minWidth: "100%",
-          padding: "50"
-  
-          
-          
-          }} >
-        
-          <input type="text" 
+          {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
             
-            tabindex="1" required autofocus
-            className="form-control"
-            name="address"
+            <div style={{
+          
+              width: "100%",
+              border: "medium none !important",
+              margin: "0 0 10px",
+              minWidth: "100%",
+              padding: "50",
+              gridArea: "input"
             
-            placeholder="address"
-            
-            value={props.formInfo.address}
-            onChange={props.handleChange} 
-            style={{width: "100%"}}
-          />
-        </div>
-
-        
-        
-        <div style={{
-          
-          width: "100%",
-          border: "medium none !important",
-          margin: "0 0 10px",
-          minWidth: "100%",
-          padding: "50"
-  
-          
-          
-          }} >
-        
-          <input type="text"
-                
-                tabindex="2" required autofocus
-                className="form-control"
-                name="zipcode"
-                //focus="phoneIsFocused"
-                placeholder="zip code"
-                
-                value={props.formInfo.zipcode}
-                onChange={props.handleChange} 
-                style={{width: "100%"}}
+            }}>
               
-                />
+              <input 
+
+                
+
+                {...getInputProps({
+                  placeholder: '123 Main St, Miami FL, 33155',
+                  className: 'location-search-input',
+
+                
+                  type: "text",
+              
+                  tabIndex: "1",
+                  className: "form-control",
+                  name: "address",
+            
+                  
+            
+                  
+                   
+                  
+                })}
+                style={{
+                  width: "100%", 
+                  height: "40px",
+                  boxShadow: "0 2px 2px 0 rgba(0,0,0,0.16), 0 0 0 1px rgba(0,0,0,0.08)",
+                  border: "honeydew",
+                  display: "block",
+                  
+                  padding: "16px",
+                  fontSize: "16px",
+                  borderRadius: "2px",
+                  outline: "none"
+                
+                
+                
+                
+                
+                }}
+              />
+            
+              <div style={{
+
+                position: "absolute",
+                zIndex: "1000",
+                borderBottom: "honeydew",
+                borderLeft: "honeydew",
+                borderRight: "honeydew",
+                borderTop: "1px solid #e6e6e6",
+                boxShadow: "0 2px 4px rgba(0,0,0,0.2)",
+                backgroundColor: '#FFF',
+                fontSize: ".5em",
+                
+                
+                borderRadius: "0 0 2px 2px"
+
+
+              }}>
+                
+                {loading && <div>Loading...</div>}
+                
+                
+                {suggestions.map(suggestion => {
+                const className = suggestion.active
+                  ? 'suggestion-item--active'
+                  : 'suggestion-item';
+                // inline style for demonstration purpose
+                const style = suggestion.active
+                  ? { backgroundColor: 'orange', cursor: 'pointer' }
+                  : { backgroundColor: '#ffffff', cursor: 'pointer' };
+                  
+                  return (
+                  
+                    <div
+                    {...getSuggestionItemProps(suggestion, {
+                      className,
+                      style,
+                    })}
+                  >
+                    <span>{suggestion.description}</span>
+                  </div>
+                  
+                  
+                    )
+                    
+                
+                })}
+              </div>
+            </div>
+          )}
+        </PlacesAutocomplete>
+
+        
+        
+        
+        
           
-        </div>
-
+        
+        
         
 
         
-        <button type="submit" className="btn btn-primary" style={{width: "100%"}}>GO</button>
-        <Progress percent={props.percent} opacity={props.percentOpacity} />
+
+                                  
+              <Button disabled={(!props.formInfo.address || props.currentSearchTerm == props.formInfo.address) ? true : false} type="submit" className="btn btn-primary"> Search </Button>
         
-        <Spinner name='wave' color='orange' />
+              
+        
+        
+        <StatusHolder>
+          <StatusBar showStatus={props.showStatus} >
+              
+            <span style={{paddingTop: "5px", fontSize: ".75em"}}>{props.status}</span>
+            
+            
+          </StatusBar>
+          <CheckMark showStatusCheck={props.showStatusCheck} src={greenCheck} style={{paddingLeft: "6px", height: "15px"}}></CheckMark>
+
+          <StatusSpinner showStatusBar={props.showStatusBar}>
+            <Spinner name='wave' color='orange' />
+            
+          </StatusSpinner>
+
+          
+            
+          
+        </StatusHolder>
+        
       </Form>
 
      
       
-    </FormWrapper>
+    
+
+    
+    
   )
 }
 

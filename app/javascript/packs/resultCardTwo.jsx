@@ -13,16 +13,16 @@ const ResultCardWrapper = styled.div`
   width: 100%;
   grid-area: results2;
   display: grid;
-  max-height: ${ props => props.showForm.toString() == "true" ? "0px" : "100%"};
-  opacity: ${ props => props.showForm.toString() == "true" ? "0" : "1"};
+  //max-height: ${ props => props.showForm.toString() == "true" ? "0px" : "100%"};
+  //opacity: ${ props => props.showForm.toString() == "true" ? "0" : "1"};
   //transition: all opacity .3s max-height 1s ease-in;
-  transition: opacity 2s, display 2s;
-  transition-timing-function: ease-in;
+  //transition: opacity .4s;
+  //transition-timing-function: ease-out;
 
-  background: ${ props => props.results.two.party == "Democrat" ? "#dde0ff" : "#ffd1d1"};
-  padding: 25px;
+  background: ${ props => props.results.two.party == "Democrat" ? "#F9F9F9" : "#F9F9F9"};
+  //padding: 25px;
   
-  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+  //box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
   
 
 `;

@@ -136,15 +136,15 @@ class LookupsController < ApplicationController
     
     #get info from react front end form, used for google api call
     @address = params[:lookup][:address]
-    @zipcode = params[:lookup][:zipcode]
+    #@zipcode = params[:lookup][:zipcode]
     puts "=====================start: got info from front end=================="
     puts "Address is = " + @address.to_s
-    puts "zipcode is = " + @zipcode.to_s
+    #puts "zipcode is = " + @zipcode.to_s
     puts "=====================end: got info from front end=================="
 
     
     #google api call, get latitude and longitude based off user input (address/zipcode) 
-    googleResponse = HTTParty.get('https://maps.googleapis.com/maps/api/geocode/json?address='+@address+','+@zipcode+'&key='+@googleGeoApi).to_dot
+    googleResponse = HTTParty.get('https://maps.googleapis.com/maps/api/geocode/json?address='+@address+'&key='+@googleGeoApi).to_dot
 
     @lat = googleResponse.results[0].geometry.location.lat.to_s
     @lng = googleResponse.results[0].geometry.location.lng.to_s
