@@ -72,8 +72,10 @@ function Look_Up_Section (props) {
     const [showStatus, setShowStatus] = React.useState (false)
     const [showStatusBar, setShowStatusBar] = React.useState (false)
     const [showStatusCheck, setShowStatusCheck] = React.useState (false)
-    const [status, setStatus] = React.useState ("...may take up to 60 seconds")
+    const [status, setStatus] = React.useState ("..Search")
     const [currentSearchTerm, setCurrentSearchTerm] = React.useState ('')
+    const [coordinates, setCoordinates] = React.useState ({lat: '', lng: ''})
+    const [firstMatch, setFirstMatch] = React.useState ('')
     const [formInfo, setFormInfo] = React.useState({
 
         
@@ -107,12 +109,12 @@ function Look_Up_Section (props) {
 
       const handleChange2 = event => {
         console.log("handle change 222")
-        console.log(currentSearchTerm)
-        console.log(event)
-        console.log(showStatusBar)
+        //console.log(currentSearchTerm)
+        //console.log(event)
+        //console.log(showStatusBar)
 
         
-    
+        //resets search if user erases first search term
         if (currentSearchTerm != event){
 
           console.log("innnn")
@@ -121,7 +123,7 @@ function Look_Up_Section (props) {
           setShowStatusCheck(false)
           
           
-          console.log(showStatusBar)
+          //console.log(showStatusBar)
           
         } 
         
@@ -137,7 +139,7 @@ function Look_Up_Section (props) {
 
         <>
 
-            {console.log("render")}
+            {console.log("rendering lookupSection")}
             
             
             
@@ -145,7 +147,7 @@ function Look_Up_Section (props) {
 
                 <h1 style={{gridArea: "title", padding: "25px 10px 10px 10px", lineHeight: "1.5em", textAlign: "center"}}> Find your Florida State Legistlators </h1>
                 <h2 style={{gridArea: "subTitle", padding: "25px", lineHeight: "1.5em", textAlign: "center"}}> ...and send them a preformated messages </h2>
-                <LookupForm showStatusCheck={showStatusCheck} setShowStatusCheck={setShowStatusCheck} status={status} setStatus={setStatus} currentSearchTerm={currentSearchTerm} setCurrentSearchTerm={setCurrentSearchTerm} showStatus={showStatus} setShowStatus={setShowStatus} showStatusBar={showStatusBar} setShowStatusBar={setShowStatusBar} buttonDisabled={buttonDisabled} setButtonDisabled={setButtonDisabled} showForm={showForm} setShowForm={setShowForm} setMinimalResults={setMinimalResults} handleChange={handleChange} handleChange2={handleChange2}formInfo={formInfo} setFormInfo={setFormInfo} setResults={setResults} style={{gridArea: "form"}}/>
+                <LookupForm firstMatch={firstMatch} setFirstMatch={setFirstMatch} coordinates={coordinates} setCoordinates={setCoordinates} showStatusCheck={showStatusCheck} setShowStatusCheck={setShowStatusCheck} status={status} setStatus={setStatus} currentSearchTerm={currentSearchTerm} setCurrentSearchTerm={setCurrentSearchTerm} showStatus={showStatus} setShowStatus={setShowStatus} showStatusBar={showStatusBar} setShowStatusBar={setShowStatusBar} buttonDisabled={buttonDisabled} setButtonDisabled={setButtonDisabled} showForm={showForm} setShowForm={setShowForm} setMinimalResults={setMinimalResults} handleChange={handleChange} handleChange2={handleChange2}formInfo={formInfo} setFormInfo={setFormInfo} setResults={setResults} style={{gridArea: "form"}}/>
 
                 <ResultCardOne showForm={showForm} results={results} />
 

@@ -66,6 +66,7 @@ const formData = new FormData();
 const Button = styled.button`
 
   width: 100%;
+  height: 35px;
   grid-area: button;
   background-color: #FFA500;
   border: none;
@@ -96,7 +97,7 @@ const Button = styled.button`
     display: flex;
     justify-content: center;
     align-content: center;
-    padding: 10px;
+    
 
 
   `;
@@ -105,8 +106,8 @@ const Button = styled.button`
   
     
   
-    max-height: ${ props => props.showStatus.toString() == "true" ? "100%" : "0px"};
-    opacity: ${ props => props.showStatus.toString() == "true" ? "1" : "0"};
+    max-height: ${ props => props.showStatus.toString() == "true" ? "100%" : "100%"};
+    opacity: ${ props => props.showStatus.toString() == "true" ? "1" : "1"};
     transition: opacity .4s;
     transition-timing-function: ease-out;
   `;
@@ -145,16 +146,32 @@ function Lookup(props) {
 
   const handleSelect = address => {
     console.log("inHandleSelecr")
+    console.log(address)
+    props.setFormInfo( {address : address} ) 
     geocodeByAddress(address)
       .then(results => getLatLng(results[0]))
-      .then(latLng => console.log('Success', latLng))
+      .then(latLng => {
+        
+        console.log('Success', latLng)
+        props.setCoordinates({
+        
+          lat: latLng.lat,
+          lng: latLng.lng
+
+        })
+      
+      
+      })
       .catch(error => console.error('Error', error));
   };
 
     
   const handleAdd = e => {
 
-   
+    
+    //user enters address but doesnt choose one from "react places autocomplete", and thus bypasses handkeSelect method, which gets the lat lng, so get lat lan otherway
+    let secondTryLat = ''
+    let secondTryLng = ''
     
     e.preventDefault();
     
@@ -169,41 +186,135 @@ function Lookup(props) {
       props.setShowStatusBar(true)
      
       formData.append('event[address]', props.formInfo.address);
+      
+      
+      if (props.coordinates.lat == '' || props.coordinates.lng == ''){
+        console.log("lat and lng was empty, get latlng")
+
+        geocodeByAddress(props.formInfo.address)
+          .then(results => getLatLng(results[0]))
+          .then(latLng => {
+        
+            console.log('Success2', latLng)
+
+            secondTryLat = latLng.lat
+            secondTryLng = latLng.lng
+            
+           
+        
+            console.log("secondTryLat = " + secondTryLat)
+      console.log("secondTryLng = " + secondTryLng)
+      if (props.coordinates.lat == '' ){
+        console.log("lat was empty")
+
+        console.log("secondTryLat = " + secondTryLat)
+        console.log("secondTryLng = " + secondTryLng)
+        fetch('/lookup', {
+      
+          method: 'post',
+          
+          dataType: "text",
+          
+          body: JSON.stringify(
+            {"lookup" : {
+              "address" : props.formInfo.address,
+              "lat" : secondTryLat,
+              "lng" : secondTryLng
+            }}),
+        
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-Token': csrf
+          }
+        })
+        .then(response => response.json() )
+        .then(data => {
+          
+          
+          
+          props.setStatus("Search Complete!!")
+          props.setShowStatusBar(false)
+          props.setShowStatusCheck(true)
+          props.setResults(data);
+  
+          
+          
+          
+        })
+
+          
+      
+      
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+      }
+        
+          })
+        .catch(error => console.error('Error', error));
+
+
+      }
       //formData.append('event[zipcode]', props.formInfo.zipcode);
       const csrf = document.querySelector("meta[name='csrf-token']").getAttribute("content");  
-     
-          
-      fetch('/lookup', {
       
-        method: 'post',
-        
-        dataType: "text",
-        
-        body: JSON.stringify(
-          {"lookup" : {
-            "address" : props.formInfo.address
-            //"zipcode" : props.formInfo.zipcode
-          }}),
-      
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRF-Token': csrf
-        }
-      })
-      .then(response => response.json() )
-      .then(data => {
-        
-        
-        
-        props.setStatus("Search Complete!!")
-        props.setShowStatusBar(false)
-        props.setShowStatusCheck(true)
-        props.setResults(data);
 
+
+
+
+
+      
+        console.log("lat was NOT empty")
+        fetch('/lookup', {
+      
+          method: 'post',
+          
+          dataType: "text",
+          
+          body: JSON.stringify(
+            {"lookup" : {
+              "address" : props.formInfo.address,
+              "lat" : props.coordinates.lat,
+              "lng" : props.coordinates.lng
+            }}),
         
-        
-        
-      })
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-Token': csrf
+          }
+        })
+        .then(response => response.json() )
+        .then(data => {
+          
+          
+          
+          props.setStatus("Search Complete!!")
+          props.setShowStatusBar(false)
+          props.setShowStatusCheck(true)
+          props.setResults(data);
+  
+          
+          
+          
+        })
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
       
      
       
@@ -243,6 +354,7 @@ function Lookup(props) {
           onChange={props.handleChange2}
           onSelect={handleSelect}
           searchOptions={searchOptions}
+          //onClick={handleSelect}
         >
         
           {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
@@ -308,7 +420,7 @@ function Lookup(props) {
                 borderTop: "1px solid #e6e6e6",
                 boxShadow: "0 2px 4px rgba(0,0,0,0.2)",
                 backgroundColor: '#FFF',
-                fontSize: ".5em",
+                fontSize: ".7em",
                 
                 
                 borderRadius: "0 0 2px 2px"
@@ -320,6 +432,8 @@ function Lookup(props) {
                 
                 
                 {suggestions.map(suggestion => {
+                  console.log(suggestions.values().next().value.description)
+                  //props.setFirstMatch(suggestions.values().next().value.description)
                 const className = suggestion.active
                   ? 'suggestion-item--active'
                   : 'suggestion-item';
@@ -361,29 +475,34 @@ function Lookup(props) {
         
 
                                   
-              <Button disabled={(!props.formInfo.address || props.currentSearchTerm == props.formInfo.address) ? true : false} type="submit" className="btn btn-primary"> Search </Button>
+              <Button disabled={(!props.formInfo.address || props.currentSearchTerm == props.formInfo.address) ? true : false} type="submit" className="btn btn-primary"> 
+              
+                <StatusHolder>
+                  <StatusBar showStatus={props.showStatus} >
+                      
+                    <span style={{height: "100%", fontSize: ".75em"}}>{props.status}</span>
+                    
+                    <CheckMark showStatusCheck={props.showStatusCheck} src={greenCheck} style={{paddingLeft: "6px", height: "11px"}}></CheckMark>
+                  </StatusBar>
+                
+                  
+
+                  <StatusSpinner showStatusBar={props.showStatusBar}>
+                    <Spinner name='wave' color='orange' />
+                    
+                  </StatusSpinner>
+
+            
+              
+            
+                </StatusHolder>   
+                
+              </Button>
         
               
         
         
-        <StatusHolder>
-          <StatusBar showStatus={props.showStatus} >
-              
-            <span style={{paddingTop: "5px", fontSize: ".75em"}}>{props.status}</span>
-            
-            
-          </StatusBar>
-          <CheckMark showStatusCheck={props.showStatusCheck} src={greenCheck} style={{paddingLeft: "6px", height: "15px"}}></CheckMark>
-
-          <StatusSpinner showStatusBar={props.showStatusBar}>
-            <Spinner name='wave' color='orange' />
-            
-          </StatusSpinner>
-
-          
-            
-          
-        </StatusHolder>
+        
         
       </Form>
 

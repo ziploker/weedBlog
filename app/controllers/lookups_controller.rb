@@ -130,8 +130,9 @@ class LookupsController < ApplicationController
     
 
     #get api keys 
-    @googleGeoApi = Rails.application.credentials.dig(:google, :geoapi)
-    @openStatesApi = Rails.application.credentials.dig(:openStatesApi)
+    @googleGeoApi = Rails.application.credentials.dig(:GOOGLE_API)
+    @googleGeoApiUr = Rails.application.credentials.dig(:GOOGLE_API_UR)
+    @openStatesApi = Rails.application.credentials.dig(:OPENSTATES_API)
 
     
     #get info from react front end form, used for google api call
@@ -139,19 +140,25 @@ class LookupsController < ApplicationController
     #@zipcode = params[:lookup][:zipcode]
     puts "=====================start: got info from front end=================="
     puts "Address is = " + @address.to_s
+    
+    @address = "\""+@address+"\""
+    puts @address.to_s
     #puts "zipcode is = " + @zipcode.to_s
     puts "=====================end: got info from front end=================="
 
-    
+    #puts 'https://maps.googleapis.com/maps/api/geocode/json?address='+@address+'&key='+@googleGeoApi
     #google api call, get latitude and longitude based off user input (address/zipcode) 
-    googleResponse = HTTParty.get('https://maps.googleapis.com/maps/api/geocode/json?address='+@address+'&key='+@googleGeoApi).to_dot
+    #googleResponse = HTTParty.get('https://maps.googleapis.com/maps/api/geocode/json?address='+@address+'&key='+@googleGeoApi).to_dot
+    #puts googleResponse
+    
+    #@lat = googleResponse.results[0].geometry.location.lat.to_s
+    #@lng = googleResponse.results[0].geometry.location.lng.to_s
 
-    @lat = googleResponse.results[0].geometry.location.lat.to_s
-    @lng = googleResponse.results[0].geometry.location.lng.to_s
-
+    @lat = params[:lookup][:lat].to_s
+    @lng = params[:lookup][:lng].to_s
     puts "=====================start: google api call results=================="
-    puts "lat = " + @lat.to_s
-    puts "lng = " + @lng.to_s
+    puts "lat = " + @lat
+    puts "lng = " + @lng
     puts "=====================end: google api call results=================="
     
     
@@ -239,7 +246,7 @@ class LookupsController < ApplicationController
         method: 'POST',
         
         headers: { "Content-Type" => "application/json",
-                    "X-API-KEY" => "70717a1b-75dc-45cc-82cd-5ba4725e4f0d" },
+                    "X-API-KEY" => "70717a1b-75dc-45cc-82cd-5ba4725e4f0d"},
         
         body: '{"query" : '+ openStatesQuery2of3 + '}'
     }).to_dot
@@ -288,7 +295,7 @@ class LookupsController < ApplicationController
         method: 'POST',
         
         headers: { "Content-Type" => "application/json",
-                    "X-API-KEY" => "70717a1b-75dc-45cc-82cd-5ba4725e4f0d" },
+                    "X-API-KEY" => "70717a1b-75dc-45cc-82cd-5ba4725e4f0d"},
         
         body: '{"query" : '+ openStatesQuery3of3 + '}'
     }).to_dot
@@ -362,8 +369,8 @@ class LookupsController < ApplicationController
 
       senateSite = "flsenate.gov"
       houseSite = "myfloridahouse.gov"
-      puts "https://www.googleapis.com/customsearch/v1?q=#{search_phrase_encoded}&cx=003645805095083477600%3Agmzwtwcebd3&siteSearch=#{senateSite}&key=#{@googleGeoApi}"
-      thc = HTTParty.get("https://www.googleapis.com/customsearch/v1?q=#{search_phrase_encoded}&cx=003645805095083477600%3Agmzwtwcebd3&siteSearch=#{senateSite}&key=#{@googleGeoApi}")
+      #puts "https://www.googleapis.com/customsearch/v1?q=#{search_phrase_encoded}&cx=003645805095083477600%3Agmzwtwcebd3&siteSearch=#{senateSite}&key=#{@googleGeoApiUr}"
+      thc = HTTParty.get("https://www.googleapis.com/customsearch/v1?q=#{search_phrase_encoded}&cx=003645805095083477600%3Agmzwtwcebd3&siteSearch=#{senateSite}&key=#{@googleGeoApiUr}")
     
       if thc["searchInformation"]["totalResults"] != "0"
         theLink = thc["items"][0]["link"]
@@ -471,9 +478,11 @@ class LookupsController < ApplicationController
         search_phrase_encoded = URI::encode(@name)
 
         
-        puts "https://www.googleapis.com/customsearch/v1?q=#{search_phrase_encoded}&cx=003645805095083477600%3A7hraibewjhe&siteSearch=lobbytools.com&key=#{@googleGeoApi}"
-        thc = HTTParty.get("https://www.googleapis.com/customsearch/v1?q=#{search_phrase_encoded}&cx=003645805095083477600%3A7hraibewjhe&siteSearch=lobbytools.com&key=#{@googleGeoApi}")
+        #puts "https://www.googleapis.com/customsearch/v1?q=#{search_phrase_encoded}&cx=003645805095083477600%3A7hraibewjhe&siteSearch=lobbytools.com&key=#{@googleGeoApiUr}"
+        thc = HTTParty.get("https://www.googleapis.com/customsearch/v1?q=#{search_phrase_encoded}&cx=003645805095083477600%3A7hraibewjhe&siteSearch=lobbytools.com&key=#{@googleGeoApiUr}")
       
+        puts thc
+
         theLink = thc["items"][0]["link"]
 
         doc = HTTParty.get(theLink)
