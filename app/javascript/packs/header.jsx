@@ -10,7 +10,7 @@ const HeaderWrapper = styled.header`
     display: flex;
     justify-content: flex-end;
     align-items: center;
-
+    
     height: 70px;
     width: 100%;
     margin-bottom: 25px;
@@ -23,7 +23,7 @@ const HeaderWrapper = styled.header`
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 1;
+    z-index: 1001;
 
     transform: translateY(0);
     transition: all 0.3s ease;
