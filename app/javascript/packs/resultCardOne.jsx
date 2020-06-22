@@ -17,6 +17,8 @@ const ResultCardWrapper = styled.div`
   //transition: opacity .4s;
   //transition-timing-function: ease-out;
 
+  margin-bottom: 35px;
+
 
   background: ${ props => props.results.one.party == "Democrat" ? "#F9F9F9" : "#F9F9F9"};
   //padding: 25px;

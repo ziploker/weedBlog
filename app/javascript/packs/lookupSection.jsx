@@ -19,7 +19,7 @@ const Lookup_Section_Wrapper = styled.div`
     grid-template-areas:
             
             "title"
-            "subTitle"
+            
             "form"
             "results1"
             "results2";
@@ -112,7 +112,6 @@ function Look_Up_Section (props) {
       <Lookup_Section_Wrapper>
 
         <h1 style={{gridArea: "title", padding: "25px 10px 10px 10px", lineHeight: "1.5em", textAlign: "center"}}> Find your Florida State Legistlators </h1>
-        <h2 style={{gridArea: "subTitle", padding: "25px", lineHeight: "1.5em", textAlign: "center"}}> ...and send them a preformated messages </h2>
         <LookupForm firstMatch={firstMatch} setFirstMatch={setFirstMatch} coordinates={coordinates} setCoordinates={setCoordinates} showStatusCheck={showStatusCheck} setShowStatusCheck={setShowStatusCheck} status={status} setStatus={setStatus} currentSearchTerm={currentSearchTerm} setCurrentSearchTerm={setCurrentSearchTerm} showStatus={showStatus} setShowStatus={setShowStatus} showStatusBar={showStatusBar} setShowStatusBar={setShowStatusBar} buttonDisabled={buttonDisabled} setButtonDisabled={setButtonDisabled} showForm={showForm} setShowForm={setShowForm} setMinimalResults={setMinimalResults} handleChange={handleChange} handleChange2={handleChange2}formInfo={formInfo} setFormInfo={setFormInfo} setResults={setResults} style={{gridArea: "form"}}/>
 
         <ResultCardOne showForm={showForm} results={results} />
