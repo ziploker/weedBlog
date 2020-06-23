@@ -11,7 +11,7 @@ function Admin(props){
     
     return (
 
-        <div>
+        <div style={{marginTop: "25px"}}>
             <h1> STORY FORM from inside admin.jsx </h1>
            
            <NewForm/>

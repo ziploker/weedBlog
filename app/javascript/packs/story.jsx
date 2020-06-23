@@ -23,7 +23,7 @@ const StorySection = styled.section`
     //height: 350px;
     //border: 1px solid orange;
     
-    margin-bottom: 20px;
+    //margin-bottom: 20px;
     //border: 1px solid orange;
     //border-top-left-radius: 17px;
     //border-top-right-radius: 17px;
@@ -44,17 +44,15 @@ const StorySection = styled.section`
 const StoryImageWrapper = styled.div`
 
     
-    border-top-left-radius: 17px;
-    border-top-right-radius: 17px;
-
+   
     grid-area: 1 /1 /3 /-1;
     
 
     /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#ffffff+0,ffffff+100&0+67,1+100 */
-    background: -moz-linear-gradient(top,  rgba(255,255,255,0) 0%, rgba(255,255,255,0) 67%, rgba(255,255,255,1) 100%); /* FF3.6-15 */
-    background: -webkit-linear-gradient(top,  rgba(255,255,255,0) 0%,rgba(255,255,255,0) 67%,rgba(255,255,255,1) 100%); /* Chrome10-25,Safari5.1-6 */
-    background: linear-gradient(to bottom,  rgba(255,255,255,0) 0%,rgba(255,255,255,0) 67%,rgba(255,255,255,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */
+    //background: -moz-linear-gradient(top,  rgba(255,255,255,0) 0%, rgba(255,255,255,0) 67%, rgba(255,255,255,1) 100%); /* FF3.6-15 */
+    //background: -webkit-linear-gradient(top,  rgba(255,255,255,0) 0%,rgba(255,255,255,0) 67%,rgba(255,255,255,1) 100%); /* Chrome10-25,Safari5.1-6 */
+    //background: linear-gradient(to bottom,  rgba(255,255,255,0) 0%,rgba(255,255,255,0) 67%,rgba(255,255,255,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    //filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */
     
     
     
@@ -73,8 +71,7 @@ const StoryImage = styled.img`
 
     width:100%;
     height: 100%;
-    border-top-left-radius: 17px;
-    border-top-right-radius: 17px;
+    
     position: relative;
     
     z-index: -20;
@@ -116,18 +113,7 @@ const StoryInfoWrapper = styled.div`
 
 `;
 
-const StoryInfo = styled.h3`
 
-    
-    margin: 0px;
-    padding: 0px;
-    //font-size: .5em;
-    padding-left: 10px;
-    color: #818080;
-    grid-area: "time";
-    justify-self: center;
-
-`;
 
 const StoryShareButtons = styled.div`
 
@@ -179,14 +165,25 @@ const StoryBody = styled.h1`
     font-weight: 700;
     grid-area: body;
     margin: 0px;
-    padding: 0px 11px 11px 11px;
+    //padding: 0px 11px 11px 11px;
     text-align: center;
     line-height: 1.2em;
 
 `;
 
 
+const StoryInfo = styled.h3`
 
+    
+    margin: 0px;
+    padding: 0px;
+    font-size: .9em;
+    
+    color: #818080;
+    grid-area: "time";
+    justify-self: center;
+
+`;
 
   
   
