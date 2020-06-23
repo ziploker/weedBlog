@@ -153,9 +153,9 @@ class Story < ApplicationRecord
     def acceptable_image
         return unless image.attached?
 
-        unless image.byte_size <= 1.megabyte
-            errors.add(:image, "is too big")
-        end
+        #unless image.byte_size <= 1.megabyte
+        #    errors.add(:image, "is too big")
+        #end
 
         acceptable_types = ["image/jpeg", "image/png"]
         
