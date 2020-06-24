@@ -30,7 +30,7 @@ const StorySection = styled.section`
     padding: 15px;
     
     display: grid;
-    grid-template-rows: 30% 2em 1fr;  
+    //grid-template-rows: 30% 2em 1fr;  
 
     grid-template-areas:
         "picture"
@@ -49,10 +49,10 @@ const StoryImageWrapper = styled.div`
     
 
     /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#ffffff+0,ffffff+100&0+67,1+100 */
-    //background: -moz-linear-gradient(top,  rgba(255,255,255,0) 0%, rgba(255,255,255,0) 67%, rgba(255,255,255,1) 100%); /* FF3.6-15 */
-    //background: -webkit-linear-gradient(top,  rgba(255,255,255,0) 0%,rgba(255,255,255,0) 67%,rgba(255,255,255,1) 100%); /* Chrome10-25,Safari5.1-6 */
-    //background: linear-gradient(to bottom,  rgba(255,255,255,0) 0%,rgba(255,255,255,0) 67%,rgba(255,255,255,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    //filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */
+    background: -moz-linear-gradient(top,  rgba(255,255,255,0) 0%, rgba(255,255,255,0) 67%, rgba(255,255,255,1) 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top,  rgba(255,255,255,0) 0%,rgba(255,255,255,0) 67%,rgba(255,255,255,1) 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom,  rgba(255,255,255,0) 0%,rgba(255,255,255,0) 67%,rgba(255,255,255,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */
     
     
     
@@ -76,7 +76,7 @@ const StoryImage = styled.img`
     
     z-index: -20;
 
-    
+   
 
 
     
@@ -134,7 +134,7 @@ const StoryTags = styled.div`
     height: 23px;
     border-radius: 4px;
     background-color: orange;
-    opacity: .6;
+    opacity: .9;
 
     grid-area: grayArea;
     justify-self: center;
@@ -147,13 +147,12 @@ const StoryTags = styled.div`
 const Tag = styled.h3`
 
     
-   color: black;
-   margin: 0px;
+    color: black;
+    margin: 0px;
     text-align: center;
     line-height: 23px;
     
-    10px
-
+    
 
 `;
 
@@ -168,6 +167,7 @@ const StoryBody = styled.h1`
     //padding: 0px 11px 11px 11px;
     text-align: center;
     line-height: 1.2em;
+    margin-bottom: 15px;
 
 `;
 
@@ -177,7 +177,8 @@ const StoryInfo = styled.h3`
     
     margin: 0px;
     padding: 0px;
-    font-size: .9em;
+    font-size: 1.1em;
+    
     
     color: #818080;
     grid-area: "time";

@@ -221,6 +221,7 @@ function Lookup(props) {
               props.setStatus("Search Complete!!")
               props.setShowStatusBar(false)
               props.setShowStatusCheck(true)
+              props.setShowCards(true)
               props.setResults(data);
             })
         
@@ -252,6 +253,7 @@ function Lookup(props) {
           props.setStatus("Search Complete!!")
           props.setShowStatusBar(false)
           props.setShowStatusCheck(true)
+          props.setShowCards(true)
           props.setResults(data);
         })
       }

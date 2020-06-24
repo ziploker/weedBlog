@@ -49,8 +49,10 @@ const Lookup_Section_Wrapper = styled.div`
 
 function Look_Up_Section (props) {
 
-  const [showForm, setShowForm] = React.useState( true )
-  const [results, setResults] = React.useState( {"one":{"name":"Annette Taddeo","firstName":"Annette","lastName":"Taddeo","image":"http://www.flsenate.gov/PublishedContent/Senators/2018-2020/Photos/s40_5331.jpg","id":"ocd-person/ea190b03-d1ca-4d75-89c7-dca745386db7","email":"taddeo.annette.web@flsenate.gov","chamber":"Senate","party":"Democrat","parent":"Florida Legislature","district":"40","fullDistrict":"Florida State Senate district 40"},"two":{"name":"Juan Alfonso Fernandez-Barquin","firstName":"","lastName":"","image":"https://www.myfloridahouse.gov//FileStores/Web/Imaging/Member/4709.jpg","id":"ocd-person/a8c88fee-1915-4907-ae37-5755c4bff446","email":"JuanF.Barquin@myfloridahouse.gov","chamber":"House","party":"Republican","parent":"Florida Legislature","district":"119","fullDistrict":"Florida State House district 119"}} );
+  const [showCards, setShowCards] = React.useState( false )
+  //const [results, setResults] = React.useState( {"one":{"name":"Annette Taddeo","firstName":"Annette","lastName":"Taddeo","image":"http://www.flsenate.gov/PublishedContent/Senators/2018-2020/Photos/s40_5331.jpg","id":"ocd-person/ea190b03-d1ca-4d75-89c7-dca745386db7","email":"taddeo.annette.web@flsenate.gov","chamber":"Senate","party":"Democrat","parent":"Florida Legislature","district":"40","fullDistrict":"Florida State Senate district 40"},"two":{"name":"Juan Alfonso Fernandez-Barquin","firstName":"","lastName":"","image":"https://www.myfloridahouse.gov//FileStores/Web/Imaging/Member/4709.jpg","id":"ocd-person/a8c88fee-1915-4907-ae37-5755c4bff446","email":"JuanF.Barquin@myfloridahouse.gov","chamber":"House","party":"Republican","parent":"Florida Legislature","district":"119","fullDistrict":"Florida State House district 119"}} );
+  const [results, setResults] = React.useState( {"one" : {}, "two" : {} });
+
   const [minimalResults, setMinimalResults] = React.useState ({})
   const [buttonDisabled, setButtonDisabled] = React.useState ( false)
   const [showStatus, setShowStatus] = React.useState (false)
@@ -112,14 +114,13 @@ function Look_Up_Section (props) {
       <Lookup_Section_Wrapper>
 
         <h1 style={{gridArea: "title", padding: "25px 10px 10px 10px", lineHeight: "1.5em", textAlign: "center"}}> Find your Florida State Legistlators </h1>
-        <LookupForm firstMatch={firstMatch} setFirstMatch={setFirstMatch} coordinates={coordinates} setCoordinates={setCoordinates} showStatusCheck={showStatusCheck} setShowStatusCheck={setShowStatusCheck} status={status} setStatus={setStatus} currentSearchTerm={currentSearchTerm} setCurrentSearchTerm={setCurrentSearchTerm} showStatus={showStatus} setShowStatus={setShowStatus} showStatusBar={showStatusBar} setShowStatusBar={setShowStatusBar} buttonDisabled={buttonDisabled} setButtonDisabled={setButtonDisabled} showForm={showForm} setShowForm={setShowForm} setMinimalResults={setMinimalResults} handleChange={handleChange} handleChange2={handleChange2}formInfo={formInfo} setFormInfo={setFormInfo} setResults={setResults} style={{gridArea: "form"}}/>
+        <LookupForm firstMatch={firstMatch} setFirstMatch={setFirstMatch} coordinates={coordinates} setCoordinates={setCoordinates} showStatusCheck={showStatusCheck} setShowStatusCheck={setShowStatusCheck} status={status} setStatus={setStatus} currentSearchTerm={currentSearchTerm} setCurrentSearchTerm={setCurrentSearchTerm} showStatus={showStatus} setShowStatus={setShowStatus} showStatusBar={showStatusBar} setShowStatusBar={setShowStatusBar} buttonDisabled={buttonDisabled} setButtonDisabled={setButtonDisabled} showCards={showCards} setShowCards={setShowCards} setMinimalResults={setMinimalResults} handleChange={handleChange} handleChange2={handleChange2}formInfo={formInfo} setFormInfo={setFormInfo} setResults={setResults} style={{gridArea: "form"}}/>
 
-        <ResultCardOne showForm={showForm} results={results} />
+        <ResultCardOne showCards={showCards} results={results} />
 
-        <ResultCardTwo showForm={showForm} results={results} />
+        <ResultCardTwo showCards={showCards} results={results} />
 
-        <ResetButton showForm={showForm} setShowForm={setShowForm}/>
-            
+        
       </Lookup_Section_Wrapper>
     
     </>

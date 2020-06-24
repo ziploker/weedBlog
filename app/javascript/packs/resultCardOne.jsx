@@ -1,5 +1,6 @@
 import React, {useEffect, useState, useRef} from 'react';
 import styled, { ThemeProvider } from 'styled-components';
+import man from '../../assets/images/man.png'
 
 
 const ResultCardWrapper = styled.div`
@@ -12,10 +13,10 @@ const ResultCardWrapper = styled.div`
   width: 100%;
   display: grid;
   grid-area: results1;
-  //max-height: ${ props => props.showForm.toString() == "true" ? "0px" : "100%"};
-  //opacity: ${ props => props.showForm.toString() == "true" ? "0" : "1"};
-  //transition: opacity .4s;
-  //transition-timing-function: ease-out;
+  max-height: ${ props => props.showCards.toString() == "false" ? "0px" : "100%"};
+  opacity: ${ props => props.showCards.toString() == "false" ? "0" : "1"};
+  transition: opacity .4s;
+  transition-timing-function: ease-out;
 
   margin-bottom: 35px;
 
@@ -38,12 +39,12 @@ function ResultCardOne(props){
 
   return (
     
-    <ResultCardWrapper showForm={props.showForm} results={props.results}>
+    <ResultCardWrapper showCards={props.showCards} results={props.results}>
 
-      <h4 style={{marginBottom: "15px"}}>{props.results.one.fullDistrict ? props.results.one.fullDistrict : ""} </h4>
-      <img src={props.results.one ? props.results.one.image : placeholder} style={{width: "143px", height: "200px", borderRadius: "15px", marginBottom: "15px"}}/>
-      <h4 style={{margin: "0"}}>{props.results.one.chamber === "Senate" ? "Senator": "Representative"}</h4>
-      <h1 style={{margin: "0", fontSize: ".7em"}}>{props.results.one.name ? props.results.one.name : ""} ({props.results.one.party === "Democrat" ? "D" : "R"})</h1>
+      <h4 style={{marginBottom: "15px"}}>{props.results.one.fullDistrict ? props.results.one.fullDistrict : "Florida State Senator"} </h4>
+      <img src={props.results.one.image ? props.results.one.image : man} style={{width: "143px", height: "200px", borderRadius: "15px", marginBottom: "15px", focus: "blur(1.7rem)"}}/>
+      <h4 style={{margin: "0"}}>{props.results.one.chamber ? props.results.one.chamber === "Senate" ? "Senator": "Representative" : ""}</h4>
+      <h1 style={{margin: "0", fontSize: ".7em"}}>{props.results.one.name ? props.results.one.name : ""} {props.results.one.party ? props.results.one.party === "Democrat" ? "(D)" : "(R)" : ""}</h1>
       
     </ResultCardWrapper>
 
