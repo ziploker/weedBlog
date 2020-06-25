@@ -4,6 +4,9 @@ import styled from 'styled-components';
 import {Link} from 'react-router-dom';
 
 import useDocumentScrollThrottled from './useDocumentScrollThrottled.jsx'
+import Burger from './burger'
+import Menu from './menu'
+
 
 const HeaderWrapper = styled.header`
 
@@ -125,7 +128,60 @@ const OptionLink = styled(Link)`
 
 
 
+const Nav = styled.nav`
+    @media only screen and (max-width: 850px){
+    
+       display: none     
 
+    }   
+    //transform: translate(-30px,-30px);
+    //opacity: 0;
+    //height: 100%;
+
+    display: flex;
+    
+    ul{
+        
+        list-style: none;
+
+        li, a{
+            
+        
+            font-weight: 500;
+            font-size: 16px;
+            
+            color: orangered;
+            
+            text-decoration: none;
+        
+        
+        }
+    
+        li{
+            display: inline-block;
+            padding: 0px 20px;
+
+        
+            a{
+                transition: all 0.3s ease 0s;
+
+                &:hover{
+
+                    color: gray;
+
+                }
+            
+            }
+        
+        }
+    
+    
+    
+    }
+    
+    
+
+`;
 
 
 
@@ -137,10 +193,12 @@ function Header() {
 
     const [shouldHideHeader, setShouldHideHeader] = useState(false);
     const [shouldShowShadow, setShouldShowShadow] = useState(false);
-    
-
+    const [open, setOpen] = useState(false);
+    const ref = React.useRef();
+    const navbar = React.createRef();
     const MINIMUM_SCROLL = 80;
     const TIMEOUT_DELAY = 400;
+    
 
     useDocumentScrollThrottled(callbackData => {
         const { previousScrollTop, currentScrollTop } = callbackData;
@@ -162,7 +220,49 @@ function Header() {
     const shadowStyle = shouldShowShadow ? 'shadow' : '';
     const hiddenStyle = shouldHideHeader ? 'hidden' : '';
 
+    function handler(){
+        setOpen(false);
+        console.log("ran setopen in handler, open = " + open);
+      }
 
+
+
+    useEffect(() => {
+
+        console.log("UseEffect Start, open state is currently " + open);
+        
+        const listener = event => {
+          
+          if (!ref.current || ref.current.contains(event.target)) {
+  
+            console.log("nada");
+            return;
+          }
+          
+          console.log("call handler");
+          handler();
+        };
+  
+        const handleResize = () => {
+          console.log(window.innerWidth);
+          if (window.innerWidth > 850){
+            setOpen(false);
+          }
+        }
+  
+        window.addEventListener("resize", handleResize);
+        window.addEventListener("orientationchange", handleResize);
+        document.addEventListener('mousedown', listener);
+        
+        return () => {
+          console.log("cleanup first line");
+          document.removeEventListener('mousedown', listener);
+          console.log("cleanup");
+          console.log("cleanup done, open = " + open);
+        };
+      },
+      [ref, handler],
+      );
 
 
 
@@ -175,26 +275,23 @@ function Header() {
             </HomeLink>
             
             
-        
-        
-            <Options>
+            <Nav ref={navbar}>
                 <ul>
-                    <li>
-                        <OptionLink to='/Letter'>
-                            Letter
-                        </OptionLink>
-                    </li>
-                    <li>
-                        <OptionLink to='/Feedback'>
-                        
-                            Feedback
-                        </OptionLink>
-                    </li>
+                    <li><a href="#">Link1</a></li>
+                    <li><a href="#">Link2</a></li>
+                    <li><a href="#">Link3</a></li>
+                    <li><a href="#">Link4</a></li>
+
                 </ul>
-            </Options>
+
+            </Nav>
         
+            
         
-        
+            <div className="tester" ref={ref}>
+            <Burger open={open} setOpen={setOpen}/>
+            <Menu open={open}  />
+            </div>
         
         
         </HeaderWrapper>
