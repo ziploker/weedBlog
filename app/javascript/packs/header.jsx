@@ -188,7 +188,7 @@ const Nav = styled.nav`
 
 
 
-function Header() {
+function Header(props) {
 
 
     const [shouldHideHeader, setShouldHideHeader] = useState(false);
@@ -275,12 +275,17 @@ function Header() {
             </HomeLink>
             
             
-            <Nav ref={navbar}>
+            <Nav ref={navbar} >
                 <ul>
                     <li><a href="#">Link1</a></li>
                     <li><a href="#">Link2</a></li>
                     <li><a href="#">Link3</a></li>
                     <li><a href="#">Link4</a></li>
+
+                    <l1>{props.state.loggedInStatus} {props.state.user.email ? props.state.user.email : "" }</l1>
+
+                    <button onClick= {props.handleLogOutClick}>Logout</button>
+                    
 
                 </ul>
 

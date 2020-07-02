@@ -111,12 +111,12 @@ class LookupsController < ApplicationController
 
   
   
-  #incomming form submission from react front end
-  def incomming
+  #incoming form submission from react front end
+  def incoming
 
 
     #object to be sent to frontend
-    sendToFrontEnd = {"one" => {"name" => "", "firstName" => "", "lastName" => "", "image" => "", "id" => "", "email" => "", "chamber" => "", "party" => "", "parent" => "", "district" => "", "fullDistrict" => ""}, "two" => {"name" => "", "firstName" => "", "lastName" => "", "image" => "", "id" => "", "email" => "", "chamber" => "", "party" => "", "parent" => "", "district" => "", "fullDistrict" => ""}}
+    sendToFrontEnd = {"one" => {"name" => "", "firstName" => "", "lastName" => "", "image" => "", "id" => "", "email" => "", "chamber" => "", "party" => "", "parent" => "", "district" => "", "fullDistrict" => "", "fullDistrictTrunk" => ""}, "two" => {"name" => "", "firstName" => "", "lastName" => "", "image" => "", "id" => "", "email" => "", "chamber" => "", "party" => "", "parent" => "", "district" => "", "fullDistrict" => "", "fullDistrictTrunk" => ""}}
 
 
     #disable any views being rendered
@@ -192,7 +192,21 @@ class LookupsController < ApplicationController
     sendToFrontEnd["one"]["chamber"] =  primaryOpenStatesResponse.data.people.edges[0].node.chamber[0].organization.name
     sendToFrontEnd["one"]["parent"] =  primaryOpenStatesResponse.data.people.edges[0].node.chamber[0].organization.parent.name
     sendToFrontEnd["one"]["district"] =  primaryOpenStatesResponse.data.people.edges[0].node.chamber[0].post.label
+    
+    puts "1sendToFrontEnd === " + sendToFrontEnd["one"]["fullDistrict"]
     sendToFrontEnd["one"]["fullDistrict"] =  primaryOpenStatesResponse.data.people.edges[0].node.chamber[0].post.division.name
+    puts "2sendToFrontEnd === " + sendToFrontEnd["one"]["fullDistrict"]
+    
+    temp = primaryOpenStatesResponse.data.people.edges[0].node.chamber[0].post.division.name.dup
+    puts "3sendToFrontEnd === " + sendToFrontEnd["one"]["fullDistrict"]
+
+    fullDistrictTrunk = temp.gsub!(/(\d+|(district))/,"").rstrip
+    puts "4sendToFrontEnd === " + sendToFrontEnd["one"]["fullDistrict"]
+    sendToFrontEnd["one"]["fullDistrictTrunk"] = fullDistrictTrunk
+    puts "5sendToFrontEnd === " + sendToFrontEnd["one"]["fullDistrict"]
+
+    
+
 
 
     sendToFrontEnd["two"]["name"] =  primaryOpenStatesResponse.data.people.edges[1].node.name.gsub('\\"', '')
@@ -205,6 +219,15 @@ class LookupsController < ApplicationController
     sendToFrontEnd["two"]["district"] =  primaryOpenStatesResponse.data.people.edges[1].node.chamber[0].post.label
     sendToFrontEnd["two"]["fullDistrict"] =  primaryOpenStatesResponse.data.people.edges[1].node.chamber[0].post.division.name
 
+    temp = primaryOpenStatesResponse.data.people.edges[1].node.chamber[0].post.division.name
+    fullDistrictTrunk = temp.gsub!(/(\d+|(district))/,"").rstrip
+    sendToFrontEnd["two"]["fullDistrictTrunk"] = fullDistrictTrunk
+    
+    
+    
+    
+    
+    
     primaryOpenStatesResponse.data.people.edges[0].node.contactDetails.each do |object|
       
       if object.type === "email" && object.value.exclude?("%") && object.value.include?("@flsenate.gov") || object.value.include?("@myfloridahouse.gov")

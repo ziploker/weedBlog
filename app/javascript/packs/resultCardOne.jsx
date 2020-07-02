@@ -12,13 +12,13 @@ const ResultCardWrapper = styled.div`
   justify-items: center;
   width: 100%;
   display: grid;
-  grid-area: results1;
+  //grid-area: results1;
   max-height: ${ props => props.showCards.toString() == "false" ? "0px" : "100%"};
   opacity: ${ props => props.showCards.toString() == "false" ? "0" : "1"};
   transition: opacity .4s;
   transition-timing-function: ease-out;
 
-  margin-bottom: 35px;
+  
 
 
   background: ${ props => props.results.one.party == "Democrat" ? "#F9F9F9" : "#F9F9F9"};
@@ -41,11 +41,12 @@ function ResultCardOne(props){
     
     <ResultCardWrapper showCards={props.showCards} results={props.results}>
 
-      <h4 style={{marginBottom: "15px"}}>{props.results.one.fullDistrict ? props.results.one.fullDistrict : "Florida State Senator"} </h4>
+      <h4>{props.results.one.fullDistrictTrunk ? props.results.one.fullDistrictTrunk : ""} </h4>
       <img src={props.results.one.image ? props.results.one.image : man} style={{width: "143px", height: "200px", borderRadius: "15px", marginBottom: "15px", focus: "blur(1.7rem)"}}/>
       <h4 style={{margin: "0"}}>{props.results.one.chamber ? props.results.one.chamber === "Senate" ? "Senator": "Representative" : ""}</h4>
       <h1 style={{margin: "0", fontSize: ".7em"}}>{props.results.one.name ? props.results.one.name : ""} {props.results.one.party ? props.results.one.party === "Democrat" ? "(D)" : "(R)" : ""}</h1>
-      
+      <h3 style={{margin: "0"}}>{props.results.one.district ? "District " + props.results.one.district   : ""}</h3>
+    
     </ResultCardWrapper>
 
   )

@@ -177,7 +177,7 @@ const StoryInfo = styled.h3`
     
     margin: 0px;
     padding: 0px;
-    font-size: 1.1em;
+    font-size: .9em;
     
     
     color: #818080;

@@ -12,7 +12,7 @@ const ResultCardWrapper = styled.div`
   align-items: center;
   justify-items: center;
   width: 100%;
-  grid-area: results2;
+  //grid-area: results2;
   display: grid;
   max-height: ${ props => props.showCards.toString() == "false" ? "0px" : "100%"};
   opacity: ${ props => props.showCards.toString() == "false" ? "0" : "1"};
@@ -39,11 +39,12 @@ function ResultCardTwo(props){
     
     <ResultCardWrapper showCards={props.showCards} results={props.results}>
 
-      <h4 style={{marginBottom: "15px"}}>{props.results.two.fullDistrict ? props.results.two.fullDistrict : "Florida State House"} </h4>
+      <h4 >{props.results.two.fullDistrictTrunk ? props.results.two.fullDistrictTrunk : ""} </h4>
       <img src={props.results.two.image ? props.results.two.image : man} style={{width: "143px", height: "200px", borderRadius: "15px", marginBottom: "15px", focus: "blur(1.7rem)"}}/>
       <h4 style={{margin: "0"}}>{props.results.two.chamber ? props.results.two.chamber === "Senate" ? "Senator": "Representative" : ""}</h4>
       <h1 style={{margin: "0", fontSize: ".7em"}}>{props.results.two.name ? props.results.two.name : ""} {props.results.two.party ? props.results.two.party === "Democrat" ? "(D)" : "(R)" : ""}</h1>
-      
+      <h3 style={{margin: "0"}}>{props.results.two.district ? "District " + props.results.two.district   : ""}</h3>
+
         
 
     </ResultCardWrapper>

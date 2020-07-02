@@ -47,8 +47,8 @@ const Wrapper = styled.div`
 
 
 
-function Home({story}){
-    
+function Home(props){
+        console.log("Home", props)
     
     return (
         
@@ -57,7 +57,7 @@ function Home({story}){
         <Wrapper>
             
             
-            {story.map((info, index) => (
+            {props.story.map((info, index) => (
                 
                 
                 <div key={index}>
@@ -65,7 +65,7 @@ function Home({story}){
                 </div>
             ))}
 
-            
+           
         </Wrapper>  
 
             

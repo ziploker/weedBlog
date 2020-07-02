@@ -2,6 +2,8 @@ source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '2.6.5'
+gem 'solargraph'
+gem 'bcrypt', '~> 3.1.11'
 gem 'hash_dot'
 gem 'image_processing', '~> 1.2'
 gem 'httparty'
@@ -46,6 +48,7 @@ group :development do
   gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'bootsnap', '>= 1.4.2', require: false
+  
 end
 
 group :test do

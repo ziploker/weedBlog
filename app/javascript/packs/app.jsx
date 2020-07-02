@@ -1,4 +1,10 @@
 import React, {useEffect, useState, useRef} from 'react';
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    Link
+  } from "react-router-dom";
 import styled, { ThemeProvider } from 'styled-components';
 
 import Letter from '../packs/letter.jsx'
@@ -9,75 +15,95 @@ import Header from '../packs/header'
 import LookupSection from '../packs/lookupSection.jsx'
 import Footer from '../packs/footer.jsx'
 
+import Login from "./pages/login";
+import Signup from './pages/signup';
+import axios from 'axios'
 import '../../assets/stylesheets/sticky.scss'
 
 import GlobalStyles from "./global"
 
-import {
-    BrowserRouter as Router,
-    Switch,
-    Route,
-    Link
-  } from "react-router-dom";
-
-const Wrapper = styled.div`
-
-    display: grid;
-    grid-template-columns: minmax(200px, 700px);
-    grid-gap: 10px;
-    justify-content: center;
-
-    @media screen and (min-width: 750px){
-        grid-template-columns: minmax(245px, 400px) minmax(245px, 400px) minmax(245px, 400px);
-        grid-gap: 10px;
-        justify-content: center;
-        //justify-items: center;
-        
-    }
 
 
 
-`;
 
-
-const Div = styled.div`
-
-    width:100%;
-    height: 350px;
-    background-color: pink;
-
-
-`;
-
-function App({story}){
-    //const [story, setStory] = React.useState({
-
-        //story: JSON.stringify(props.story)
-        //story: props.story
-        
+function App(info){
     
-      //})
+    //global state of user (logged in ? and user)
+    const [state, setState] = React.useState({
+        loggedInStatus: "NOT_LOGGED_IN",
+        user: {}
+    })
 
     
     const [isSticky, setSticky] = useState(false);
     const ref = useRef(null);
+    
     const handleScroll = () => {
-
-        //consomle.log(ref.current.getBoundingClientRect() )
         
-        //setSticky(ref.current.getBoundingClientRect().top <= -90);
-
-
         if (document.body.scrollTop > 70 || document.documentElement.scrollTop > 70) {
             //document.getElementById("header").style.fontSize = "30px";
-
-          } else {
+        } else {
             //document.getElementById("header").style.fontSize = "90px";
-          }
-        
+        }
     };
 
+    
+
+    const handleSuccessfulAuth = data => {
+        
+        setState({
+            loggedInStatus: "LOGGED_IN",
+            user: data.user
+        })
+        //props.history.push("/ziploker")
+    }
+
+    
+    const handleLogOutClick = () => {
+        
+        const mode = process.env.NODE_ENV =="development" ? "http://127.0.0.1:3000" : "https://weedblog.herokuapp.com"
+        axios.delete(mode + "/logout", {withCredentials : true})
+        .then(response => {
+            setState({
+                loggedInStatus: "NOT_LOGGED_IN",
+                user: {}
+            })
+
+        }).catch(error => {
+            console.log("logout errors", error)
+        })
+        
+       
+    }
+
+    
+    
     useEffect(() => {
+
+        const mode = process.env.NODE_ENV == "development" ? "http://127.0.0.1:3000" : "https://weedblog.herokuapp.com"
+        axios.get( mode + "/logged_in", {withCredentials: true})
+            .then(response => {
+
+                if (response.data.logged_in && state.loggedInStatus == "NOT_LOGGED_IN"){
+                    
+                    setState({
+                        loggedInStatus: "LOGGED_IN",
+                        user: response.data.user
+                    })
+                    
+                }else if (!response.data.logged_in && state.loggedInStatus == "LOGGED_IN"){
+                    
+                    setState({
+                        loggedInStatus: "NOT_LOGGED_IN",
+                        user: {}
+                    })
+
+                }
+            
+            })
+            .catch(error => console.log("Logged in? error", error))
+
+        
         window.addEventListener('scroll', handleScroll);
 
         return () => {
@@ -85,22 +111,24 @@ function App({story}){
         };
     },[]);
     
-    console.log("appp")
-    console.log(story.title);
+    
     return (
+        
         <Router>
             <GlobalStyles/>
                 
                     
-                <Header/>
+                <Header state={state} handleLogOutClick={handleLogOutClick}/>
                 
                 
                 
                 <Switch>
 
                     
-                    <Route exact path="/" render={ (props) => <Home {...props} story={story} />}/>
-                    <Route exact path="/ziploker" component={Admin} />
+                    <Route exact path="/" render={ props => <Home {...props} story={info.story} loggedInStatus={state.loggedInStatus}/>}/>
+                    <Route path="/login" render={ props => <Login {...props} handleSuccessfulAuth={handleSuccessfulAuth} />} />
+                    <Route path="/signup" render={ props => <Signup {...props} handleSuccessfulAuth={handleSuccessfulAuth} />} />
+                    <Route exact path="/ziploker" render={ props => <Admin {...props} loggedInStatus={state.loggedInStatus}/>} />
                     <Route path="/letter" component={Letter} />
                     
                     <Route path="/feedback" component={Feedback} />
@@ -119,8 +147,9 @@ function App({story}){
                 <Footer/>
                 
         </Router>
+        
     );
 }
 
 
-export default story => <App {...story} />;
+export default props => <App {...props} />;
