@@ -23,6 +23,7 @@ class SessionsController < ApplicationController
 
         if @current_user
             render json: {
+                controller: "sessions",
                 logged_in: true,
                 user: @current_user
             }
