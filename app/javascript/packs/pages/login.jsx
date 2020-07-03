@@ -17,7 +17,7 @@ function Login(props) {
     console.log("about to axios", "abou to axiooos")
     console.log("Rails.env", process.env.NODE_ENV)
 
-    const mode = process.env.NODE_ENV =="development" ? "http://127.0.0.1:3000" : "http://weedblog.herokuapp.com"
+    const mode = process.env.NODE_ENV =="development" ? "http://127.0.0.1:3000" : "https://weedblog.herokuapp.com"
     axios.post(mode + "/sessions", {
       
       user: { 

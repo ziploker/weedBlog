@@ -34,6 +34,9 @@ const Button = styled.button`
   width: 100%;
   margin-bottom: 1rem;
   font-size: 0.8rem;
+  
+  cursor: pointer;
+  
 `;
 
 const Logo = styled.img`
