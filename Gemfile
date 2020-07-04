@@ -3,6 +3,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '2.6.5'
 gem 'solargraph'
+gem 'rack-cors'
 gem 'bcrypt', '~> 3.1.11'
 gem 'hash_dot'
 gem 'image_processing', '~> 1.2'

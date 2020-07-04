@@ -81,9 +81,7 @@ function App(info){
     useEffect(() => {
 
         const mode = process.env.NODE_ENV == "development" ? "http://127.0.0.1:3000" : "https://weedblog.herokuapp.com"
-        axios.get( mode + "/logged_in",
-        {'Cache-Control' : 'no-cache, no-store'},
-        {withCredentials: true})
+        axios.get( mode + "/logged_in", {withCredentials: true})
             .then(response => {
 
                 if (response.data.logged_in && state.loggedInStatus == "NOT_LOGGED_IN"){
