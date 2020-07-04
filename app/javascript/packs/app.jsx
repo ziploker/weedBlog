@@ -55,7 +55,7 @@ function App(info){
             loggedInStatus: "LOGGED_IN",
             user: data.user
         })
-        //props.history.push("/ziploker")
+        props.history.push("/")
     }
 
     
