@@ -2,7 +2,12 @@ import React, { useState } from "react";
 import { Link, Redirect } from "react-router-dom";
 import axios from 'axios';
 import logoImg from "../../../assets/images/logoPlaceholder.jpg";
-import { Card, Logo, Form, Input, Button, Error } from './AuthForm';
+import redX from '../../../assets/images/redX.jpg'
+import tinyMan from '../../../assets/images/tinyMan.png'
+import lock from '../../../assets/images/lock.png'
+
+import { Card, Logo, Form, Input, Button, Error, RedX, LoginWrapper, InputIcon } from './AuthForm';
+
 
 
 function Login(props) {
@@ -10,38 +15,49 @@ function Login(props) {
     email: "",
     password: "",
     
-    loginErrors: ""
+    error: "",
+    status: ""
   })
 
   function handleSubmit(event){
-    console.log("about to axios", "abou to axiooos")
-    console.log("Rails.env", process.env.NODE_ENV)
+    
+    event.preventDefault();
 
     const mode = process.env.NODE_ENV =="development" ? "http://127.0.0.1:3000" : "https://weedblog.herokuapp.com"
     axios.post(mode + "/sessions", {
       
       user: { 
         email: state.email,
-        password: state.password,
+        password: state.password
+        
         
 
       }
     },
     {withCredentials: true}
     ).then(response => {
-      console.log("LoginResponse", response)
-      if (response.data.status === "created"){
+      
+      if (response.data.status == "green"){
         props.handleSuccessfulAuth(response.data)
-        //props.handleSuccessfulAuth(response.data)
-        //props.history.push("/ziploker")
+        
+        props.history.push("/")
       }else{
-        //update error state
+        setState({
+          ...state,
+          error: response.data.error,
+          status: response.data.status
+        });
       }
       
     }).catch(error => {
       console.log("LoginErrors", error)
+      setState({
+        ...state,
+        error: response.data.error,
+        status: "pink"
+      });
     })
-    event.preventDefault();
+    
 
 
   }
@@ -60,16 +76,66 @@ function Login(props) {
   }
 
   return (
-    <Card>
+    <LoginWrapper>
       <Logo src={logoImg} />
+    <Card>
+      <h2 style={{
+        margin: "40px 20px 0",
+        lineHeight: "1.5",
+        fontSize: "24px"
+      }}>Log in to your account</h2>
       <Form onSubmit = {handleSubmit}>
-        <Input name="email" type="email" placeholder="email" value={state.email} onChange={handleChange} required/>
-        <Input name="password" type="password" placeholder="password" value={state.password} onChange={handleChange} required/>
+      <div style={{
+          position: "relative",
+          margin: "0 0 20px 0",
+          padding: "0"}}>
+          <label style={{
+            textAlign: "left", 
+            width: "100",
+            display: "block",
+            maxWidth: "100%",
+            marginBottom: "5px",
+            color: "#62748e",
+            fontSize: "12px",
+            fontWeight: "bold",
+            lineHeight: "1.42857"
+            
+            }}>email</label>
+          <InputIcon style={{backgroundImage: `url(${tinyMan})`}}></InputIcon>
+          <Input name="email" type="email" placeholder="email" value={state.email} onChange={handleChange} required/>
+        </div>
 
+
+        <div style={{
+          position: "relative",
+          margin: "0 0 20px 0",
+          padding: "0"}}>
+          <label style={{
+            textAlign: "left", 
+            width: "100",
+            display: "block",
+            maxWidth: "100%",
+            marginBottom: "5px",
+            color: "#62748e",
+            fontSize: "12px",
+            fontWeight: "bold",
+            lineHeight: "1.42857"
+            
+            }}>password</label>
+          <InputIcon style={{backgroundImage: `url(${lock})`}}></InputIcon>
+          
+        <Input name="password" type="password" placeholder="password" value={state.password} onChange={handleChange} required/>
+        </div>
         <Button type="submit">Sign Up</Button>
       </Form>
-      <Link to="/signup">Dont have an account?</Link>
+      <Error status={state.status}>
+        <RedX status={state.status} src={redX} style={{backgroundColor: "transparent", height: "20px", verticalAlign: "middle"}}/>
+        <span style={{paddingLeft: "10px"}}>{state.error}</span>
+      </Error>
+      
     </Card>
+    <Link style={{fontSize: ".5em"}} to="/signup">Dont have an account? <span style={{textDecoration: "underline"}}>click here</span></Link>
+    </LoginWrapper>
   );
 }
 

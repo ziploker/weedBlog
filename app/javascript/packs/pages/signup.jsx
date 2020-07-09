@@ -7,6 +7,8 @@ import axios from 'axios';
 function Signup(props) {
 
   const [state, setState] = React.useState({
+    first: "",
+    last: "",
     email: "",
     password: "",
     passwordConfirmation: "",
@@ -29,6 +31,8 @@ function Signup(props) {
     axios.post(mode + "/registrations", {
       
       user: { 
+        first: state.first,
+        last: state.last,
         email: state.email,
         password: state.password,
         passwordConfirmation: state.passwordConfirmation
@@ -71,6 +75,8 @@ function Signup(props) {
     <Card>
       <Logo src={logoImg} />
       <Form onSubmit = {handleSubmit}>
+        <Input name="first" type="text" placeholder="first name" value={state.first} onChange={handleChange} required/>
+        <Input name="last" type="text" placeholder="last name" value={state.last} onChange={handleChange} required/>
         <Input name="email" type="email" placeholder="email" value={state.email} onChange={handleChange} required/>
         <Input name="password" type="password" placeholder="password" value={state.password} onChange={handleChange} required/>
         <Input name="passwordConfirmation" type="password" placeholder="password confirmation" value={state.passwordConfirmation} onChange={handleChange} required/>

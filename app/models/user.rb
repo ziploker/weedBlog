@@ -6,5 +6,13 @@ class User < ApplicationRecord
     
     validates_uniqueness_of :email
 
+    before_save :downcase_fields
+
+   def downcase_fields
+      self.email.downcase!
+   end
+
+    
+
     
 end

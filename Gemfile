@@ -2,6 +2,7 @@ source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '2.6.5'
+gem 'sendgrid-ruby'
 gem 'solargraph'
 gem 'rack-cors'
 gem 'bcrypt', '~> 3.1.11'

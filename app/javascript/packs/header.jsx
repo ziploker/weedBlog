@@ -265,7 +265,7 @@ function Header(props) {
       );
 
 
-
+      
     return (
         //<HeaderWrapper className={`header ${hiddenStyle} ${shadowStyle}`}>
         <HeaderWrapper>

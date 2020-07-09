@@ -12,5 +12,11 @@
         "herokuapp",
         "weedblog",
         "ziploker"
+    ],
+    "cSpell.ignoreWords": [
+        "base",
+        "downcase",
+        "urlsafe",
+        "urlsafe base"
     ]
 }

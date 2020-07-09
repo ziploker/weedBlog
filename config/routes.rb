@@ -9,7 +9,12 @@ Rails.application.routes.draw do
 
   resources :stories
   resources :sessions, only: [:create]
-  resources :registrations, only: [:create]
+  resources :registrations, only: [:create], param: :token do
+    member do
+      get :confirm_email
+    end
+  end
+  
 
   delete :logout, to: "sessions#logout"
   get :logged_in, to: "sessions#logged_in"

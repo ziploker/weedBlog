@@ -1,20 +1,34 @@
 class SessionsController < ApplicationController
     include CurrentUserConcern
     
+    #logging in logic
     def create   
+        #email = params["user"]["email"].downcase
+        #puts "email is =========== " + email
         user = User
-            .find_by(email: params["user"]["email"])
+            .find_by(email: params["user"]["email"].downcase)
             .try(:authenticate, params["user"][:password])
 
         if user
-            session[:user_id] = user.id
-            render json:{
-                status: :created,
-                logged_in: true,
-                user: user
-            }
+            if user.email_confirmed
+                session[:user_id] = user.id
+                render json:{
+                    status: "green",
+                    logged_in: true,
+                    user: user
+                }
+            else
+                render json: {
+                    status: "pink", 
+                    error: "Account not active yet, check email and click link"
+                }
+            end
+
         else
-            render json: {status: 401}
+            render json: {
+                status: "pink", 
+                error: "bad email or password"
+            }
         end
     end
 

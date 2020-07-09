@@ -118,14 +118,14 @@ function App(info){
             <GlobalStyles/>
                 
                     
-                <Header state={state} handleLogOutClick={handleLogOutClick}/>
+                
                 
                 
                 
                 <Switch>
 
                     
-                    <Route exact path="/" render={ props => <Home {...props} story={info.story} loggedInStatus={state.loggedInStatus}/>}/>
+                    <Route exact path="/" render={ props => <Home {...props} story={info.story} loggedInStatus={state.loggedInStatus} state={state} handleLogOutClick={handleLogOutClick}/>}/>
                     <Route path="/login" render={ props => <Login {...props} handleSuccessfulAuth={handleSuccessfulAuth} />} />
                     <Route path="/signup" render={ props => <Signup {...props} handleSuccessfulAuth={handleSuccessfulAuth} />} />
                     <Route exact path="/ziploker" render={ props => <Admin {...props} loggedInStatus={state.loggedInStatus}/>} />

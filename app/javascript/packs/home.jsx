@@ -5,6 +5,7 @@ import styled, { ThemeProvider } from 'styled-components';
 //import Feedback from '../packs/feedback.jsx'
 //import Admin from '../packs/admin.jsx'
 import Story from '../packs/story.jsx'
+import Header from './header.jsx'
 
 import slugify from 'react-slugify'
 
@@ -56,7 +57,7 @@ function Home(props){
         
         <Wrapper>
             
-            
+            <Header state={props.state} handleLogOutClick={props.handleLogOutClick}/>
             {props.story.map((info, index) => (
                 
                 
