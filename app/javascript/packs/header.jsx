@@ -282,9 +282,9 @@ function Header(props) {
                     <li><a href="#">Link3</a></li>
                     <li><a href="#">Link4</a></li>
 
-                    <l1>{props.state.loggedInStatus} {props.state.user.email ? props.state.user.email : "" }</l1>
+    <l1>{props.state.loggedInStatus == "LOGGED_IN" ? [<Link onClick= {props.handleLogOutClick}> Logout </Link>, <Link to="/edit">edit </Link>] :   [<Link to="/login"> Login </Link>, <Link to="/signup"> Signup</Link>]  } </l1>
 
-                    <button onClick= {props.handleLogOutClick}>Logout</button>
+                    
                     
 
                 </ul>

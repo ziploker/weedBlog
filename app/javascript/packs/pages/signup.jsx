@@ -1,7 +1,9 @@
 import React, {useState} from "react";
 import { Link } from 'react-router-dom';
 import logoImg from "../../../assets/images/logoPlaceholder.jpg";
-import { Card, Logo, Form, Input, Button } from './AuthForm';
+import redX from '../../../assets/images/redX.jpg'
+import { Card, Logo, Form, Input, Button, Error, RedX, LoginWrapper, InputIcon, LogoWrapper} from './AuthForm';
+
 import axios from 'axios';
 
 function Signup(props) {
@@ -11,7 +13,7 @@ function Signup(props) {
     last: "",
     email: "",
     password: "",
-    passwordConfirmation: "",
+    password_confirmation: "",
     registrationErrors: ""
   })
 
@@ -35,7 +37,7 @@ function Signup(props) {
         last: state.last,
         email: state.email,
         password: state.password,
-        passwordConfirmation: state.passwordConfirmation
+        password_confirmation: state.password_confirmation
 
       }
     },
@@ -72,6 +74,7 @@ function Signup(props) {
   }
 
   return (
+    <LoginWrapper>
     <Card>
       <Logo src={logoImg} />
       <Form onSubmit = {handleSubmit}>
@@ -79,12 +82,18 @@ function Signup(props) {
         <Input name="last" type="text" placeholder="last name" value={state.last} onChange={handleChange} required/>
         <Input name="email" type="email" placeholder="email" value={state.email} onChange={handleChange} required/>
         <Input name="password" type="password" placeholder="password" value={state.password} onChange={handleChange} required/>
-        <Input name="passwordConfirmation" type="password" placeholder="password confirmation" value={state.passwordConfirmation} onChange={handleChange} required/>
+        <Input name="password_confirmation" type="password" placeholder="password confirmation" value={state.password_confirmation} onChange={handleChange} required/>
 
         <Button type="submit">Sign Up</Button>
       </Form>
-      <Link to="/login">Already have an account?</Link>
+      <Error status={state.status}>
+        <RedX status={state.status} src={redX} style={{backgroundColor: "transparent", height: "20px", verticalAlign: "middle"}}/>
+        <span style={{paddingLeft: "10px"}}>{state.error}</span>
+      </Error>
+      
     </Card>
+    <Link to="/login">Already have an account?</Link>
+    </LoginWrapper>
   );
 }
 

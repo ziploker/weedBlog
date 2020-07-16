@@ -6,7 +6,7 @@ import redX from '../../../assets/images/redX.jpg'
 import tinyMan from '../../../assets/images/tinyMan.png'
 import lock from '../../../assets/images/lock.png'
 
-import { Card, Logo, Form, Input, Button, Error, RedX, LoginWrapper, InputIcon } from './AuthForm';
+import { Card, Logo, Form, Input, Button, Error, RedX, LoginWrapper, InputIcon, LogoWrapper} from './AuthForm';
 
 
 
@@ -36,8 +36,10 @@ function Login(props) {
     },
     {withCredentials: true}
     ).then(response => {
-      
+      console.log("theREsponse", response)
       if (response.data.status == "green"){
+
+        console.log("hererererererer")
         props.handleSuccessfulAuth(response.data)
         
         props.history.push("/")
@@ -53,7 +55,7 @@ function Login(props) {
       console.log("LoginErrors", error)
       setState({
         ...state,
-        error: response.data.error,
+        error: error,
         status: "pink"
       });
     })
@@ -77,13 +79,16 @@ function Login(props) {
 
   return (
     <LoginWrapper>
-      <Logo src={logoImg} />
+      
     <Card>
+      <LogoWrapper>
+      <Logo src={logoImg} />
       <h2 style={{
-        margin: "40px 20px 0",
+        margin: "0 20px",
         lineHeight: "1.5",
         fontSize: "24px"
-      }}>Log in to your account</h2>
+      }}>Log in</h2>
+      </LogoWrapper>
       <Form onSubmit = {handleSubmit}>
       <div style={{
           position: "relative",

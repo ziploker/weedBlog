@@ -6,6 +6,7 @@ import styled, { ThemeProvider } from 'styled-components';
 //import Admin from '../packs/admin.jsx'
 import Story from '../packs/story.jsx'
 import Header from './header.jsx'
+import LookupSection from './lookupSection.jsx'
 
 import slugify from 'react-slugify'
 
@@ -65,6 +66,7 @@ function Home(props){
                     <Story info={info} />
                 </div>
             ))}
+            <LookupSection/>
 
            
         </Wrapper>  

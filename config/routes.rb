@@ -9,16 +9,19 @@ Rails.application.routes.draw do
 
   resources :stories
   resources :sessions, only: [:create]
-  resources :registrations, only: [:create], param: :token do
+  resources :registrations, only: [:create], param: :confirm_token do
     member do
       get :confirm_email
     end
   end
+
+  resources :registrations, only: [:update]
   
 
   delete :logout, to: "sessions#logout"
   get :logged_in, to: "sessions#logged_in"
   post '/lookup', to: 'lookups#incoming'
+  put '/registrations/:id', to: 'registrations#update'
   
   root to: 'landings#index'
 

@@ -17,6 +17,8 @@ import Footer from '../packs/footer.jsx'
 
 import Login from "./pages/login";
 import Signup from './pages/signup';
+import Edit from './pages/edit';
+
 import axios from 'axios'
 import '../../assets/stylesheets/sticky.scss'
 
@@ -55,7 +57,7 @@ function App(info){
             loggedInStatus: "LOGGED_IN",
             user: data.user
         })
-        props.history.push("/")
+        //info.history.push("/")
     }
 
     
@@ -128,6 +130,8 @@ function App(info){
                     <Route exact path="/" render={ props => <Home {...props} story={info.story} loggedInStatus={state.loggedInStatus} state={state} handleLogOutClick={handleLogOutClick}/>}/>
                     <Route path="/login" render={ props => <Login {...props} handleSuccessfulAuth={handleSuccessfulAuth} />} />
                     <Route path="/signup" render={ props => <Signup {...props} handleSuccessfulAuth={handleSuccessfulAuth} />} />
+                    <Route path="/edit" render={ props => <Edit {...props} user={state.user}/>} />
+
                     <Route exact path="/ziploker" render={ props => <Admin {...props} loggedInStatus={state.loggedInStatus}/>} />
                     <Route path="/letter" component={Letter} />
                     
@@ -141,7 +145,7 @@ function App(info){
                         
                     
                 </Switch>
-                <LookupSection/>
+                
                 
 
                 <Footer/>

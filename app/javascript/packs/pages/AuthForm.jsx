@@ -19,7 +19,7 @@ const Form = styled.form`
   display: flex;
   flex-direction: column;
   width: 100%;
-  padding: 40px 40px 0px 40px;
+  padding: 0 40px 0px 40px;
 `;
 
 const Input = styled.input`
@@ -60,10 +60,10 @@ const Button = styled.button`
 `;
 
 const Logo = styled.img`
-  width: 69px;
-  height: 98px;
+  width: 51px;
+  height: 51px;
   
-  margin: 0 0 40px;
+  //margin: 0 0 40px;
   justify-self: center;
 `;
 
@@ -90,11 +90,21 @@ const LoginWrapper = styled.div`
   grid-template-columns: minmax(200px, 430px);
   
   padding-top: 60px;
+  padding-bottom: 20px;
   text-align: center;
   margin-right: auto;
   margin-left: auto;
   padding-left: 15px;
   padding-right: 15px;
+
+`;
+
+const LogoWrapper = styled.div`
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 15px 10px 15px;
 
 `;
 
@@ -122,4 +132,4 @@ height: 18px;
   
 `;
 
-export { Form, Input, Button, Logo, Card, Error, RedX, LoginWrapper, InputIcon };
+export { Form, Input, Button, Logo, Card, Error, RedX, LoginWrapper, InputIcon, LogoWrapper };

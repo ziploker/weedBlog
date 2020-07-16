@@ -9,10 +9,10 @@ class RegistrationsController < ApplicationController
         
         sendgrid_api = Rails.application.credentials.dig(:SENDGRID_API)
         token = SecureRandom.urlsafe_base64.to_s
-        @user = User.create(
+        @user = User.create!(
             first: params['user']['first'],
             last: params['user']['last'],
-            email: params['user']['email'],
+            email: params['user']['email'].downcase,
             password: params['user']['password'],
             password_confirmation: params['user']['password_confirmation'],
             
@@ -66,15 +66,15 @@ class RegistrationsController < ApplicationController
                 
 
             #email.template_id = "6ede18bb-2eba-4958-8a57-43a58a559a0a"
-            ######sg = SendGrid::API.new(api_key: sendgrid_api)
+            sg = SendGrid::API.new(api_key: sendgrid_api)
 
-            ########response = sg.client.mail._('send').post(request_body: email.to_json)
+            response = sg.client.mail._('send').post(request_body: email.to_json)
 
-            #puts response.status_code.to_s
+            puts response.status_code.to_s
 
-            #puts response.body.to_s
+            puts response.body.to_s
 
-            #puts response.headers.to_s
+            puts response.headers.to_s
             
             
             
@@ -116,7 +116,7 @@ class RegistrationsController < ApplicationController
     def confirm_email
 
         
-        @user = User.find_by_confirm_token(params[:token])
+        @user = User.find_by_confirm_token(params[:confirm_token])
         if @user
             @user.email_confirmed = true
             @user.confirm_token = nil
@@ -130,6 +130,66 @@ class RegistrationsController < ApplicationController
           
         end
     end
+
+
+    def update
+        puts 'inController'
+
+        @user = User
+            .find_by(id: params[:id])
+            .try(:authenticate, params["user"][:oldPassword])
+
+        if @user
+            if @user.email_confirmed
+                #session[:user_id] = user.id
+                
+                
+                
+                if @user.update(user_params)
+                
+                    render json:{
+                        status: "green",
+                        logged_in: true,
+                        user: @user,
+                        error: { green: ["Changes saved!"]}
+                    }
+                else
+                    render json:{
+                        status: "pink",
+                        logged_in: true,
+                        user: @user,
+                        error: @user.errors.messages
+                    }
+
+                end
+            
+            
+            
+            
+            
+            else
+                render json: {
+                    status: "pink", 
+                    error: "Account not active yet, check email and click link"
+                }
+            end
+
+        else
+            render json: {
+                status: "pink", 
+                error: { auth: ["Current password isn't right"]}
+            }
+        end
+    end
+       
+    #reject { |_, v| v.blank? }
+
+    def user_params
+        if params[:email]
+            params[:email].downcase
+        end
+        params.require(:user).permit(:first, :last, :email, :password_digest, :password, :password_confirmation, :email_confirmed, :confirm_token)
+      end
 end
 
 

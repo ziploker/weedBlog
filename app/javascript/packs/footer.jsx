@@ -5,7 +5,7 @@ const Footer_Wrapper = styled.div`
 
     background: purple;
     height: 175px;
-    margin-top: 50px;
+    
     
 
 
