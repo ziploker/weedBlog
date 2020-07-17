@@ -6,6 +6,10 @@ import { Card, Logo, Form, Input, Button, Error, RedX, LoginWrapper, InputIcon, 
 
 import axios from 'axios';
 
+
+
+
+///////////////////////////////////  SIGN_UP_PAGE //////////////////////////////
 function Signup(props) {
 
   const [state, setState] = React.useState({
@@ -14,21 +18,17 @@ function Signup(props) {
     email: "",
     password: "",
     password_confirmation: "",
-    registrationErrors: ""
+    errors: {}
   })
 
-  //const [email, setEmail] = useState("")
-  //const [password, setPassword] = useState("")
-
-  //const [passwordConfirmation, setPasswordConfirmation] = useState("")
-
-  //const [registrationErrors, setRegistrationErrors] = useState("")
-
   
+  
+  
+  ///////////////////////////////////  HANDLE_SUBMIT ///////////////////////////
   function handleSubmit(event){
-    console.log("about to axios", "abou to axiooos")
-    console.log("Rails.env", process.env.NODE_ENV)
-
+    
+    ////send info into backend heyyohhhh/////
+    event.preventDefault();
     const mode = process.env.NODE_ENV =="development" ? "http://127.0.0.1:3000" : "https://weedblog.herokuapp.com"
     axios.post(mode + "/registrations", {
       
@@ -41,31 +41,43 @@ function Signup(props) {
 
       }
     },
-    {withCredentials: true}
-    ).then(response => {
-      console.log("regResponse", response)
-      if (response.data.status === "created"){
-        console.log("==========inside")
-        props.handleSuccessfulAuth(response.data)
-        //props.history.push("/ziploker")
-      }else{
-        //update error state
-      }
+    {withCredentials: true})
+    .then(response => {
       
+      console.log("Sign up submit Response", response)
+      
+      if (response.data.status === "created"){
+        
+        setState({
+          ...state,
+          errors: response.data.error
+        });
+        
+        props.handleSuccessfulAuth(response.data)
+        props.history.push("/")
+      
+      }else{
+        
+        //update error state
+        setState({
+          ...state,
+          errors: response.data.error
+        });
+      }
     }).catch(error => {
-      console.log("RegErrors", error)
+      
+      console.log("Sign_up Errors", error)
+    
     })
-    event.preventDefault();
-
-
   }
 
+
+  
+  ///////////////////////////////////  HANDLE_CHANGE /////////////////////////////
   function handleChange(event){
 
     const value = event.target.value;
 
-    console.log("name", event.target.name)
-    console.log("value", value)
     setState({
       ...state,
       [event.target.name]: value
@@ -73,26 +85,57 @@ function Signup(props) {
 
   }
 
-  return (
-    <LoginWrapper>
-    <Card>
-      <Logo src={logoImg} />
-      <Form onSubmit = {handleSubmit}>
-        <Input name="first" type="text" placeholder="first name" value={state.first} onChange={handleChange} required/>
-        <Input name="last" type="text" placeholder="last name" value={state.last} onChange={handleChange} required/>
-        <Input name="email" type="email" placeholder="email" value={state.email} onChange={handleChange} required/>
-        <Input name="password" type="password" placeholder="password" value={state.password} onChange={handleChange} required/>
-        <Input name="password_confirmation" type="password" placeholder="password confirmation" value={state.password_confirmation} onChange={handleChange} required/>
+  
+  
+  
+  ///////////////////////////////////  SETUP ERRORMESSAGES //////////////////////
+  let errorMessages = [];
+    
 
-        <Button type="submit">Sign Up</Button>
-      </Form>
-      <Error status={state.status}>
-        <RedX status={state.status} src={redX} style={{backgroundColor: "transparent", height: "20px", verticalAlign: "middle"}}/>
-        <span style={{paddingLeft: "10px"}}>{state.error}</span>
-      </Error>
+  if (state.errors){
+
+    if (state.errors.success) {
+      errorMessages.push(<h4> {state.errors.success[0]} </h4>)
+    }
+       
+    if (state.errors.auth) {
+      errorMessages.push(<h4> {state.errors.auth[0]} </h4>)
+    } 
+
+    if (state.errors.password) {
+      errorMessages.push(<h4> {"Password " + state.errors.password[0]} </h4>)
+    } 
+
+    if (state.errors.password_confirmation) {
+      errorMessages.push(<h4> {"Confirmation " + state.errors.password_confirmation[0]} </h4>)
+    } 
+
+    if (state.errors.green) {
+      errorMessages.push(<h4> {state.errors.green} </h4>)
+    }
+  }
+
+  
+  /////////////////////////////////// JSX /////////////////////////////////////////
+  return (
+    
+    <LoginWrapper>
+      <Card>
+        <Logo src={logoImg} />
+        <Form onSubmit = {handleSubmit}>
+          <Input name="first" type="text" placeholder="first name" value={state.first} onChange={handleChange} required/>
+          <Input name="last" type="text" placeholder="last name" value={state.last} onChange={handleChange} required/>
+          <Input name="email" type="email" placeholder="email" value={state.email} onChange={handleChange} required/>
+          <Input name="password" type="password" placeholder="password" value={state.password} onChange={handleChange} required/>
+          <Input name="password_confirmation" type="password" placeholder="password confirmation" value={state.password_confirmation} onChange={handleChange} required/>
+
+          <Button type="submit">Sign Up</Button>
+        </Form>
+        
+        {errorMessages}
       
-    </Card>
-    <Link to="/login">Already have an account?</Link>
+      </Card>
+      <Link to="/login">Already have an account?</Link>
     </LoginWrapper>
   );
 }

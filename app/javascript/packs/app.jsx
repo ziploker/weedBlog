@@ -32,7 +32,9 @@ function App(info){
     
     //global state of user (logged in ? and user)
     const [state, setState] = React.useState({
+        
         loggedInStatus: "NOT_LOGGED_IN",
+        emailStatus: "EMAIL_NOT_VERIFIED",
         user: {}
     })
 
@@ -54,10 +56,11 @@ function App(info){
     const handleSuccessfulAuth = data => {
         
         setState({
+            ...state,
             loggedInStatus: "LOGGED_IN",
             user: data.user
         })
-        //info.history.push("/")
+
     }
 
     
@@ -89,6 +92,7 @@ function App(info){
                 if (response.data.logged_in && state.loggedInStatus == "NOT_LOGGED_IN"){
                     
                     setState({
+                        ...state,
                         loggedInStatus: "LOGGED_IN",
                         user: response.data.user
                     })
@@ -96,10 +100,21 @@ function App(info){
                 }else if (!response.data.logged_in && state.loggedInStatus == "LOGGED_IN"){
                     
                     setState({
+                        ...state,
                         loggedInStatus: "NOT_LOGGED_IN",
                         user: {}
                     })
 
+                }
+
+                if (response.data.user.email_confirmed == true){
+                    
+                    setState({
+                        ...state,
+                       
+                        emailStatus: "EMAIL_VERIFIED"
+                    })
+                    
                 }
             
             })
@@ -107,6 +122,8 @@ function App(info){
 
         
         window.addEventListener('scroll', handleScroll);
+
+    
 
         return () => {
             window.removeEventListener('scroll', () => handleScroll);
@@ -127,7 +144,7 @@ function App(info){
                 <Switch>
 
                     
-                    <Route exact path="/" render={ props => <Home {...props} story={info.story} loggedInStatus={state.loggedInStatus} state={state} handleLogOutClick={handleLogOutClick}/>}/>
+                    <Route exact path="/" render={ props => <Home {...props} story={info.story} loggedInStatus={state.loggedInStatus} emailStatus={state.emailStatus} carryState={state} handleLogOutClick={handleLogOutClick}/>}/>
                     <Route path="/login" render={ props => <Login {...props} handleSuccessfulAuth={handleSuccessfulAuth} />} />
                     <Route path="/signup" render={ props => <Signup {...props} handleSuccessfulAuth={handleSuccessfulAuth} />} />
                     <Route path="/edit" render={ props => <Edit {...props} user={state.user}/>} />

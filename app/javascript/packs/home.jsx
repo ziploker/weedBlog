@@ -58,7 +58,7 @@ function Home(props){
         
         <Wrapper>
             
-            <Header state={props.state} handleLogOutClick={props.handleLogOutClick}/>
+            <Header carryState={props.carryState} handleLogOutClick={props.handleLogOutClick}/>
             {props.story.map((info, index) => (
                 
                 

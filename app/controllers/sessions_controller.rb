@@ -1,43 +1,56 @@
 class SessionsController < ApplicationController
+    
+    #sets @current_user if session[:id] exists
     include CurrentUserConcern
     
-    #logging in logic
+    
+    
+    
+    ####################  LOGIN  ###############################
+    
     def create   
-        #email = params["user"]["email"].downcase
-        #puts "email is =========== " + email
+        
+        
+        # search for user email and try to auth...
         user = User
             .find_by(email: params["user"]["email"].downcase)
             .try(:authenticate, params["user"][:password])
 
-        if user
+        
+        if user.present?
+            
             if user.email_confirmed
+                
                 session[:user_id] = user.id
                 render json:{
+                    
                     status: "green",
                     logged_in: true,
-                    user: user
+                    user: user,
+                    error: {success: ["You have successfully logged in !!"]}
                 }
             else
                 render json: {
                     status: "pink", 
-                    error: "Account not active yet, check email and click link"
+                    error: {auth: ["Account not active yet, check email and click link"]}
                 }
             end
 
         else
             render json: {
                 status: "pink", 
-                error: "bad email or password"
+                error: {auth: ["Email or password is bad."]}
             }
         end
     end
 
-    #like devise userLoggedIn? feature
+    ################# check if user is logged in ###########
     def logged_in
 
         if @current_user
+            
             render json: {
-                controller: "sessions",
+                
                 logged_in: true,
                 user: @current_user
             }
@@ -48,9 +61,14 @@ class SessionsController < ApplicationController
         end
     end
 
-
+    
+    ################# Log user da fk out ###########
     def logout
         reset_session
-        render json: {status: 200, logged_out: true}
+        render json: {
+            
+            status: 200, 
+            logged_out: true
+        }
     end
 end

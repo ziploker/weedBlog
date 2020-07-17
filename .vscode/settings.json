@@ -14,8 +14,14 @@
         "ziploker"
     ],
     "cSpell.ignoreWords": [
+        "api",
         "base",
         "downcase",
+        "errormessages",
+        "heyyohhhh",
+        "sendgrid",
+        "sendgrid api",
+        "signup",
         "urlsafe",
         "urlsafe base"
     ]
