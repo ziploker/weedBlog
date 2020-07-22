@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, Redirect } from "react-router-dom";
 import axios from 'axios';
 import logoImg from "../../../assets/images/logoPlaceholder.jpg";
@@ -13,67 +13,44 @@ import { Card, Logo, Form, Input, Button, ErrorMsg, RedX, LoginWrapper,
 ///////////////////////////////////  LOG_IN_PAGE //////////////////////////////
 function Login(props) {
   
-  const [state, setState] = React.useState({
+  const [state, setState] = useState({
     
-    email: "",
-    fieldActive: false,
     password: "",
+    password_confirmation: "",
     status: "",
     errors: {}
 
   })
 
-  // to activate the input field while typing
-  function activateField() {
-    setState({
-      ...state,
-      fieldActive: true
-    })
-  }
-
-  // to deactivate input only if it's empty
-  function disableField(e) {
-    if (e.target.value === "") {
-      setState({
-        ...state,
-        fieldActive: false
-      })
-    }
-  }
-
-
-  
-
   
   ///////////////////////////////////  HANDLE_SUBMIT ///////////////////////////
   function handleSubmit(event){
     
-    ////send info into backend to Log IN/////
+    ////send info into backend heyyohhhh/////
     event.preventDefault();
     const mode = process.env.NODE_ENV =="development" ? "http://127.0.0.1:3000" : "https://weedblog.herokuapp.com"
-    axios.post(mode + "/sessions", {
+    axios.post(mode + "/registrations/"+ props.match.params.token +"/reset", {
       
       user: { 
-        email: state.email,
-        password: state.password
+        password: state.password,
+        password_confirmation: state.password_confirmation
+        
       }
     },
     {withCredentials: true})
     .then(response => {
       
-      console.log("Log in submit Response", response)
+      console.log("change_PW response", response)
       
       if (response.data.status == "green"){
 
         setState({
           ...state,
-          status: response.data.status,
+          state: response.data.status,
           errors: response.data.error,
         });
         
-        props.handleSuccessfulAuth(response.data)
-        
-        props.history.push("/")
+        //props.history.push("/")
       
       }else{
         
@@ -89,7 +66,7 @@ function Login(props) {
       
       setState({
         ...state,
-        status: "pink",
+        state: "pink",
         errors: {auth: [error]}
       });
     })
@@ -107,8 +84,6 @@ function Login(props) {
       ...state,
       [event.target.name]: value
     });
-
-    //activateField(event);
   }
 
 
@@ -140,57 +115,37 @@ function Login(props) {
   }
 
 
+  
+
   /////////////////////////////////// JSX /////////////////////////////////////////
   return (
     <LoginWrapper>
-      
       <Card>
+
+      <LogoWrapper>
         
-        <LogoWrapper>
-          <Link to="/">
-            <Logo src={logoImg} />
-          </Link>   
-          <H2>Log in to your account</H2>
-        </LogoWrapper>
+        <Link to="/">
+          <Logo src={logoImg} />
+        </Link>   
+
+        <H2>Reset your password</H2>
+      </LogoWrapper>
+        
         
         <Form onSubmit = {handleSubmit}>
           
-          <FormItem >
-            <Label className={state.fieldActive ? "field-active" : ""}>email</Label>
-            <InputIcon 
-              style={{backgroundImage: `url(${tinyMan})`}}></InputIcon>
-            <Input 
-              name="email" 
-              type="email" 
-              placeholder="email" 
-              value={state.email} 
-              onChange={handleChange}
-              onFocus={activateField}
-              onBlur={disableField}
-              required/>
-          </FormItem>
+          <Input name="change_password" type="password" autoComplete={"off"} placeholder="password" value={state.password} onChange={handleChange} required/>
+          <Input name="change_password_confirmation" type="password" placeholder="password confirmation" value={state.password_confirmation} onChange={handleChange} required/>
 
-
-          <FormItem >
-            <Label>password</Label>
-            <InputIcon style={{backgroundImage: `url(${lock})`}}></InputIcon>
-            <Input name="password" type="password" placeholder="password" value={state.password} onChange={handleChange} required/>
-          </FormItem>
-          
-          <Button type="submit">Log In</Button>
-        
+          <Button type="submit">Sign Up</Button>
         </Form>
+       
         
-        <ErrorWrapper>        
-          <RedX status={state.status} src={redX}/>
-          {errorMessages}
-        </ErrorWrapper>
-
-        
-      </Card>
+        {errorMessages}
+        {props.match.params.token}
       
-      <Link style={{fontSize: ".5em", textDecoration: "underline"}} to="/signup">Dont have an account? </Link>
-      <Link style={{fontSize: ".5em", textDecoration: "underline"}} to="/forgot">Forgot password?? </Link>
+      </Card>
+      <Link style={{fontSize: ".5em"}} to="/forgot">Forgot password?? <span style={{textDecoration: "underline"}}>click here</span></Link>
 
     </LoginWrapper>
   );

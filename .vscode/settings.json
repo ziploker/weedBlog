@@ -16,13 +16,22 @@
     "cSpell.ignoreWords": [
         "api",
         "base",
+        "bottom",
         "downcase",
+        "entity",
         "errormessages",
+        "font",
+        "font size",
+        "height",
         "heyyohhhh",
         "sendgrid",
         "sendgrid api",
         "signup",
+        "size",
+        "unprocessable",
+        "unprocessable entity",
         "urlsafe",
-        "urlsafe base"
+        "urlsafe base",
+        "weight"
     ]
 }

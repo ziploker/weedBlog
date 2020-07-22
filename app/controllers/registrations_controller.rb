@@ -76,7 +76,7 @@ class RegistrationsController < ApplicationController
             render json: {
 
                 
-                status: :created,
+                status: "green",
                 user: @user,
                 error: {auth: ["Success!!! click the link in the email we sent you."]}
             }
@@ -86,14 +86,14 @@ class RegistrationsController < ApplicationController
             if @user.errors.messages
                 render json: {
                 
-                    status: 500,
+                    status: "pink",
                     error: {auth: [@user.errors.full_messages[0]]}
                 
                 }
             else
                 render json: {
                     
-                    status: 500,
+                    status: "pink",
                     error: {auth: ["something went wrong"]}
                 
                 }
@@ -130,7 +130,7 @@ class RegistrationsController < ApplicationController
     def update
         
         @user = User
-            .find_by(id: params[:id])
+            .find_by(email: params[:user][:email])
             .try(:authenticate, params["user"][:oldPassword])
 
         if @user.present?
@@ -207,7 +207,7 @@ class RegistrationsController < ApplicationController
                     
                     render json: {
 
-                        status: :created,
+                        status: "pink",
                         user: @user,
                         error: { auth: ["Please click the link in the email we sent you."]}
                     }
@@ -254,15 +254,162 @@ class RegistrationsController < ApplicationController
     end
        
    
+
+
+
+
+
+
+
+
+
+
+    def forgot
+    
+        # check if email is present
+        if params[:user][:email].blank? 
+            
+            return render json: {
+                status: "pink",
+                error: {auth: ["Email can't be blank"]}
+            }
+        
+        end
+
+        email = params[:user][:email].downcase
+        puts email
+        @user = User.find_by(email: email) 
+
+        if @user.present?
+            @user.generate_password_token!
+            
+            host = ""
+            theLink = ""
+            
+            if Rails.env.production?
+                host = "https://weedblog.heroku.com"
+            else
+                host = "127.0.0.1:3000"
+            end
+            
+            theLink = host + "/change_pw/" + @user.reset_password_token
+            
+            sendgrid_api = Rails.application.credentials.dig(:SENDGRID_API)
+            
+            email = SendGrid::Mail.new
+            email.from = Email.new(email: 'admin@weedblog.com', name: "Weedblog Team")
+            
+            email.subject = "** WeedBlog password reset **"
+
+            per = Personalization.new
+
+            per.add_to(Email.new(email: @user.email, name: @user.first))
+            #per.add_cc(Email.new(email: @user.email, name: 'cc'))
+            #per.add_bcc(Email.new(email: @user.email, name: 'bcc'))
+            per.add_substitution(Substitution.new(key: "user_name", value: @user.first))
+
+            per.add_substitution(Substitution.new(key: "reset_link", value: theLink))
+
+            email.add_personalization(per)
+
+            #email.add_content(Content.new(type: 'text/plain', value: 'some text here user_name'))
+            email.add_content(Content.new(type: 'text/html', value: '
+                
+                <html>
+                    <body>
+                        <h1> Hi user_name,</h1>
+                        <p> To change your weedBlog password please click on the link below.<br><br>
+
+                        reset_link<br></p>
+
+                        <p>Thank you,<br>
+                        <em>-Weedblog Team</em></p>
+
+                    </body>
+                </html>'))
+                    
+                    
+                
+
+            #email.template_id = "6ede18bb-2eba-4958-8a57-43a58a559a0a"
+            sg = SendGrid::API.new(api_key: sendgrid_api)
+
+            response = sg.client.mail._('send').post(request_body: email.to_json)
+
+            puts response.status_code.to_s
+            puts response.body.to_s
+            puts response.headers.to_s
+            
+            render json: {
+                
+                status: "green",
+                error: {auth: ["Please check the email we just sent you."]}
+            }
+        
+        else
+            
+            render json: {
+                status: "pink",
+                error: {auth: ["Email address not found."]}
+            }
+
+        end
+    end
+
+  
+  
+    def reset
+        
+
+        if params[:token].blank?
+            return render json: {
+                
+                status: "pink",
+                error: {auth: ["Token not present"]}
+            }
+        end
+
+        token = params[:token].to_s
+
+        user = User.find_by(reset_password_token: token)
+
+        if user.present? && user.password_token_valid?
+        
+            
+            if user.reset_password!(params[:user][:password])
+                render json: {
+                    status: "green",
+                    error: {auth: ["Password change successful!!"]}
+                }
+            else
+                render json: {
+                    status: "pink",
+                    error: {auth: [user.errors.full_messages[0]]}
+                }
+            end
+        else
+            render json: {
+                status: "pink",
+                error: {auth:  ["Link not valid or expired. Try generating a new link."]}
+            }
+        end
+  end
+
+
+
+
+  
     
     
     private
 
     def user_params
         
-        if params[:email]
-            params[:email].downcase
+        if params[:user][:email]
+            params[:user][:email].downcase!
         end
+
+       
         
         params.require(:user).permit(:first, :last, :email, :password_digest, :password, :password_confirmation, :email_confirmed, :confirm_token)
     end

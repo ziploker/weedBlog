@@ -2,7 +2,8 @@ import React, {useState} from "react";
 import { Link } from 'react-router-dom';
 import logoImg from "../../../assets/images/logoPlaceholder.jpg";
 import redX from '../../../assets/images/redX.jpg'
-import { Card, Logo, Form, Input, Button, Error, RedX, LoginWrapper, InputIcon, LogoWrapper} from './AuthForm';
+import { Card, Logo, Form, Input, Button, ErrorMsg, RedX, LoginWrapper, 
+  InputIcon, LogoWrapper, H2, FormItem, Label, ErrorWrapper} from './AuthForm';
 
 import axios from 'axios';
 
@@ -18,6 +19,7 @@ function Signup(props) {
     email: "",
     password: "",
     password_confirmation: "",
+    status: "",
     errors: {}
   })
 
@@ -46,10 +48,11 @@ function Signup(props) {
       
       console.log("Sign up submit Response", response)
       
-      if (response.data.status === "created"){
+      if (response.data.status === "green"){
         
         setState({
           ...state,
+          status: response.data.status,
           errors: response.data.error
         });
         
@@ -61,12 +64,18 @@ function Signup(props) {
         //update error state
         setState({
           ...state,
+          status: response.data.status,
           errors: response.data.error
         });
       }
     }).catch(error => {
       
       console.log("Sign_up Errors", error)
+      setState({
+        ...state,
+        status: response.data.status,
+        errors: response.data.error
+      });
     
     })
   }
@@ -95,23 +104,23 @@ function Signup(props) {
   if (state.errors){
 
     if (state.errors.success) {
-      errorMessages.push(<h4> {state.errors.success[0]} </h4>)
+      errorMessages.push(<ErrorMsg> {state.errors.success[0]} </ErrorMsg>)
     }
        
     if (state.errors.auth) {
-      errorMessages.push(<h4> {state.errors.auth[0]} </h4>)
+      errorMessages.push(<ErrorMsg> {state.errors.auth[0]} </ErrorMsg>)
     } 
 
     if (state.errors.password) {
-      errorMessages.push(<h4> {"Password " + state.errors.password[0]} </h4>)
+      errorMessages.push(<ErrorMsg> {"Password " + state.errors.password[0]} </ErrorMsg>)
     } 
 
     if (state.errors.password_confirmation) {
-      errorMessages.push(<h4> {"Confirmation " + state.errors.password_confirmation[0]} </h4>)
+      errorMessages.push(<ErrorMsg> {"Confirmation " + state.errors.password_confirmation[0]} </ErrorMsg>)
     } 
 
     if (state.errors.green) {
-      errorMessages.push(<h4> {state.errors.green} </h4>)
+      errorMessages.push(<ErrorMsg> {state.errors.green} </ErrorMsg>)
     }
   }
 
@@ -121,18 +130,48 @@ function Signup(props) {
     
     <LoginWrapper>
       <Card>
-        <Logo src={logoImg} />
+        
+        <LogoWrapper>
+          <Link to="/">
+            <Logo src={logoImg} />
+          </Link>   
+          <H2>Create an account</H2>
+        </LogoWrapper>
+        
         <Form onSubmit = {handleSubmit}>
-          <Input name="first" type="text" placeholder="first name" value={state.first} onChange={handleChange} required/>
-          <Input name="last" type="text" placeholder="last name" value={state.last} onChange={handleChange} required/>
-          <Input name="email" type="email" placeholder="email" value={state.email} onChange={handleChange} required/>
-          <Input name="password" type="password" placeholder="password" value={state.password} onChange={handleChange} required/>
-          <Input name="password_confirmation" type="password" placeholder="password confirmation" value={state.password_confirmation} onChange={handleChange} required/>
+          
+          <FormItem >
+            <Label >first name</Label>
+            <Input name="first" type="text" placeholder="first name" value={state.first} onChange={handleChange} required/>
+          </FormItem>
+          
+          <FormItem >
+            <Label >last name</Label>
+            <Input name="last" type="text" placeholder="last name" value={state.last} onChange={handleChange} required/>
+          </FormItem>
+
+          <FormItem >
+            <Label >email</Label>
+            <Input name="email" type="email" placeholder="email" value={state.email} onChange={handleChange} required/>
+          </FormItem>
+
+          <FormItem >
+            <Label >password</Label>
+            <Input name="password" type="password" placeholder="password" value={state.password} onChange={handleChange} required/>
+          </FormItem>
+          
+          <FormItem >
+            <Label >password confirmation</Label>
+            <Input name="password_confirmation" type="password" placeholder="password confirmation" value={state.password_confirmation} onChange={handleChange} required/>
+          </FormItem>
 
           <Button type="submit">Sign Up</Button>
         </Form>
         
-        {errorMessages}
+        <ErrorWrapper>        
+          <RedX status={state.status} src={redX}/>
+          {errorMessages}
+        </ErrorWrapper>
       
       </Card>
       <Link to="/login">Already have an account?</Link>

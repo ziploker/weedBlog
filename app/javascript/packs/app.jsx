@@ -16,8 +16,10 @@ import LookupSection from '../packs/lookupSection.jsx'
 import Footer from '../packs/footer.jsx'
 
 import Login from "./pages/login";
+import Forgot from "./pages/forgot";
 import Signup from './pages/signup';
 import Edit from './pages/edit';
+import Change from './pages/change_pw'
 
 import axios from 'axios'
 import '../../assets/stylesheets/sticky.scss'
@@ -107,7 +109,7 @@ function App(info){
 
                 }
 
-                if (response.data.user.email_confirmed == true){
+                if (response.data.user && response.data.user.email_confirmed == true){
                     
                     setState({
                         ...state,
@@ -147,6 +149,11 @@ function App(info){
                     <Route exact path="/" render={ props => <Home {...props} story={info.story} loggedInStatus={state.loggedInStatus} emailStatus={state.emailStatus} carryState={state} handleLogOutClick={handleLogOutClick}/>}/>
                     <Route path="/login" render={ props => <Login {...props} handleSuccessfulAuth={handleSuccessfulAuth} />} />
                     <Route path="/signup" render={ props => <Signup {...props} handleSuccessfulAuth={handleSuccessfulAuth} />} />
+                    <Route path="/forgot" render={ props => <Forgot {...props}  />} />                    <Route path="/forgot" render={ props => <Forgot {...props}  />} />
+
+                    <Route exact path="/change_pw/:token" render={ props => <Change {...props}  />} />
+
+
                     <Route path="/edit" render={ props => <Edit {...props} user={state.user}/>} />
 
                     <Route exact path="/ziploker" render={ props => <Admin {...props} loggedInStatus={state.loggedInStatus}/>} />

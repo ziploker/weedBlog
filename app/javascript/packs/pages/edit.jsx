@@ -2,11 +2,14 @@ import React, {useState, useEffect} from "react";
 import { Link } from 'react-router-dom';
 import logoImg from "../../../assets/images/logoPlaceholder.jpg";
 import redX from '../../../assets/images/redX.jpg'
-import { Card, Logo, Form, Input, Button, Error, RedX, LoginWrapper, InputIcon, LogoWrapper} from './AuthForm';
-import axios from 'axios';
+import greenCheck from '../../../assets/images/greenCheck.png'
+import { Card, Logo, Form, Input, Button, ErrorMsg, RedX, LoginWrapper, 
+  InputIcon, LogoWrapper, H2, FormItem, Label, ErrorWrapper} from './AuthForm';
+
+  import axios from 'axios';
 
 
-///////////////////////////////////  LOG_IN_PAGE //////////////////////////////
+///////////////////////////////////  EDIT ACCOUNT //////////////////////////////
 function Edit(props) {
 
   const [state, setState] = React.useState({
@@ -17,6 +20,7 @@ function Edit(props) {
     oldPassword: '',
     password: "",
     password_confirmation: "",
+    status: "",
     errors: {}
   })
     
@@ -43,10 +47,11 @@ function Edit(props) {
     .then(response => {
       console.log("EDIT Response", response)
       
-      if (response.data.status == "created"){
+      if (response.data.status == "green"){
         
         setState({
           ...state,
+          state: response.data.status,
           errors: response.data.error
         });
         
@@ -57,6 +62,7 @@ function Edit(props) {
         
         setState({
           ...state,
+          status: response.data.status,
           errors: response.data.error
         });
       }
@@ -65,7 +71,8 @@ function Edit(props) {
       
       setState({
         ...state,
-        errors: error
+        status: "pink",
+        errors: {auth: [error]}
       });
       
     })
@@ -93,23 +100,23 @@ function Edit(props) {
   if (state.errors){
 
     if (state.errors.success) {
-      errorMessages.push(<h4> {state.errors.success[0]} </h4>)
+      errorMessages.push(<ErrorMsg> {state.errors.success[0]} </ErrorMsg>)
     }
        
     if (state.errors.auth) {
-      errorMessages.push(<h4> {state.errors.auth[0]} </h4>)
+      errorMessages.push(<ErrorMsg> {state.errors.auth[0]} </ErrorMsg>)
     } 
 
     if (state.errors.password) {
-      errorMessages.push(<h4> {"Password " + state.errors.password[0]} </h4>)
+      errorMessages.push(<ErrorMsg> {"Password " + state.errors.password[0]} </ErrorMsg>)
     } 
 
     if (state.errors.password_confirmation) {
-      errorMessages.push(<h4> {"Confirmation " + state.errors.password_confirmation[0]} </h4>)
+      errorMessages.push(<ErrorMsg> {"Confirmation " + state.errors.password_confirmation[0]} </ErrorMsg>)
     } 
 
     if (state.errors.green) {
-      errorMessages.push(<h4> {state.errors.green} </h4>)
+      errorMessages.push(<ErrorMsg> {state.errors.green} </ErrorMsg>)
     }
   }
   
@@ -125,6 +132,7 @@ function Edit(props) {
             
           console.log("theResults", response)
           setState({
+            
             loggedInStatus: "LOGGED_IN",
             first: response.data.user.first,
             last: response.data.user.last,
@@ -145,7 +153,19 @@ function Edit(props) {
         }
       
       })
-      .catch(error => console.log("Logged in? error", error))
+      .catch(error => {
+        
+        console.log("Logged in? error", error)
+
+        setState({
+          ...state,
+          status: "pink",
+          errors: {auth: [error]}
+        });
+
+
+      }
+    )
 
     
   },[]);
@@ -155,20 +175,58 @@ function Edit(props) {
   return (
     <LoginWrapper>
       <Card>
-        <Logo src={logoImg} />
+        <LogoWrapper>
+          <Link to="/">
+            <Logo src={logoImg} />
+          </Link>   
+          <H2>Edit your account</H2>
+        </LogoWrapper>
+        
         <Form onSubmit = {handleSubmit}>
-          <Input name="first" type="text" placeholder="first name" value={state.first || ''} onChange={handleChange} required/>
-          <Input name="last" type="text" placeholder="last name" value={state.last || ''} onChange={handleChange} required/>
-          <Input name="email" type="email" placeholder="email" value={state.email || ''} onChange={handleChange} required/>
-          <Input name="oldPassword" type="password" placeholder="old password" value={state.oldPassword || ''} onChange={handleChange} required/>
+          
+          <FormItem>
+            <Label >first name</Label>
+            <Input name="first" type="text" placeholder="first name" value={state.first || ''} onChange={handleChange} required/>
+          </FormItem>
+          
+          <FormItem>
+            <Label >last name</Label>
+            <Input name="last" type="text" placeholder="last name" value={state.last || ''} onChange={handleChange} required/>
+          </FormItem>
+          
+          <FormItem>
+            <Label >email</Label>
+            <Input name="email" type="email" placeholder="email" value={state.email || ''} onChange={handleChange} required/>
+          </FormItem>
+          
+          <FormItem>
+            <Label >current password</Label>
+            <Input name="oldPassword" type="password" placeholder="old password" value={state.oldPassword || ''} onChange={handleChange} required/>
+          </FormItem>
 
-          <Input name="password" type="password" placeholder="new password" value={state.password} onChange={handleChange} />
-          <Input name="password_confirmation" type="password" placeholder="new password confirmation" value={state.password_confirmation} onChange={handleChange} />
 
-          <Button type="submit">Sign Up</Button>
+          <FormItem>
+            <Label >new password </Label>
+            <Input name="password" type="password" placeholder="new password" value={state.password} onChange={handleChange} />
+          </FormItem>
+          
+
+          <FormItem>
+            <Label >new password confirmation</Label>
+            <Input name="password_confirmation" type="password" placeholder="new password confirmation" value={state.password_confirmation} onChange={handleChange} />
+          </FormItem>
+
+          <Button type="submit">Make Changes</Button>
+        
         </Form>
-        {errorMessages}
+        
+        <ErrorWrapper>        
+          <RedX status={state.status} src={state.status == "" ?  "" : state.status == "pink" ? redX : greenCheck}/>
+          {errorMessages}
+        </ErrorWrapper>
+      
       </Card>
+      
       <Link to="/login">Already have an account?</Link>
     </LoginWrapper>
   );

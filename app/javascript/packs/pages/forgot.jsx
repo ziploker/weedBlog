@@ -9,59 +9,35 @@ import lock from '../../../assets/images/lock.png'
 import { Card, Logo, Form, Input, Button, ErrorMsg, RedX, LoginWrapper, 
   InputIcon, LogoWrapper, H2, FormItem, Label, ErrorWrapper} from './AuthForm';
 
-
 ///////////////////////////////////  LOG_IN_PAGE //////////////////////////////
 function Login(props) {
   
   const [state, setState] = React.useState({
     
     email: "",
-    fieldActive: false,
-    password: "",
     status: "",
     errors: {}
 
   })
 
-  // to activate the input field while typing
-  function activateField() {
-    setState({
-      ...state,
-      fieldActive: true
-    })
-  }
-
-  // to deactivate input only if it's empty
-  function disableField(e) {
-    if (e.target.value === "") {
-      setState({
-        ...state,
-        fieldActive: false
-      })
-    }
-  }
-
-
-  
-
   
   ///////////////////////////////////  HANDLE_SUBMIT ///////////////////////////
   function handleSubmit(event){
     
-    ////send info into backend to Log IN/////
+    ////send info into backend heyyohhhh/////
     event.preventDefault();
     const mode = process.env.NODE_ENV =="development" ? "http://127.0.0.1:3000" : "https://weedblog.herokuapp.com"
-    axios.post(mode + "/sessions", {
+    axios.post(mode + "/registrations/forgot", {
       
       user: { 
         email: state.email,
-        password: state.password
+        
       }
     },
     {withCredentials: true})
     .then(response => {
       
-      console.log("Log in submit Response", response)
+      console.log("Forgot PW Response", response)
       
       if (response.data.status == "green"){
 
@@ -71,9 +47,7 @@ function Login(props) {
           errors: response.data.error,
         });
         
-        props.handleSuccessfulAuth(response.data)
-        
-        props.history.push("/")
+        //props.history.push("/")
       
       }else{
         
@@ -101,14 +75,10 @@ function Login(props) {
 
     const value = event.target.value;
 
-    console.log("name", event.target.name)
-    console.log("value", value)
     setState({
       ...state,
       [event.target.name]: value
     });
-
-    //activateField(event);
   }
 
 
@@ -150,34 +120,19 @@ function Login(props) {
           <Link to="/">
             <Logo src={logoImg} />
           </Link>   
-          <H2>Log in to your account</H2>
+          <H2>Reset your password</H2>
         </LogoWrapper>
         
+        
         <Form onSubmit = {handleSubmit}>
-          
+        
           <FormItem >
-            <Label className={state.fieldActive ? "field-active" : ""}>email</Label>
-            <InputIcon 
-              style={{backgroundImage: `url(${tinyMan})`}}></InputIcon>
-            <Input 
-              name="email" 
-              type="email" 
-              placeholder="email" 
-              value={state.email} 
-              onChange={handleChange}
-              onFocus={activateField}
-              onBlur={disableField}
-              required/>
+            <Label >email</Label>
+            <InputIcon style={{backgroundImage: `url(${tinyMan})`}}></InputIcon>
+            <Input name="email" type="email" placeholder="email" value={state.email} onChange={handleChange} required/>
           </FormItem>
 
-
-          <FormItem >
-            <Label>password</Label>
-            <InputIcon style={{backgroundImage: `url(${lock})`}}></InputIcon>
-            <Input name="password" type="password" placeholder="password" value={state.password} onChange={handleChange} required/>
-          </FormItem>
-          
-          <Button type="submit">Log In</Button>
+          <Button type="submit">Reset</Button>
         
         </Form>
         
@@ -185,12 +140,10 @@ function Login(props) {
           <RedX status={state.status} src={redX}/>
           {errorMessages}
         </ErrorWrapper>
-
         
       </Card>
       
-      <Link style={{fontSize: ".5em", textDecoration: "underline"}} to="/signup">Dont have an account? </Link>
-      <Link style={{fontSize: ".5em", textDecoration: "underline"}} to="/forgot">Forgot password?? </Link>
+      <Link style={{fontSize: ".5em", textDecoration: "underline"}} to="/login">Already have an account?</Link>
 
     </LoginWrapper>
   );

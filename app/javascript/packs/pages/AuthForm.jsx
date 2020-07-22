@@ -3,7 +3,7 @@ import styled from 'styled-components';
 const Card = styled.div`
   box-sizing: border-box;
   max-width: 430px;
-  //margin: 0 auto 20px;
+  margin-bottom: 20px;
   //padding: 0 2rem;
   
   //margin-top: 100px;
@@ -15,11 +15,63 @@ const Card = styled.div`
   border-radius: 8px;
 `;
 
+const H2 = styled.h2`
+
+  margin: 0 20px;
+  line-height: 1.5;
+  font-size: 24px;
+       
+
+`;
+
 const Form = styled.form`
   display: flex;
   flex-direction: column;
   width: 100%;
   padding: 0 40px 0px 40px;
+`;
+
+const FormItem = styled.div`
+
+  position: relative;
+  margin: 0 0 20px 0;
+  padding: 0;
+
+
+
+`;
+
+const Label = styled.label`
+
+  text-align: left;
+  width: 100;
+  display: block;
+  max-width: 100%;
+  margin-bottom: 5px;
+  color: #62748e;
+  //font-size: 12px;
+  font-weight: bold;
+  line-height: 1.42857;
+
+
+  display: inline-block;
+  position:absolute;
+  left: 15px;
+  top: 16px;
+  transition: all 150ms ease-in;
+  color: #676767;
+
+  
+  
+  
+  transform: ${props => props.className == "field-active" ? "translateY(-25px)" : 0};
+  font-size: .9em;
+  color: #000;
+  text-shadow: 1px 0 0 #fff, -1px 0 0 #fff, 2px 0 0 #fff, -2px 0 0 #fff, 0 1px 0 #fff, 0 -1px 0 #fff, 0 2px 0 #fff, 0 -2px 0 #fff;
+ }
+              
+              
+
 `;
 
 const Input = styled.input`
@@ -34,12 +86,14 @@ const Input = styled.input`
   padding-right: 8px;
 
   font-size: 14px;
-line-height: 1.42857;
-color: #3f3f44;
-background-color: #fff;
-background-image: none;
-border: 1px solid #cbcbd2;
-border-radius: 4px;
+  line-height: 1.42857;
+  color: #3f3f44;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #cbcbd2;
+  border-radius: 4px;
+  
+  filter: none;
 
   
 `;
@@ -51,7 +105,7 @@ const Button = styled.button`
   padding: 1rem;
   color: white;
   font-weight: 700;
-  width: 100%;
+  width: 100%;:
   margin-bottom: 1rem;
   font-size: 0.8rem;
   
@@ -67,7 +121,17 @@ const Logo = styled.img`
   justify-self: center;
 `;
 
-const Error = styled.div`
+const ErrorWrapper = styled.div`
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px 30px;
+  line-height: .7em;
+
+
+`;
+const ErrorMsg = styled.h4`
   
   font-size: .5em;
   padding: 5px 12px;
@@ -76,7 +140,9 @@ const Error = styled.div`
 
 const RedX = styled.img`
 
-  display: ${props => props.status == "pink" ? "initial" : "none"};
+  display: ${props => props.status == "" ? "none" : "initial"};
+  height: 15px;
+
 
 `;
 const LoginWrapper = styled.div`
@@ -132,4 +198,5 @@ height: 18px;
   
 `;
 
-export { Form, Input, Button, Logo, Card, Error, RedX, LoginWrapper, InputIcon, LogoWrapper };
+export { Form, Input, Button, Logo, Card, RedX, LoginWrapper, 
+  InputIcon, LogoWrapper, H2, FormItem, Label, ErrorMsg, ErrorWrapper };

@@ -22,6 +22,11 @@ Rails.application.routes.draw do
   get :logged_in, to: "sessions#logged_in"
   post '/lookup', to: 'lookups#incoming'
   put '/registrations/:id', to: 'registrations#update'
+
+  post '/registrations/forgot', to: 'registrations#forgot'
+  post '/registrations/:token/reset', to: 'registrations#reset', as: 'registrations_reset'
+
+  
   
   root to: 'landings#index'
 
