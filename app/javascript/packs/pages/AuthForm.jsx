@@ -43,33 +43,31 @@ const FormItem = styled.div`
 
 const Label = styled.label`
 
-  text-align: left;
-  width: 100;
-  display: block;
-  max-width: 100%;
-  margin-bottom: 5px;
+  height: 100%;
+  line-height: 44px;
+  
   color: #62748e;
-  //font-size: 12px;
-  font-weight: bold;
-  line-height: 1.42857;
+  
+  //font-weight: bold;
+  
 
 
   display: inline-block;
   position:absolute;
-  left: 15px;
-  top: 16px;
+  left: 52px;
+  
   transition: all 150ms ease-in;
-  color: #676767;
+  color: #9FA5C4;
+  pointer-events: none;
 
   
   
   
-  transform: ${props => props.className == "field-active" ? "translateY(-25px)" : 0};
-  font-size: .9em;
-  color: #000;
+  transform: ${props => props.className == "field-active" ? "translateY(-22px)" : 0};
+  font-size: .6em;
+  
   text-shadow: 1px 0 0 #fff, -1px 0 0 #fff, 2px 0 0 #fff, -2px 0 0 #fff, 0 1px 0 #fff, 0 -1px 0 #fff, 0 2px 0 #fff, 0 -2px 0 #fff;
- }
-              
+          
               
 
 `;
@@ -94,7 +92,7 @@ const Input = styled.input`
   border-radius: 4px;
   
   filter: none;
-
+  
   
 `;
 

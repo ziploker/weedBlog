@@ -15,15 +15,37 @@ function Signup(props) {
 
   const [state, setState] = React.useState({
     first: "",
+    firstFieldActive: false,
     last: "",
+    lastFieldActive: false,
     email: "",
+    emailFieldActive: false,
     password: "",
+    passwordFieldActive: false,
     password_confirmation: "",
+    password_confirmationFieldActive: false,
     status: "",
     errors: {}
   })
 
-  
+  // to activate the input field while typing
+  function activateField(e) {
+    
+    setState({
+      ...state,
+      [e.target.name+"FieldActive"]: true
+    })
+  }
+
+  // to deactivate input only if it's empty
+  function disableField(e) {
+    if (e.target.value === "") {
+      setState({
+        ...state,
+        [e.target.name+"FieldActive"]: false
+      })
+    }
+  }
   
   
   ///////////////////////////////////  HANDLE_SUBMIT ///////////////////////////
@@ -141,28 +163,68 @@ function Signup(props) {
         <Form onSubmit = {handleSubmit}>
           
           <FormItem >
-            <Label >first name</Label>
-            <Input name="first" type="text" placeholder="first name" value={state.first} onChange={handleChange} required/>
+            <Label className={state.firstFieldActive ? "field-active" : ""}>first name</Label>
+            <Input 
+              name="first" 
+              type="text" 
+              
+              value={state.first} 
+              onChange={handleChange} 
+              onFocus={activateField}
+              onBlur={disableField}
+              required/>
           </FormItem>
           
           <FormItem >
-            <Label >last name</Label>
-            <Input name="last" type="text" placeholder="last name" value={state.last} onChange={handleChange} required/>
+            <Label className={state.lastFieldActive ? "field-active" : ""} >last name</Label>
+            <Input 
+              name="last" 
+              type="text" 
+              
+              value={state.last} 
+              onChange={handleChange} 
+              onFocus={activateField}
+              onBlur={disableField}
+              required/>
           </FormItem>
 
           <FormItem >
-            <Label >email</Label>
-            <Input name="email" type="email" placeholder="email" value={state.email} onChange={handleChange} required/>
+            <Label className={state.emailFieldActive ? "field-active" : ""}>email</Label>
+            <Input 
+              name="email" 
+              type="email" 
+              
+              value={state.email} 
+              onChange={handleChange} 
+              onFocus={activateField}
+              onBlur={disableField}
+              required/>
           </FormItem>
 
           <FormItem >
-            <Label >password</Label>
-            <Input name="password" type="password" placeholder="password" value={state.password} onChange={handleChange} required/>
+            <Label className={state.passwordFieldActive ? "field-active" : ""}>password</Label>
+            <Input 
+              name="password" 
+              type="password" 
+              
+              value={state.password} 
+              onChange={handleChange} 
+              onFocus={activateField}
+              onBlur={disableField}
+              required/>
           </FormItem>
           
           <FormItem >
-            <Label >password confirmation</Label>
-            <Input name="password_confirmation" type="password" placeholder="password confirmation" value={state.password_confirmation} onChange={handleChange} required/>
+            <Label className={state.password_confirmationFieldActive ? "field-active" : ""}>password confirmation</Label>
+            <Input 
+              name="password_confirmation" 
+              type="password" 
+              
+              value={state.password_confirmation} 
+              onChange={handleChange} 
+              onFocus={activateField}
+              onBlur={disableField}
+              required/>
           </FormItem>
 
           <Button type="submit">Sign Up</Button>

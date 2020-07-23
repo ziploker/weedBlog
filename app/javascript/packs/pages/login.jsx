@@ -16,18 +16,20 @@ function Login(props) {
   const [state, setState] = React.useState({
     
     email: "",
-    fieldActive: false,
+    emailFieldActive: false,
     password: "",
+    passwordFieldActive: false,
     status: "",
     errors: {}
 
   })
 
   // to activate the input field while typing
-  function activateField() {
+  function activateField(e) {
+    
     setState({
       ...state,
-      fieldActive: true
+      [e.target.name+"FieldActive"]: true
     })
   }
 
@@ -36,7 +38,7 @@ function Login(props) {
     if (e.target.value === "") {
       setState({
         ...state,
-        fieldActive: false
+        [e.target.name+"FieldActive"]: false
       })
     }
   }
@@ -156,13 +158,14 @@ function Login(props) {
         <Form onSubmit = {handleSubmit}>
           
           <FormItem >
-            <Label className={state.fieldActive ? "field-active" : ""}>email</Label>
-            <InputIcon 
-              style={{backgroundImage: `url(${tinyMan})`}}></InputIcon>
+            
+            <Label className={state.emailFieldActive ? "field-active" : ""}>email</Label>
+            <InputIcon style={{backgroundImage: `url(${tinyMan})`}}></InputIcon>
+            
             <Input 
               name="email" 
               type="email" 
-              placeholder="email" 
+              
               value={state.email} 
               onChange={handleChange}
               onFocus={activateField}
@@ -172,9 +175,18 @@ function Login(props) {
 
 
           <FormItem >
-            <Label>password</Label>
+            
+            <Label className={state.passwordFieldActive ? "field-active" : ""}>password</Label>
             <InputIcon style={{backgroundImage: `url(${lock})`}}></InputIcon>
-            <Input name="password" type="password" placeholder="password" value={state.password} onChange={handleChange} required/>
+            
+            <Input 
+              name="password" 
+              type="password" 
+              value={state.password} 
+              onChange={handleChange}
+              onFocus={activateField}
+              onBlur={disableField} 
+              required/>
           </FormItem>
           
           <Button type="submit">Log In</Button>

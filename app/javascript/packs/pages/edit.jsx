@@ -15,15 +15,41 @@ function Edit(props) {
   const [state, setState] = React.useState({
     loggedInStatus: "NOT_LOGGED_IN",
     first: props.user ? props.user.first : '',
+    firstFieldActive: false,
     last: props.user ? props.user.last : '',
+    lastFieldActive: false,
     email: props.user ? props.user.email : '',
+    emailFieldActive: false,
     oldPassword: '',
+    oldPasswordFieldActive: false,
     password: "",
+    passwordFieldActive: false,
     password_confirmation: "",
+    password_confirmationFieldActive: false,
     status: "",
     errors: {}
   })
     
+
+  // to activate the input field while typing
+  function activateField(e) {
+    
+    setState({
+      ...state,
+      [e.target.name+"FieldActive"]: true
+    })
+  }
+
+  // to deactivate input only if it's empty
+  function disableField(e) {
+    if (e.target.value === "") {
+      setState({
+        ...state,
+        [e.target.name+"FieldActive"]: false
+      })
+    }
+  }
+
   
   ///////////////////////////////////  HANDLE_SUBMIT ///////////////////////////
   function handleSubmit(event){
@@ -175,7 +201,7 @@ function Edit(props) {
   return (
     <LoginWrapper>
       <Card>
-        <LogoWrapper>
+      <LogoWrapper>
           <Link to="/">
             <Logo src={logoImg} />
           </Link>   
@@ -185,35 +211,75 @@ function Edit(props) {
         <Form onSubmit = {handleSubmit}>
           
           <FormItem>
-            <Label >first name</Label>
-            <Input name="first" type="text" placeholder="first name" value={state.first || ''} onChange={handleChange} required/>
+            <Label className={state.firstFieldActive ? "field-active" : ""}>first name</Label>
+            <Input 
+                name="first" 
+                type="text" 
+                value={state.first || ''} 
+                onChange={handleChange} 
+                onFocus={activateField}
+                onBlur={disableField}
+                required />
           </FormItem>
           
           <FormItem>
-            <Label >last name</Label>
-            <Input name="last" type="text" placeholder="last name" value={state.last || ''} onChange={handleChange} required/>
+            <Label className={state.lastFieldActive ? "field-active" : ""}>last name</Label>
+            <Input 
+              name="last" 
+              type="text" 
+              value={state.last || ''} 
+              onChange={handleChange} 
+              onFocus={activateField}
+              onBlur={disableField}
+              required/>
           </FormItem>
           
           <FormItem>
-            <Label >email</Label>
-            <Input name="email" type="email" placeholder="email" value={state.email || ''} onChange={handleChange} required/>
+            <Label className={state.emailFieldActive ? "field-active" : ""}>email</Label>
+            <Input 
+              name="email" 
+              type="email" 
+              value={state.email || ''} 
+              onChange={handleChange} 
+              onFocus={activateField}
+              onBlur={disableField}
+              required/>
           </FormItem>
           
           <FormItem>
-            <Label >current password</Label>
-            <Input name="oldPassword" type="password" placeholder="old password" value={state.oldPassword || ''} onChange={handleChange} required/>
+            <Label className={state.oldPasswordFieldActive ? "field-active" : ""}>current password</Label>
+            <Input 
+              name="oldPassword" 
+              type="password" 
+              value={state.oldPassword || ''} 
+              onChange={handleChange} 
+              onFocus={activateField}
+              onBlur={disableField}
+              required/>
           </FormItem>
 
 
           <FormItem>
-            <Label >new password </Label>
-            <Input name="password" type="password" placeholder="new password" value={state.password} onChange={handleChange} />
+            <Label className={state.passwordFieldActive ? "field-active" : ""}>new password </Label>
+            <Input 
+              name="password" 
+              type="password" 
+              value={state.password} 
+              onChange={handleChange} 
+              onFocus={activateField}
+              onBlur={disableField}/>
           </FormItem>
           
 
           <FormItem>
-            <Label >new password confirmation</Label>
-            <Input name="password_confirmation" type="password" placeholder="new password confirmation" value={state.password_confirmation} onChange={handleChange} />
+            <Label className={state.password_confirmationFieldActive ? "field-active" : ""}>new password confirmation</Label>
+            <Input 
+              name="password_confirmation" 
+              type="password" 
+              value={state.password_confirmation} 
+              onChange={handleChange} 
+              onFocus={activateField}
+              onBlur={disableField}/>
           </FormItem>
 
           <Button type="submit">Make Changes</Button>

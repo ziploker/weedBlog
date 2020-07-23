@@ -3,6 +3,7 @@ import { Link, Redirect } from "react-router-dom";
 import axios from 'axios';
 import logoImg from "../../../assets/images/logoPlaceholder.jpg";
 import redX from '../../../assets/images/redX.jpg'
+import greenCheck from '../../../assets/images/greenCheck.png'
 import tinyMan from '../../../assets/images/tinyMan.png'
 import lock from '../../../assets/images/lock.png'
 
@@ -15,16 +16,40 @@ function Login(props) {
   
   const [state, setState] = useState({
     
-    password: "",
-    password_confirmation: "",
+    change_password: "",
+    change_passwordFieldActive: false,
+    change_password_confirmation: "",
+    change_password_confirmationFieldActive: false,
     status: "",
     errors: {}
 
   })
 
+  // to activate the input field while typing
+  function activateField(e) {
+    
+    setState({
+      ...state,
+      [e.target.name+"FieldActive"]: true
+    })
+  }
+
+  // to deactivate input only if it's empty
+  function disableField(e) {
+    if (e.target.value === "") {
+      setState({
+        ...state,
+        [e.target.name+"FieldActive"]: false
+      })
+    }
+  }
+
   
   ///////////////////////////////////  HANDLE_SUBMIT ///////////////////////////
   function handleSubmit(event){
+
+
+
     
     ////send info into backend heyyohhhh/////
     event.preventDefault();
@@ -82,7 +107,8 @@ function Login(props) {
     console.log("value", value)
     setState({
       ...state,
-      [event.target.name]: value
+      [event.target.name]: value,
+      [event.target.name+"FieldActive"]: true
     });
   }
 
@@ -115,6 +141,20 @@ function Login(props) {
   }
 
 
+  useEffect(() => {
+
+
+    console.log("useEffect")
+    setState({
+      ...state,
+      change_password: "",
+      change_password_confirmation: "",
+    })
+
+
+
+
+  },[])
   
 
   /////////////////////////////////// JSX /////////////////////////////////////////
@@ -133,16 +173,42 @@ function Login(props) {
         
         
         <Form onSubmit = {handleSubmit}>
-          
-          <Input name="change_password" type="password" autoComplete={"off"} placeholder="password" value={state.password} onChange={handleChange} required/>
-          <Input name="change_password_confirmation" type="password" placeholder="password confirmation" value={state.password_confirmation} onChange={handleChange} required/>
+          <FormItem>
+            <Label className={state.change_passwordFieldActive ? "field-active" : ""}>new password</Label>
+            <Input 
+              name="change_password" 
+              type="password" 
+              autoComplete={"off"} 
+              value={state.password} 
+              onChange={handleChange} 
+              onFocus={activateField}
+              onBlur={disableField}
+              required/>
+
+          </FormItem>
+
+          <FormItem>
+            <Label className={state.change_password_confirmationFieldActive ? "field-active" : ""}>new password confirmation</Label>
+            <Input 
+              name="change_password_confirmation" 
+              type="password" 
+              value={state.password_confirmation} 
+              onChange={handleChange} 
+              onFocus={activateField}
+              onBlur={disableField}
+              required/>
+
+
+          </FormItem>
 
           <Button type="submit">Sign Up</Button>
         </Form>
        
+        <ErrorWrapper>        
+          <RedX status={state.status} src={state.status == "" ?  "" : state.status == "pink" ? redX : greenCheck}/>
+          {errorMessages}
+        </ErrorWrapper>
         
-        {errorMessages}
-        {props.match.params.token}
       
       </Card>
       <Link style={{fontSize: ".5em"}} to="/forgot">Forgot password?? <span style={{textDecoration: "underline"}}>click here</span></Link>
