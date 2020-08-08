@@ -12,9 +12,9 @@ const Section = styled.section`
 
     //background: rgb(136,189,188);
     //background: radial-gradient(circle, rgba(136,189,188,1) 0%, rgba(158,190,189,0.9612044646960347) 41%);
-    background: #F7C562;
+    //background: #F7C562;
     //height: 100vh;
-    min-height: 400px;
+    //min-height: 400px;
     position: relative;
 
 `;

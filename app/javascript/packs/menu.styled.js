@@ -13,7 +13,7 @@ const StyledMenu = styled.nav`
   text-align: left;
   padding: 2rem;
   position: absolute;
-  top: 70px;
+  top: 45px;
   right: 0;
   transition: transform 0.3s ease-in-out;
   z-index: 3;

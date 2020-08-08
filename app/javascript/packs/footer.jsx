@@ -3,7 +3,7 @@ import styled, { ThemeProvider } from 'styled-components';
 
 const Footer_Wrapper = styled.div`
 
-    background: purple;
+    background-color: ${props => props.theme.pink};    
     height: 175px;
     
     

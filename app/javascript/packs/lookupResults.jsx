@@ -11,9 +11,7 @@ import placeholder from '../../assets/images/man.png'
 
 const Look_Up_Results_Wrapper = styled.div`
 
-    background: pink;
-  //  display: grid;
-  //  grid-template-columns: 1fr 1fr;
+    
     width: 100%;
     padding: 25px;
 

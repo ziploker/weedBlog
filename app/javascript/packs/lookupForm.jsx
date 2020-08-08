@@ -4,6 +4,10 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import $ from 'jquery';
 import greenCheck from '../../assets/images/greenCheck.png'
+import searchIcon from '../../assets/images/search.png'
+import searchIconOrange from '../../assets/images/searchPink.png'
+import searchIconOrange2 from '../../assets/images/searchPink2.png'
+
 import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng,
@@ -27,10 +31,11 @@ const Form = styled.form`
   justify-content: center;
   
   width: 100%;
-  margin-bottom: 20px;
+  margin: 30px 0px 20px 0px;
   grid-area: form;
+  
 
-  background: #F9F9F9;
+  //background: #F9F9F9;
   //padding: 25px;
   
   //box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
@@ -41,27 +46,54 @@ const Form = styled.form`
 
 const Button = styled.button`
 
-  width: 100%;
-  height: 35px;
-  grid-area: button;
-  background-color: #FFA500;
-  border: none;
+  
+  height: 40px;
+  width: 50px;
+  //grid-area: button;
+  background-color: #e8e5e5;
+  //background-image: ${props => props.searchButtonActive ? 'url(' +searchIconOrange+ ')' : 'url(' +searchIcon +')'};
+  background-image: url( ${searchIconOrange});
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center; 
+  border: 5px solid #e8e5e5;
+  //border: none;
+  z-index: 999;
   cursor: pointer;
   color: black;
+  position: absolute;
+  right: 0;
+  z-index: 1002;
   
+  transition: background-image 1s;
+  transition-timing-function: ease-in;
+  filter: ${props => props.searchButtonActive ? 'grayscale(0%)' : 'grayscale(80%)'};
+  //filter: ${props => props.searchButtonActive ? 'sepia(0%)' : 'sepia(60%)'};
 
-  &:disabled{
-    opacity: .6;
-    //cursor: not-allowed;
-    background-color: #eae6de;
-    &:hover{
+  &:hover{
+    
+    //background-image: url( ${searchIconOrange});transition: background-image 1s;
+    transition-timing-function: ease-in;
+    filter: grayscale(0%);
+    //filter: sepia(0%);
 
-      background-color: #FFA500;
-        opacity: .6;
-        background-color: #eae6de;
-        
-    }
+
   }
+
+  //&:disabled{
+  //  opacity: .6;
+  //  cursor: default;
+  //  background-color: #eae6de;
+  //  &:hover{
+
+  //    background-color: #FFA500;
+  //      opacity: .6;
+  //      background-color: #eae6de;
+        
+  //  }
+  }
+
+  
 `;
 
 
@@ -79,10 +111,10 @@ const StatusHolder = styled.div`
 
 const StatusBar = styled.div`
 
-  max-height: ${ props => props.showStatus.toString() == "true" ? "100%" : "100%"};
-  opacity: ${ props => props.showStatus.toString() == "true" ? "1" : "1"};
+  max-height: 100%;
+  opacity: 1;
   transition: opacity .4s;
-  transition-timing-function: ease-out;
+  transition-timing-function: ease-in;
 
 `;
 
@@ -90,8 +122,8 @@ const StatusBar = styled.div`
 
 const StatusSpinner = styled.div`
   
-  max-height: ${ props => props.showStatusBar.toString() == "true" ? "100%" : "0px"};
-  opacity: ${ props => props.showStatusBar.toString() == "true" ? "1" : "0"};
+  max-height: ${ props => props.showStatusSpinner.toString() == "true" ? "100%" : "0px"};
+  opacity: ${ props => props.showStatusSpinner.toString() == "true" ? "1" : "0"};
   transition: opacity .4s;
   transition-timing-function: ease-out;
 
@@ -105,6 +137,8 @@ const CheckMark = styled.img`
   opacity: ${ props => props.showStatusCheck.toString() == "true" ? "1" : "0"};
   transition: opacity .4s;
   transition-timing-function: ease-out;
+  padding-left: 6px;
+  height: 11px;
 
 `;
 
@@ -114,7 +148,7 @@ const ResultSpan = styled.div`
   
   &:hover{
 
-    background-color: orange;
+    background-color: #56c5cc;
     //color: red;
     //font-size: 3em;
   }
@@ -122,10 +156,36 @@ const ResultSpan = styled.div`
 `;
 
 
+const Span = styled.span`
 
+  height: 100%;
+  font-size: .75em;
+  transition: opacity 2s ease-in;
+  opacity: ${props => props.status.toString() == "Enter an address." ? "0" : "1"};
+            
+
+`;
 
 ////////////////////////////////////////////////////////// MAIN FUNCTION //////////
 function Lookup(props) {
+
+   // to activate the input field while typing
+   function activateField(e) {
+    
+    
+    props.setSearchButtonActive( true)
+  
+  }
+
+  // to deactivate input only if it's empty
+  function disableField(e) {
+    if (e.target.value == ""){
+    props.setSearchButtonActive( false)
+  }
+    
+  }
+
+  
 
   //search options for 'react places autocomplete
   const searchOptions = {
@@ -134,11 +194,9 @@ function Lookup(props) {
   
   //address selected from dropdown box///////////////////  HANDLE_SELECT  /////////
   const handleSelect = address => {
-    
-    console.log("inHandleSelect")
-    
+   
     //populate the input with the address selected from 'react places autocomplete'
-    props.setFormInfo( {address : address} ) 
+    props.setFormInfo( {address: address} ) 
     
     
     //get the lat/lng of the address selected and save to state
@@ -146,14 +204,17 @@ function Lookup(props) {
       .then(results => getLatLng(results[0]))
       .then(latLng => {
         
-        console.log('Success', latLng)
         props.setCoordinates({
         
           lat: latLng.lat,
           lng: latLng.lng
 
         })
-      }).catch(error => console.error('Error', error));
+      }).catch(error => {
+        props.setStatus("No results found. Check address")
+        props.setShowStatusSpinner(false)
+        console.error('Error', error);
+      })
   };
 
   
@@ -161,6 +222,7 @@ function Lookup(props) {
   const handleAdd = e => {
 
     
+
     //user enters address but doesnt choose one from "react places autocomplete"
     //and thus bypasses handkeSelect method, which gets the lat lng, so get lat lan otherway
     let secondTryLat = ''
@@ -169,14 +231,17 @@ function Lookup(props) {
     e.preventDefault();
     
     if ( validForm() ) {
+
+
+      
       
       //set current Search term state from input
-      props.setCurrentSearchTerm(props.formInfo.address)
+      props.setLastTermSearched(props.formInfo.address)
       
       //let user know somethings happening
       props.setStatus('....may take up to 60 seconds')
-      props.setShowStatus(true)
-      props.setShowStatusBar(true)
+      
+      props.setShowStatusSpinner(true)
      
       
       //get formdata ready to send to server
@@ -187,18 +252,13 @@ function Lookup(props) {
       //selecting address from react places autocompete
       if (props.coordinates.lat == '' || props.coordinates.lng == ''){
         
-        console.log("lat/lng was empty")
         geocodeByAddress(props.formInfo.address)
           .then(results => getLatLng(results[0]))
           .then(latLng => {
         
-            console.log('Success2', latLng)
-
             secondTryLat = latLng.lat
             secondTryLng = latLng.lng
             
-        
-        
             const csrf = document.querySelector("meta[name='csrf-token']").getAttribute("content");
             
             fetch('/lookup', {
@@ -219,13 +279,19 @@ function Lookup(props) {
             .then(response => response.json() )
             .then(data => {
               props.setStatus("Search Complete!!")
-              props.setShowStatusBar(false)
+              props.setShowStatusSpinner(false)
               props.setShowStatusCheck(true)
               props.setShowCards(true)
               props.setResults(data);
             })
         
-          }).catch(error => console.error('Error', error));
+          }).catch(error => {
+            
+            props.setStatus("No results found. Check address")
+            props.setShowStatusSpinner(false)
+            console.log("Error", error)
+        
+          })
 
 
       }else{
@@ -251,31 +317,37 @@ function Lookup(props) {
         .then(response => response.json() )
         .then(data => {
           props.setStatus("Search Complete!!")
-          props.setShowStatusBar(false)
+          props.setShowStatusSpinner(false)
           props.setShowStatusCheck(true)
           props.setShowCards(true)
           props.setResults(data);
         })
       }
       
-    } else {
-      alert('Please enter valid address.');
     }
   }
 
   
   ////////////////////////////////////////////////   VALID_FORM  //////
   const validForm = () => {
-    if (props.formInfo.address && props.formInfo.zipcode  ) {
-      return true;
-    } else {
+    if (props.formInfo.address == "" ){
+      props.setStatus("Enter an address.")
+      props.setShowStatusCheck(false)
+
+      setTimeout( () => {props.setStatus("")}, 2000 )
+      
+      return false;
+    
+    }else if(props.formInfo.address == props.lastTermSearched){
+      props.setStatus("Enter a different address.")
+      props.setShowStatusCheck(false)
+      return false;
+
+    }else{
       return true;
     }
   }
 
-  
-  
-  
   
   return(
 
@@ -296,8 +368,14 @@ function Lookup(props) {
             margin: "0 0 10px",
             minWidth: "100%",
             padding: "50",
-            gridArea: "input"
+            zIndex: "1000",
+            gridArea: "input",
+            position: "relative"
           }}>
+
+            <Button searchButtonActive={props.searchButtonActive} disabled={false} type="submit" className="btn btn-primary"> </Button>
+            
+
             
             <input 
               {...getInputProps({
@@ -307,15 +385,17 @@ function Lookup(props) {
                 tabIndex: "1",
                 className: "form-control",
                 name: "address",
+                onFocus: activateField,
+                onBlur: disableField
+                
               })}
-              
               style={{
                 width: "100%", 
                 height: "40px",
                 boxShadow: "0 2px 2px 0 rgba(0,0,0,0.16), 0 0 0 1px rgba(0,0,0,0.08)",
                 border: "honeydew",
                 display: "block",
-                padding: "16px",
+                paddingLeft: "10px",
                 fontSize: "16px",
                 borderRadius: "2px",
                 outline: "none"
@@ -346,7 +426,7 @@ function Lookup(props) {
                 //props.setFirstMatch(suggestions.values().next().value.description)
               
                 const style = suggestion.active
-                  ? { backgroundColor: 'orange', cursor: 'pointer' }
+                  ? { backgroundColor: '#56c5cc', cursor: 'pointer' }
                   : { backgroundColor: '#ffffff', cursor: 'pointer' };
                 
                 return (
@@ -365,24 +445,24 @@ function Lookup(props) {
           </div>
         )}
       </PlacesAutocomplete>
+      
 
       
-      <Button disabled={(!props.formInfo.address || props.currentSearchTerm == props.formInfo.address) ? true : false} type="submit" className="btn btn-primary"> 
     
-        <StatusHolder>
-          
-          <StatusBar showStatus={props.showStatus} >
-            <span style={{height: "100%", fontSize: ".75em"}}>{props.status}</span>
-            <CheckMark showStatusCheck={props.showStatusCheck} src={greenCheck} style={{paddingLeft: "6px", height: "11px"}}></CheckMark>
-          </StatusBar>
+      <StatusHolder>
         
-          <StatusSpinner showStatusBar={props.showStatusBar}>
-            <Spinner name='wave' color='orange' />
-          </StatusSpinner>
-
-        </StatusHolder>   
+        <StatusBar>
+          
+          <Span status={props.status}> {props.status}</Span>
+          <CheckMark showStatusCheck={props.showStatusCheck} src={greenCheck}></CheckMark>
+        </StatusBar>
       
-      </Button>
+        <StatusSpinner showStatusSpinner={props.showStatusSpinner}>
+          <Spinner name='wave' color='#56c5cc' />
+        </StatusSpinner>
+
+      </StatusHolder>   
+    
         
     </Form>
 

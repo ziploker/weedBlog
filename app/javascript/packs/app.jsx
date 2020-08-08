@@ -37,7 +37,9 @@ function App(info){
         
         loggedInStatus: "NOT_LOGGED_IN",
         emailStatus: "EMAIL_NOT_VERIFIED",
-        user: {}
+        user: {},
+        prevScrollpos: window.pageYOffset,
+        visible: true
     })
 
     
@@ -46,13 +48,33 @@ function App(info){
     
     const handleScroll = () => {
         
-        if (document.body.scrollTop > 70 || document.documentElement.scrollTop > 70) {
+        //if (document.body.scrollTop > 70 || document.documentElement.scrollTop > 70) {
             //document.getElementById("header").style.fontSize = "30px";
-        } else {
+        //} else {
             //document.getElementById("header").style.fontSize = "90px";
-        }
+        //}
+
+        const prevScrollpos = state.prevScrollpos;
+
+        const currentScrollPos = window.pageYOffset;
+        const visible = prevScrollpos > currentScrollPos;
+
+        setState({
+            prevScrollpos: currentScrollPos,
+            visible
+        });
     };
 
+    const theme = {
+        white: "#ffffff",
+        offWhite: "#f4f4f4",
+        lightBlue:   "#56c5cc",	//(86,197,204)
+        pink:         "#f14f7b", //(241,79,123)
+        orange:       "#f7aa1c", //(247,170,28)
+        darkBlue:     "#000321", //(0,3,33)
+        blueGray:      "#0E2021",
+        black:        "#000000" //(0,0,0)
+      };
     
 
     const handleSuccessfulAuth = data => {
@@ -124,6 +146,7 @@ function App(info){
 
         
         window.addEventListener('scroll', handleScroll);
+        
 
     
 
@@ -134,47 +157,48 @@ function App(info){
     
     
     return (
+
+        <ThemeProvider theme={theme}>
         
         <Router>
+            
+            
             <GlobalStyles/>
+            
+                
+            <Switch>
+
+                
+                <Route exact path="/" render={ props => <Home {...props} story={info.story} loggedInStatus={state.loggedInStatus} emailStatus={state.emailStatus} carryState={state} handleLogOutClick={handleLogOutClick}/>}/>
+                <Route path="/login" render={ props => <Login {...props} handleSuccessfulAuth={handleSuccessfulAuth} />} />
+                <Route path="/signup" render={ props => <Signup {...props} handleSuccessfulAuth={handleSuccessfulAuth} />} />
+                <Route path="/forgot" render={ props => <Forgot {...props}  />} />                    <Route path="/forgot" render={ props => <Forgot {...props}  />} />
+
+                <Route exact path="/change_pw/:token" render={ props => <Change {...props}  />} />
+
+
+                <Route path="/edit" render={ props => <Edit {...props} user={state.user}/>} />
+
+                <Route exact path="/ziploker" render={ props => <Admin {...props} loggedInStatus={state.loggedInStatus}/>} />
+                <Route path="/letter" component={Letter} />
+                
+                <Route path="/feedback" component={Feedback} />
+                
+            
+                    
+
+                <Route path="/blog/:id" component={Letter} />
                 
                     
                 
-                
-                
-                
-                <Switch>
+            </Switch>
+            
+            
 
-                    
-                    <Route exact path="/" render={ props => <Home {...props} story={info.story} loggedInStatus={state.loggedInStatus} emailStatus={state.emailStatus} carryState={state} handleLogOutClick={handleLogOutClick}/>}/>
-                    <Route path="/login" render={ props => <Login {...props} handleSuccessfulAuth={handleSuccessfulAuth} />} />
-                    <Route path="/signup" render={ props => <Signup {...props} handleSuccessfulAuth={handleSuccessfulAuth} />} />
-                    <Route path="/forgot" render={ props => <Forgot {...props}  />} />                    <Route path="/forgot" render={ props => <Forgot {...props}  />} />
-
-                    <Route exact path="/change_pw/:token" render={ props => <Change {...props}  />} />
-
-
-                    <Route path="/edit" render={ props => <Edit {...props} user={state.user}/>} />
-
-                    <Route exact path="/ziploker" render={ props => <Admin {...props} loggedInStatus={state.loggedInStatus}/>} />
-                    <Route path="/letter" component={Letter} />
-                    
-                    <Route path="/feedback" component={Feedback} />
-                    
-                
-                        
-
-                    <Route path="/blog/:id" component={Letter} />
-                    
-                        
-                    
-                </Switch>
-                
-                
-
-                <Footer/>
+            <Footer/>
                 
         </Router>
+        </ThemeProvider>
         
     );
 }

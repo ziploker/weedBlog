@@ -14,11 +14,11 @@ const HeaderWrapper = styled.header`
     justify-content: flex-end;
     align-items: center;
     
-    height: 70px;
+    height: 45px;
     width: 100%;
     margin-bottom: 25px;
 
-    background-color: gray;
+    background-color: ${props => props.theme.darkBlue};
     
    
     padding: 0px 8%;
@@ -60,75 +60,11 @@ const HomeLink = styled(Link)`
 `;
 
 
-const Options = styled.nav`
-
-    //width: 100%;
-    height: 100%;
-
-    display: flex;
-    //justify-content: flex-end;
-    //align-items: center;
-
-
-    ul{
-        
-        list-style: none;
-        margin: 0;
-
-        li, a{
-            
-        
-            font-weight: 500;
-            font-size: 16px;
-            line-height: 70px;
-            
-            color: black;
-            
-            text-decoration: none;
-        
-        
-        }
-    
-        li{
-            display: inline-block;
-            padding: 0px 20px;
-
-        
-            a{
-                transition: all 0.3s ease 0s;
-
-                &:hover{
-
-                    color: gray;
-
-                }
-            
-            }
-        
-        }
-    
-    
-    
-    }
-
-`;
-
-const OptionLink = styled(Link)`
-
-    //width: 50%;
-    //height: 100%;
-
-    //display: flex;
-    //justify-content: flex-end;
-    //align-content: center;
-    //line-height: 70px;
-  
-
-`;
 
 
 
 const Nav = styled.nav`
+    
     @media only screen and (max-width: 850px){
     
        display: none     
@@ -148,9 +84,9 @@ const Nav = styled.nav`
             
         
             font-weight: 500;
-            font-size: 16px;
+            font-size: 12px;
             
-            color: orangered;
+            color: ${props => props.theme.white};
             
             text-decoration: none;
         
@@ -167,7 +103,7 @@ const Nav = styled.nav`
 
                 &:hover{
 
-                    color: gray;
+                    color: ${props => props.theme.lightBlue};;
 
                 }
             
@@ -201,15 +137,17 @@ function Header(props) {
     
 
     useDocumentScrollThrottled(callbackData => {
+        console.log("CALLBACKDATA", callbackData)
         const { previousScrollTop, currentScrollTop } = callbackData;
         const isScrolledDown = previousScrollTop < currentScrollTop;
         const isMinimumScrolled = currentScrollTop > MINIMUM_SCROLL;
        
-        setShouldShowShadow(currentScrollTop > 2);
-
-        setTimeout(() => {
+        //setShouldShowShadow(currentScrollTop > 2);
         setShouldHideHeader(isScrolledDown && isMinimumScrolled);
-        }, TIMEOUT_DELAY);
+
+        //setTimeout(() => {
+        //    setShouldHideHeader(isScrolledDown && isMinimumScrolled);
+        //}, TIMEOUT_DELAY);
     });
 
 
@@ -239,7 +177,7 @@ function Header(props) {
             return;
           }
           
-          console.log("call handler");
+          console.log("call handlerr");
           handler();
         };
   
@@ -277,12 +215,12 @@ function Header(props) {
             
             <Nav ref={navbar} >
                 <ul>
-                    <li><a href="#">Link1</a></li>
-                    <li><a href="#">Link2</a></li>
-                    <li><a href="#">Link3</a></li>
-                    <li><a href="#">Link4</a></li>
+                    <li key={1}><a href="#">Link1</a></li>
+                    <li key={2}><a href="#">Link2</a></li>
+                    <li key={3}><a href="#">Link3</a></li>
+                    <li key={4}><a href="#">Link4</a></li>
 
-    <l1>{props.carryState.loggedInStatus == "LOGGED_IN" ? [<Link onClick= {props.handleLogOutClick}> Logout </Link>, <Link to="/edit">edit </Link>] :   [<Link to="/login"> Login </Link>, <Link to="/signup"> Signup</Link>]  } </l1>
+                    <li key={5}>{props.carryState.loggedInStatus == "LOGGED_IN" ? [<Link key={"a"} to="/" onClick= {props.handleLogOutClick}> Logout | </Link>, <Link key={"b"} to="/edit">edit </Link>] :   [<Link key={"c"} to="/login"> Login |</Link>, <Link key={"d"} to="/signup"> Signup</Link>]  } </li>
                     
                     
 

@@ -20,23 +20,65 @@ import {
 const StorySection = styled.section`
 
     max-width:450px;
-    //height: 350px;
-    //border: 1px solid orange;
     
-    //margin-bottom: 20px;
-    //border: 1px solid orange;
-    //border-top-left-radius: 17px;
-    //border-top-right-radius: 17px;
-    padding: 15px;
-    
+    border: 3px double ${props => props.theme.pink};
+   
+    //padding: 15px;
+    background-color: white;
     display: grid;
-    //grid-template-rows: 30% 2em 1fr;  
+    grid-template-rows: auto;  
 
     grid-template-areas:
         "picture"
         "grayArea"
         "body"
-        "time";
+        "time"
+    ;
+
+    @media screen and (min-width: 750px) and (max-width: 1111px){
+
+        max-width: 88%;
+        width: 100%;
+        padding: 0px;
+        display: grid;
+        grid-gap: 10px;
+        grid-template-columns: 110px 1fr;
+        grid-auto-rows: min-content;
+        justify-content: center;
+        align-items: center;
+        
+        grid-template-areas:
+            "picture body"
+            "picture time"
+        ;
+            
+            
+
+
+    }
+`;
+
+
+const StoryImage = styled.img`
+
+    width:100%;
+    height: 100%;
+    grid-area: 1 /1 /3 /-1;
+    
+    
+    @media screen and (min-width: 750px) and (max-width: 1111px){
+        width: 110px;
+        height: 90px;
+        grid-area: picture;
+        padding-left: 10px;
+        align-self: center;
+        justify-self: center;
+
+    }
+    
+
+
+    
 
 
 `;
@@ -55,34 +97,16 @@ const StoryImageWrapper = styled.div`
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */
     
     
-    
-   
-    
-    
-    
+    @media screen and (min-width: 750px) and (max-width: 1111px){
 
-    
-    
+
+        display: none;
+    }
 
 
 
 `;
-const StoryImage = styled.img`
 
-    width:100%;
-    height: 100%;
-    
-    position: relative;
-    
-    z-index: -20;
-
-   
-
-
-    
-
-
-`;
 
 const LeftWrapper = styled.div`
 
@@ -129,7 +153,7 @@ const StoryShareButtons = styled.div`
 
 const StoryTags = styled.div`
 
-    
+    font-size: .7em;
     width: 80px;
     height: 23px;
     border-radius: 4px;
@@ -138,6 +162,12 @@ const StoryTags = styled.div`
 
     grid-area: grayArea;
     justify-self: center;
+
+    @media screen and (min-width: 750px) and (max-width: 1111px){
+
+
+        display: none;
+    }
     
     
 
@@ -146,12 +176,20 @@ const StoryTags = styled.div`
 
 const Tag = styled.h3`
 
-    
+    font-weight: 900;
     color: black;
     margin: 0px;
     text-align: center;
     line-height: 23px;
-    
+    font-size: .9em;
+    //padding: 5px 10px;
+
+    @media screen and (min-width: 750px) and (max-width: 1111px){
+
+
+        display: none;
+    }
+  
     
 
 `;
@@ -168,6 +206,18 @@ const StoryBody = styled.h1`
     text-align: center;
     line-height: 1.2em;
     margin-bottom: 15px;
+    
+    @media screen and (min-width: 750px) and (max-width: 1111px){
+
+        margin: 0;
+        padding: 0 10px;
+        //font-size: 1em;
+        text-align: left;
+        justify-self: start;
+
+    }
+
+    
 
 `;
 
@@ -184,6 +234,15 @@ const StoryInfo = styled.h3`
     grid-area: "time";
     justify-self: center;
 
+    @media screen and (min-width: 750px) and (max-width: 1111px){
+
+
+        justify-self: end;
+        align-self: flex-end;
+        //font-size: .9em;
+        padding: 0px 10px 0px 0px;
+    }
+
 `;
 
   
@@ -191,14 +250,15 @@ const StoryInfo = styled.h3`
 
 function Story(props){
     
-    console.log("SSSSSSS");
-    console.log(props);
+    
     return (
         <StorySection>
             
-            <StoryImageWrapper>
-                <StoryImage src={props.info ? props.info.url : null}  />
-            </StoryImageWrapper>
+            
+            <StoryImage src={props.info ? props.info.url : null}  />
+            <StoryImageWrapper/>
+                
+            
             
             
             

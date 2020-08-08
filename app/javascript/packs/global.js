@@ -1,6 +1,14 @@
 import React, {useEffect, useState} from 'react'
 import { createGlobalStyle } from 'styled-components'
 
+
+  //light blue   #56c5cc 	(86,197,204)
+	//pink         #f14f7b 	(241,79,123)
+	//orange       #f7aa1c 	(247,170,28)
+	//darkblue     #000321 	(0,3,33)
+	//black        #000000 	(0,0,0)
+
+
 const GlobalStyles = createGlobalStyle`
 
 * {
@@ -38,9 +46,9 @@ a, a:active, a:focus{
     
     /*overflow-y: scroll;*/
     padding: 0px 10px 0px;
-    font-size: calc(14px + (26 - 14) * ((100vw - 300px) / (1600 - 300)));
+    font-size: calc(14px + (24 - 14) * ((100vw - 300px) / (1600 - 300)));
     line-height: calc(1.3em + (1.5 - 1.2) * ((100vw - 300px)/(1600 - 300)));
-    background-color: #f9f6ef;
+    background-color: #f4f4f4;
 
     padding: 0px;
     margin: 0px;

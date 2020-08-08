@@ -201,7 +201,7 @@ function Login(props) {
 
           </FormItem>
 
-          <Button type="submit">Sign Up</Button>
+          <Button type="submit">Make changes</Button>
         </Form>
        
         <ErrorWrapper>        

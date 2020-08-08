@@ -17,17 +17,35 @@ import {
     Link
   } from "react-router-dom";
 
+const Layout = styled.div`
+
+  padding: 0px 10px;
+
+    @media screen and (min-width: 750px){
+        display: grid;
+        grid-template-columns: minmax(200px, 1fr) minmax(10px, 20vw);
+        grid-gap: 20px;
+    }
+`;
+
+const Ads = styled.div`
+    background-color: pink;
+
+`;
+
 const Wrapper = styled.div`
 
     display: grid;
     grid-template-columns: minmax(200px, 700px);
-    grid-gap: 20px;
+    grid-gap: 15px;
     justify-content: center;
     justify-items: center;
-    margin-top: 90px;
+    margin-top: 80px;
 
     @media screen and (min-width: 750px){
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: minmax(200px, 1fr);
+        grid-auto-rows: minmax(100px, auto);
+        
         grid-gap: 20px;
         justify-content: center;
         //justify-items: center;
@@ -35,7 +53,7 @@ const Wrapper = styled.div`
     }
 
     @media screen and (min-width: 1111px){
-        grid-template-columns: minmax(245px, 400px) minmax(245px, 400px) minmax(245px, 400px);
+        grid-template-columns:  minmax(245px, auto) minmax(245px, auto);
         grid-gap: 20px;
         justify-content: center;
         //justify-items: center;
@@ -53,23 +71,29 @@ function Home(props){
         console.log("Home", props)
     
     return (
-        
+        <>
+        <Header carryState={props.carryState} handleLogOutClick={props.handleLogOutClick}/>
 
-        
-        <Wrapper>
-            
-            <Header carryState={props.carryState} handleLogOutClick={props.handleLogOutClick}/>
-            {props.story.map((info, index) => (
+        <Layout>
+            <Wrapper>
                 
+                {props.story.map((info, index) => (
+                    
+                    
+                  
+                        <Story key={index} info={info} />
+                    
+                ))}
                 
-                <div key={index}>
-                    <Story info={info} />
-                </div>
-            ))}
-            <LookupSection/>
+            </Wrapper>  
+            <Ads>
 
-           
-        </Wrapper>  
+            </Ads>
+        </Layout>
+        
+        
+        <LookupSection/>
+        </>
 
             
         

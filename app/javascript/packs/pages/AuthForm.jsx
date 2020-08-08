@@ -103,7 +103,7 @@ const Button = styled.button`
   padding: 1rem;
   color: white;
   font-weight: 700;
-  width: 100%;:
+  width: 100%;
   margin-bottom: 1rem;
   font-size: 0.8rem;
   
