@@ -58,11 +58,12 @@ const Banner = styled.h1`
 
 
   grid-area: banner; 
-  padding: 90px 10px 0px 10px;
+  padding: 60px 10px 0px 10px;
   margin-bottom: 20px;
   
   text-align: center;
   align-self: flex-end;
+  line-height: 120%;
   
 
 `;
@@ -103,11 +104,11 @@ const Results = styled.div`
 
 `;
 
-function Look_Up_Section (props) {
+function Look_Up_Section (props, ref) {
 
-  const [showCards, setShowCards] = React.useState( true )
-  const [results, setResults] = React.useState( {"one":{"name":"Annette Taddeo","firstName":"Annette","lastName":"Taddeo","image":"http://www.flsenate.gov/PublishedContent/Senators/2018-2020/Photos/s40_5331.jpg","id":"ocd-person/ea190b03-d1ca-4d75-89c7-dca745386db7","email":"taddeo.annette.web@flsenate.gov","chamber":"Senate","party":"Democrat","parent":"Florida Legislature","district":"40","fullDistrict":"Florida State Senate district 40"},"two":{"name":"Juan Alfonso Fernandez-Barquin","firstName":"","lastName":"","image":"https://www.myfloridahouse.gov//FileStores/Web/Imaging/Member/4709.jpg","id":"ocd-person/a8c88fee-1915-4907-ae37-5755c4bff446","email":"JuanF.Barquin@myfloridahouse.gov","chamber":"House","party":"Republican","parent":"Florida Legislature","district":"119","fullDistrict":"Florida State House district 119"}} );
-  //const [results, setResults] = React.useState( {"one": {}, "two": {} });
+  const [showCards, setShowCards] = React.useState( false )
+  //const [results, setResults] = React.useState( {"one":{"name":"Annette Taddeo","firstName":"Annette","lastName":"Taddeo","image":"http://www.flsenate.gov/PublishedContent/Senators/2018-2020/Photos/s40_5331.jpg","id":"ocd-person/ea190b03-d1ca-4d75-89c7-dca745386db7","email":"taddeo.annette.web@flsenate.gov","chamber":"Senate","party":"Democrat","parent":"Florida Legislature","district":"40","fullDistrict":"Florida State Senate district 40"},"two":{"name":"Juan Alfonso Fernandez-Barquin","firstName":"","lastName":"","image":"https://www.myfloridahouse.gov//FileStores/Web/Imaging/Member/4709.jpg","id":"ocd-person/a8c88fee-1915-4907-ae37-5755c4bff446","email":"JuanF.Barquin@myfloridahouse.gov","chamber":"House","party":"Republican","parent":"Florida Legislature","district":"119","fullDistrict":"Florida State House district 119"}} );
+  const [results, setResults] = React.useState( {"one": {}, "two": {} });
 
   const [showStatusSpinner, setShowStatusSpinner] = React.useState (false)
   const [showStatusCheck, setShowStatusCheck] = React.useState (false)
@@ -161,14 +162,14 @@ function Look_Up_Section (props) {
     
   return (
 
-    <BottomHalf>
+    <BottomHalf >
 
       {console.log("rendering lookupSection")}
         
       <Lookup_Section_Wrapper>
 
-        <Banner> Find Your State Representative </Banner>
-        <SubBanner> ...and send them a messages </SubBanner>
+        <Banner ref={ref}> Find Your State Representative </Banner>
+        <SubBanner > ...and send them a messages </SubBanner>
         <LookupForm 
           setSearchButtonActive={setSearchButtonActive} 
           searchButtonActive={searchButtonActive} 
@@ -190,6 +191,7 @@ function Look_Up_Section (props) {
           formInfo={formInfo} 
           setFormInfo={setFormInfo} 
           setResults={setResults}
+          
         />
 
         <Results>
@@ -207,5 +209,9 @@ function Look_Up_Section (props) {
 
 }
 
+const Newish = React.forwardRef(Look_Up_Section);
 
-export default props => <Look_Up_Section {...props} />
+
+//export default props => <Look_Up_Section {...props} />
+
+export default Newish;

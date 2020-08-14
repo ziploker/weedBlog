@@ -31,6 +31,7 @@ const Form = styled.form`
   justify-content: center;
   
   width: 100%;
+  max-width: 555px;
   margin: 30px 0px 20px 0px;
   grid-area: form;
   
@@ -91,7 +92,7 @@ const Button = styled.button`
   //      background-color: #eae6de;
         
   //  }
-  }
+  //}
 
   
 `;

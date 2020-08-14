@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useEffect, useState, useRef, createRef} from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 
 //import Letter from '../packs/letter.jsx'
@@ -65,14 +65,21 @@ const Wrapper = styled.div`
 `;
 
 
-
+const scrollToRef = (ref) => window.scrollTo(0, ref.current.offsetTop)
 
 function Home(props){
         console.log("Home", props)
+        //let LookupRef = React.createRef();
+        const LookupRef = useRef();
+        const executeScroll = () => scrollToRef(LookupRef)
     
-    return (
+    
+    
+        return (
         <>
-        <Header carryState={props.carryState} handleLogOutClick={props.handleLogOutClick}/>
+
+         
+        <Header executeScroll={executeScroll} LookupRef={LookupRef} carryState={props.carryState} handleLogOutClick={props.handleLogOutClick}/>
 
         <Layout>
             <Wrapper>
@@ -92,7 +99,7 @@ function Home(props){
         </Layout>
         
         
-        <LookupSection/>
+        <LookupSection ref={LookupRef}/>
         </>
 
             

@@ -6,6 +6,8 @@ import {Link} from 'react-router-dom';
 import useDocumentScrollThrottled from './useDocumentScrollThrottled.jsx'
 import Burger from './burger'
 import Menu from './menu'
+import { ScrollTo } from "react-scroll-to";
+
 
 
 const HeaderWrapper = styled.header`
@@ -89,6 +91,7 @@ const Nav = styled.nav`
             color: ${props => props.theme.white};
             
             text-decoration: none;
+            cursor: pointer;
         
         
         }
@@ -215,12 +218,17 @@ function Header(props) {
             
             <Nav ref={navbar} >
                 <ul>
-                    <li key={1}><a href="#">Link1</a></li>
-                    <li key={2}><a href="#">Link2</a></li>
-                    <li key={3}><a href="#">Link3</a></li>
-                    <li key={4}><a href="#">Link4</a></li>
+                
+                    
+                    <li key={1}><a href="#">News</a></li>
+                    <li key={2}>
+                    
+                        <a onClick={props.executeScroll}>Representative Lookup</a>
+                    </li>
+                    <li key={3}><a href="#">Store</a></li>
+                    
 
-                    <li key={5}>{props.carryState.loggedInStatus == "LOGGED_IN" ? [<Link key={"a"} to="/" onClick= {props.handleLogOutClick}> Logout | </Link>, <Link key={"b"} to="/edit">edit </Link>] :   [<Link key={"c"} to="/login"> Login |</Link>, <Link key={"d"} to="/signup"> Signup</Link>]  } </li>
+                    <li key={4}>{props.carryState.loggedInStatus == "LOGGED_IN" ? [<Link key={"a"} to="/" onClick= {props.handleLogOutClick}> Logout | </Link>, <Link key={"b"} to="/edit">edit </Link>] :   [<Link key={"c"} to="/login"> Login |</Link>, <Link key={"d"} to="/signup"> Signup</Link>]  } </li>
                     
                     
 
@@ -232,7 +240,7 @@ function Header(props) {
         
             <div className="tester" ref={ref}>
             <Burger open={open} setOpen={setOpen}/>
-            <Menu open={open}  />
+            <Menu open={open} executeScroll={props.executeScroll} carryState={props.carryState} />
             </div>
         
         
