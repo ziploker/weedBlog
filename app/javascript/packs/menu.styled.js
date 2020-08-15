@@ -18,8 +18,8 @@ const StyledMenu = styled.nav`
   transition: transform 0.3s ease-in-out;
   z-index: 3;
   
-  transform: ${({ open }) => open ? 'translateX(0px)' : 'translateX(500px)'};
-  //transform: ${({ open }) => open ? 'scale(0,1)' : 'scale(1,1)'};
+  transform: ${({ openSideMenu }) => openSideMenu ? 'translateX(0px)' : 'translateX(500px)'};
+  //transform: ${({ openSideMenu }) => openSideMenu ? 'scale(0,1)' : 'scale(1,1)'};
   
   @media (max-width: ${({ theme }) => theme.mobile}) {
     //width: 100%;

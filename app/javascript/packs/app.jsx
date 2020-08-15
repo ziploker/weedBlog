@@ -1,39 +1,38 @@
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useEffect, useState, useRef} from 'react'
+
 import {
     BrowserRouter as Router,
     Switch,
     Route,
     Link
-  } from "react-router-dom";
-import styled, { ThemeProvider } from 'styled-components';
+} from "react-router-dom"
 
 import Letter from '../packs/letter.jsx'
 import Feedback from '../packs/feedback.jsx'
 import Home from '../packs/home.jsx'
 import Admin from '../packs/admin.jsx'
-import Header from '../packs/header'
-import LookupSection from '../packs/lookupSection.jsx'
 import Footer from '../packs/footer.jsx'
 
-import Login from "./pages/login";
-import Forgot from "./pages/forgot";
-import Signup from './pages/signup';
-import Edit from './pages/edit';
+import Login from "./pages/login"
+import Forgot from "./pages/forgot"
+import Signup from './pages/signup'
+import Edit from './pages/edit'
 import Change from './pages/change_pw'
 
 import axios from 'axios'
-import '../../assets/stylesheets/sticky.scss'
 
+import styled, { ThemeProvider } from 'styled-components'
+import '../../assets/stylesheets/sticky.scss'
 import GlobalStyles from "./global"
 
 
 
-
-
 function App(info){
+
+    console.log("APP_INFO", info)
     
     //global state of user (logged in ? and user)
-    const [state, setState] = React.useState({
+    const [appState, setAppState] = useState({
         
         loggedInStatus: "NOT_LOGGED_IN",
         emailStatus: "EMAIL_NOT_VERIFIED",
@@ -46,7 +45,7 @@ function App(info){
     const [isSticky, setSticky] = useState(false);
     const ref = useRef(null);
     
-    const handleScroll = () => {
+    ////const handleScroll = () => {
         
         //if (document.body.scrollTop > 70 || document.documentElement.scrollTop > 70) {
             //document.getElementById("header").style.fontSize = "30px";
@@ -54,33 +53,35 @@ function App(info){
             //document.getElementById("header").style.fontSize = "90px";
         //}
 
-        const prevScrollpos = state.prevScrollpos;
+        ////const prevScrollpos = state.prevScrollpos;
 
-        const currentScrollPos = window.pageYOffset;
-        const visible = prevScrollpos > currentScrollPos;
+        ////const currentScrollPos = window.pageYOffset;
+        ////const visible = prevScrollpos > currentScrollPos;
 
-        setState({
-            prevScrollpos: currentScrollPos,
-            visible
-        });
-    };
+        ////setState({
+        ////    prevScrollpos: currentScrollPos,
+        ////    visible
+        ////});
+    ////};
 
+    
     const theme = {
-        white: "#ffffff",
-        offWhite: "#f4f4f4",
-        lightBlue:   "#56c5cc",	//(86,197,204)
-        pink:         "#f14f7b", //(241,79,123)
-        orange:       "#f7aa1c", //(247,170,28)
-        darkBlue:     "#000321", //(0,3,33)
-        blueGray:      "#0E2021",
-        black:        "#000000" //(0,0,0)
-      };
+        
+        white:        "#ffffff",
+        offWhite:     "#f4f4f4",
+        lightBlue:    "#56c5cc",  //(86,197,204)
+        pink:         "#f14f7b",  //(241,79,123)
+        orange:       "#f7aa1c",  //(247,170,28)
+        darkBlue:     "#000321",  //(0,3,33)
+        blueGray:     "#0E2021",
+        black:        "#000000"   //(0,0,0)
+    };
     
 
     const handleSuccessfulAuth = data => {
         
-        setState({
-            ...state,
+        setAppState({
+            ...appState,
             loggedInStatus: "LOGGED_IN",
             user: data.user
         })
@@ -91,40 +92,41 @@ function App(info){
     const handleLogOutClick = () => {
         
         const mode = process.env.NODE_ENV =="development" ? "http://127.0.0.1:3000" : "https://weedblog.herokuapp.com"
-        axios.delete(mode + "/logout", {withCredentials : true})
-        .then(response => {
-            setState({
-                loggedInStatus: "NOT_LOGGED_IN",
-                user: {}
-            })
-
-        }).catch(error => {
-            console.log("logout errors", error)
-        })
         
-       
+        axios.delete(mode + "/logout", {withCredentials : true})
+            .then(response => {
+                setAppState({
+                    loggedInStatus: "NOT_LOGGED_IN",
+                    user: {}
+                })
+
+            }).catch(error => {
+                console.log("logout errors", error)
+            })
     }
 
+    
     
     
     useEffect(() => {
 
         const mode = process.env.NODE_ENV == "development" ? "http://127.0.0.1:3000" : "https://weedblog.herokuapp.com"
+        
         axios.get( mode + "/logged_in", {withCredentials: true})
             .then(response => {
 
-                if (response.data.logged_in && state.loggedInStatus == "NOT_LOGGED_IN"){
+                if (response.data.logged_in && appState.loggedInStatus == "NOT_LOGGED_IN"){
                     
-                    setState({
-                        ...state,
+                    setAppState({
+                        ...appState,
                         loggedInStatus: "LOGGED_IN",
                         user: response.data.user
                     })
                     
-                }else if (!response.data.logged_in && state.loggedInStatus == "LOGGED_IN"){
+                }else if (!response.data.logged_in && appState.loggedInStatus == "LOGGED_IN"){
                     
-                    setState({
-                        ...state,
+                    setAppState({
+                        ...appState,
                         loggedInStatus: "NOT_LOGGED_IN",
                         user: {}
                     })
@@ -133,8 +135,8 @@ function App(info){
 
                 if (response.data.user && response.data.user.email_confirmed == true){
                     
-                    setState({
-                        ...state,
+                    setAppState({
+                        ...appState,
                        
                         emailStatus: "EMAIL_VERIFIED"
                     })
@@ -145,14 +147,12 @@ function App(info){
             .catch(error => console.log("Logged in? error", error))
 
         
-        window.addEventListener('scroll', handleScroll);
+        ////window.addEventListener('scroll', handleScroll);
         
-
+        ////return () => {
+            ////window.removeEventListener('scroll', () => handleScroll);
+        ////};
     
-
-        return () => {
-            window.removeEventListener('scroll', () => handleScroll);
-        };
     },[]);
     
     
@@ -160,46 +160,30 @@ function App(info){
 
         <ThemeProvider theme={theme}>
         
-        <Router>
-            
-            
-            <GlobalStyles/>
-            
+            <Router>
                 
-            <Switch>
-
+                <GlobalStyles/>
                 
-                <Route exact path="/" render={ props => <Home {...props} story={info.story} loggedInStatus={state.loggedInStatus} emailStatus={state.emailStatus} carryState={state} handleLogOutClick={handleLogOutClick}/>}/>
-                <Route path="/login" render={ props => <Login {...props} handleSuccessfulAuth={handleSuccessfulAuth} />} />
-                <Route path="/signup" render={ props => <Signup {...props} handleSuccessfulAuth={handleSuccessfulAuth} />} />
-                <Route path="/forgot" render={ props => <Forgot {...props}  />} />                    <Route path="/forgot" render={ props => <Forgot {...props}  />} />
+                <Switch>
 
-                <Route exact path="/change_pw/:token" render={ props => <Change {...props}  />} />
-
-
-                <Route path="/edit" render={ props => <Edit {...props} user={state.user}/>} />
-
-                <Route exact path="/ziploker" render={ props => <Admin {...props} loggedInStatus={state.loggedInStatus}/>} />
-                <Route path="/letter" component={Letter} />
-                
-                <Route path="/feedback" component={Feedback} />
-                
-            
+                    <Route exact path="/" render={ props => <Home {...props} story={info.story} loggedInStatus={appState.loggedInStatus} emailStatus={appState.emailStatus} appState={appState} handleLogOutClick={handleLogOutClick}/>}/>
+                    <Route path="/login" render={ props => <Login {...props} handleSuccessfulAuth={handleSuccessfulAuth} />} />
+                    <Route path="/signup" render={ props => <Signup {...props} handleSuccessfulAuth={handleSuccessfulAuth} />} />
+                    <Route path="/forgot" render={ props => <Forgot {...props}  />} />                    <Route path="/forgot" render={ props => <Forgot {...props}  />} />
+                    <Route exact path="/change_pw/:token" render={ props => <Change {...props}  />} />
+                    <Route path="/edit" render={ props => <Edit {...props} user={appState.user}/>} />
+                    <Route exact path="/ziploker" render={ props => <Admin {...props} loggedInStatus={appState.loggedInStatus}/>} />
+                    <Route path="/letter" component={Letter} />
+                    <Route path="/feedback" component={Feedback} />
+                    <Route path="/blog/:id" component={Letter} />
                     
-
-                <Route path="/blog/:id" component={Letter} />
+                </Switch>
                 
-                    
-                
-            </Switch>
+                <Footer/>
             
-            
-
-            <Footer/>
-                
-        </Router>
-        </ThemeProvider>
+            </Router>
         
+        </ThemeProvider>
     );
 }
 

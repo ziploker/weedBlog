@@ -1,12 +1,11 @@
 import React, {useEffect, useState} from 'react'
-import Logo from '../../assets/images/logoPlaceholder.jpg'
-import styled from 'styled-components';
-import {Link} from 'react-router-dom';
-
+import {Link} from 'react-router-dom'
 import useDocumentScrollThrottled from './useDocumentScrollThrottled.jsx'
+import styled from 'styled-components'
+import Logo from '../../assets/images/logoPlaceholder.jpg'
+
 import Burger from './burger'
 import Menu from './menu'
-import { ScrollTo } from "react-scroll-to";
 
 
 
@@ -15,21 +14,15 @@ const HeaderWrapper = styled.header`
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    
     height: 45px;
     width: 100%;
     margin-bottom: 25px;
-
     background-color: ${props => props.theme.darkBlue};
-    
-   
     padding: 0px 8%;
-
     position: fixed;
     top: 0;
     left: 0;
     z-index: 1001;
-
     transform: translateY(0);
     transition: all 0.3s ease;
 
@@ -41,8 +34,6 @@ const HeaderWrapper = styled.header`
         transform: translateY(-110%);
         //height: 50px;
     }
-   
-
 `;
 
 
@@ -51,17 +42,10 @@ const HomeLink = styled(Link)`
 
     height: 100%;
     width: 70px;
-
     cursor: pointer;
     margin-right: auto;
-    
-    
     background-color: pink;
-    
-
 `;
-
-
 
 
 
@@ -130,85 +114,84 @@ const Nav = styled.nav`
 function Header(props) {
 
 
-    const [shouldHideHeader, setShouldHideHeader] = useState(false);
-    const [shouldShowShadow, setShouldShowShadow] = useState(false);
-    const [open, setOpen] = useState(false);
+    const [openSideMenu, setOpenSideMenu] = useState(false);
     const ref = React.useRef();
     const navbar = React.createRef();
     const MINIMUM_SCROLL = 80;
     const TIMEOUT_DELAY = 400;
     
 
-    useDocumentScrollThrottled(callbackData => {
-        console.log("CALLBACKDATA", callbackData)
-        const { previousScrollTop, currentScrollTop } = callbackData;
-        const isScrolledDown = previousScrollTop < currentScrollTop;
-        const isMinimumScrolled = currentScrollTop > MINIMUM_SCROLL;
+    
+
+    
+    //useDocumentScrollThrottled(callbackData => {
+        
+    //    const { previousScrollTop, currentScrollTop } = callbackData;
+    //    const isScrolledDown = previousScrollTop < currentScrollTop;
+    //    const isMinimumScrolled = currentScrollTop > MINIMUM_SCROLL;
        
-        //setShouldShowShadow(currentScrollTop > 2);
-        setShouldHideHeader(isScrolledDown && isMinimumScrolled);
-
-        //setTimeout(() => {
-        //    setShouldHideHeader(isScrolledDown && isMinimumScrolled);
-        //}, TIMEOUT_DELAY);
-    });
+        
+    //});
 
 
 
 
-
-
-    const shadowStyle = shouldShowShadow ? 'shadow' : '';
-    const hiddenStyle = shouldHideHeader ? 'hidden' : '';
-
-    function handler(){
-        setOpen(false);
-        console.log("ran setopen in handler, open = " + open);
-      }
+    function mouseDownHandler(){
+        
+        setOpenSideMenu(false);
+        console.log("mouseDownEventTriggered & openSideMenu = " + openSideMenu);
+    }
 
 
 
+    
     useEffect(() => {
 
-        console.log("UseEffect Start, open state is currently " + open);
+        console.log("UseEffect Start, openSideMenu state is currently " + openSideMenu);
         
+        //mousedown listener
         const listener = event => {
           
-          if (!ref.current || ref.current.contains(event.target)) {
-  
-            console.log("nada");
-            return;
-          }
+            if (!ref.current || ref.current.contains(event.target)) {
+    
+                return;
+            }
           
-          console.log("call handlerr");
-          handler();
+            mouseDownHandler();
         };
   
+        
+        //resize and/or orientationchange listener
         const handleResize = () => {
-          console.log(window.innerWidth);
-          if (window.innerWidth > 850){
-            setOpen(false);
-          }
+          
+            console.log(window.innerWidth);
+            
+            //closed sideMenu on orientation change
+            if (window.innerWidth > 850){
+                setOpenSideMenu(false);
+            }
         }
   
+        
         window.addEventListener("resize", handleResize);
         window.addEventListener("orientationchange", handleResize);
         document.addEventListener('mousedown', listener);
         
+        
         return () => {
-          console.log("cleanup first line");
+          
           document.removeEventListener('mousedown', listener);
           console.log("cleanup");
-          console.log("cleanup done, open = " + open);
+          console.log("cleanup done, openSideMenu = " + openSideMenu);
         };
       },
-      [ref, handler],
-      );
+      [ref, mouseDownHandler],
+    );
 
 
       
     return (
-        //<HeaderWrapper className={`header ${hiddenStyle} ${shadowStyle}`}>
+        
         <HeaderWrapper>
                 
             <HomeLink to='/'>
@@ -228,7 +211,7 @@ function Header(props) {
                     <li key={3}><a href="#">Store</a></li>
                     
 
-                    <li key={4}>{props.carryState.loggedInStatus == "LOGGED_IN" ? [<Link key={"a"} to="/" onClick= {props.handleLogOutClick}> Logout | </Link>, <Link key={"b"} to="/edit">edit </Link>] :   [<Link key={"c"} to="/login"> Login |</Link>, <Link key={"d"} to="/signup"> Signup</Link>]  } </li>
+                    <li key={4}>{props.appState.loggedInStatus == "LOGGED_IN" ? [<Link key={"a"} to="/" onClick= {props.handleLogOutClick}> Logout | </Link>, <Link key={"b"} to="/edit">edit </Link>] :   [<Link key={"c"} to="/login"> Login |</Link>, <Link key={"d"} to="/signup"> Signup</Link>]  } </li>
                     
                     
 
@@ -239,8 +222,8 @@ function Header(props) {
             
         
             <div className="tester" ref={ref}>
-            <Burger open={open} setOpen={setOpen}/>
-            <Menu open={open} executeScroll={props.executeScroll} carryState={props.carryState} />
+                <Burger openSideMenu={openSideMenu} setOpenSideMenu={setOpenSideMenu}/>
+                <Menu openSideMenu={openSideMenu} executeScroll={props.executeScroll} appState={props.appState} />
             </div>
         
         

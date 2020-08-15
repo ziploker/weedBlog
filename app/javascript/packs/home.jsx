@@ -1,13 +1,9 @@
-import React, {useEffect, useState, useRef, createRef} from 'react';
-import styled, { ThemeProvider } from 'styled-components';
+import React, {useEffect, useState, useRef} from 'react';
+import styled from 'styled-components';
 
-//import Letter from '../packs/letter.jsx'
-//import Feedback from '../packs/feedback.jsx'
-//import Admin from '../packs/admin.jsx'
 import Story from '../packs/story.jsx'
 import Header from './header.jsx'
 import LookupSection from './lookupSection.jsx'
-
 import slugify from 'react-slugify'
 
 import {
@@ -15,11 +11,13 @@ import {
     Switch,
     Route,
     Link
-  } from "react-router-dom";
+} from "react-router-dom";
 
-const Layout = styled.div`
 
-  padding: 0px 10px;
+
+const NewsSection = styled.div`
+
+    padding: 0px 10px;
 
     @media screen and (min-width: 750px){
         display: grid;
@@ -28,12 +26,16 @@ const Layout = styled.div`
     }
 `;
 
-const Ads = styled.div`
-    background-color: pink;
 
+
+const NewsAds = styled.div`
+    
+    background-color: pink;
 `;
 
-const Wrapper = styled.div`
+
+
+const NewsWrapper = styled.div`
 
     display: grid;
     grid-template-columns: minmax(200px, 700px);
@@ -57,53 +59,55 @@ const Wrapper = styled.div`
         grid-gap: 20px;
         justify-content: center;
         //justify-items: center;
-        
     }
-
-
-
 `;
 
 
-const scrollToRef = (ref) => window.scrollTo(0, ref.current.offsetTop)
+
+
+
+
 
 function Home(props){
-        console.log("Home", props)
-        //let LookupRef = React.createRef();
-        const LookupRef = useRef();
-        const executeScroll = () => scrollToRef(LookupRef)
+
+    console.log("HOME_PROPS", propsinfo)
+
+    // reference for lookupSection to scroll to, when click on nav link
+    const LookupRef = useRef();
+
+    // when click on nav link, scrolls to LookupRef
+    const scrollToRef = (ref) => window.scrollTo(0, ref.current.offsetTop)
+        
     
     
+    const executeScroll = () => scrollToRef(LookupRef)
+
     
-        return (
+    return (
+    
         <>
 
-         
-        <Header executeScroll={executeScroll} LookupRef={LookupRef} carryState={props.carryState} handleLogOutClick={props.handleLogOutClick}/>
+        <Header executeScroll={executeScroll} appState={props.appState} handleLogOutClick={props.handleLogOutClick}/>
 
-        <Layout>
-            <Wrapper>
-                
-                {props.story.map((info, index) => (
-                    
-                    
-                  
-                        <Story key={index} info={info} />
-                    
-                ))}
-                
-            </Wrapper>  
-            <Ads>
-
-            </Ads>
-        </Layout>
-        
-        
-        <LookupSection ref={LookupRef}/>
-        </>
-
+        <NewsSection>
             
+            <NewsWrapper>
         
+                {props.story.map((info, index) => (
+                    <Story key={index} info={info} />
+                ))}
+            
+            </NewsWrapper>  
+            
+            <NewsAds>
+
+            </NewsAds>
+        
+        </NewsSection>
+
+        <LookupSection ref={LookupRef}/>
+        
+        </>
     );
 }
 
