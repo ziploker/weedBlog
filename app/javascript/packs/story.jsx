@@ -63,7 +63,7 @@ const StoryImage = styled.img`
 
     width:100%;
     height: 100%;
-    min-height: 90px;
+    min-height: 400px;
     grid-area: 1 /1 /3 /-1;
     
     
@@ -253,10 +253,17 @@ function Story(props){
     
     
     return (
+        
         <StorySection>
             
             
-            <StoryImage src={props.info ? props.info.url : null}  />
+           
+            
+            <StoryImageWrapper/>
+
+                <StoryImage src={props.info ? props.info.url : null}  />
+
+
             <StoryImageWrapper/>
                 
             
