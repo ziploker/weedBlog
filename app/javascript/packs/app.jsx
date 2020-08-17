@@ -26,45 +26,23 @@ import '../../assets/stylesheets/sticky.scss'
 import GlobalStyles from "./global"
 
 
+///////////////////////////////// MAIN APP STARTING POINT ///////////////
+function App(controllerProps){
 
-function App(info){
-
-    console.log("APP_INFO", info)
     
-    //global state of user (logged in ? and user)
+    console.log("APP_controllerProps", controllerProps)
+    
+    //global APP state 
     const [appState, setAppState] = useState({
         
         loggedInStatus: "NOT_LOGGED_IN",
         emailStatus: "EMAIL_NOT_VERIFIED",
-        user: {},
-        prevScrollpos: window.pageYOffset,
-        visible: true
+        user: {}
+        
     })
 
     
-    const [isSticky, setSticky] = useState(false);
-    const ref = useRef(null);
-    
-    ////const handleScroll = () => {
-        
-        //if (document.body.scrollTop > 70 || document.documentElement.scrollTop > 70) {
-            //document.getElementById("header").style.fontSize = "30px";
-        //} else {
-            //document.getElementById("header").style.fontSize = "90px";
-        //}
-
-        ////const prevScrollpos = state.prevScrollpos;
-
-        ////const currentScrollPos = window.pageYOffset;
-        ////const visible = prevScrollpos > currentScrollPos;
-
-        ////setState({
-        ////    prevScrollpos: currentScrollPos,
-        ////    visible
-        ////});
-    ////};
-
-    
+   
     const theme = {
         
         white:        "#ffffff",
@@ -78,6 +56,8 @@ function App(info){
     };
     
 
+    
+    
     const handleSuccessfulAuth = data => {
         
         setAppState({
@@ -85,9 +65,9 @@ function App(info){
             loggedInStatus: "LOGGED_IN",
             user: data.user
         })
-
     }
 
+    
     
     const handleLogOutClick = () => {
         
@@ -115,6 +95,7 @@ function App(info){
         axios.get( mode + "/logged_in", {withCredentials: true})
             .then(response => {
 
+                //Server says logged_in but appState says not logged in
                 if (response.data.logged_in && appState.loggedInStatus == "NOT_LOGGED_IN"){
                     
                     setAppState({
@@ -123,6 +104,7 @@ function App(info){
                         user: response.data.user
                     })
                     
+                //Server says not logged in but appState says logged_in
                 }else if (!response.data.logged_in && appState.loggedInStatus == "LOGGED_IN"){
                     
                     setAppState({
@@ -133,6 +115,7 @@ function App(info){
 
                 }
 
+                //Check if email has been confirmed
                 if (response.data.user && response.data.user.email_confirmed == true){
                     
                     setAppState({
@@ -147,12 +130,6 @@ function App(info){
             .catch(error => console.log("Logged in? error", error))
 
         
-        ////window.addEventListener('scroll', handleScroll);
-        
-        ////return () => {
-            ////window.removeEventListener('scroll', () => handleScroll);
-        ////};
-    
     },[]);
     
     
@@ -166,7 +143,7 @@ function App(info){
                 
                 <Switch>
 
-                    <Route exact path="/" render={ props => <Home {...props} story={info.story} loggedInStatus={appState.loggedInStatus} emailStatus={appState.emailStatus} appState={appState} handleLogOutClick={handleLogOutClick}/>}/>
+                    <Route exact path="/" render={ () => <Home story={controllerProps.story} appState={appState} handleLogOutClick={handleLogOutClick}/>}/>
                     <Route path="/login" render={ props => <Login {...props} handleSuccessfulAuth={handleSuccessfulAuth} />} />
                     <Route path="/signup" render={ props => <Signup {...props} handleSuccessfulAuth={handleSuccessfulAuth} />} />
                     <Route path="/forgot" render={ props => <Forgot {...props}  />} />                    <Route path="/forgot" render={ props => <Forgot {...props}  />} />

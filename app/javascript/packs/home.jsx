@@ -70,24 +70,38 @@ const NewsWrapper = styled.div`
 
 function Home(props){
 
-    console.log("HOME_PROPS", propsinfo)
+    console.log("HOME_PROPS", props)
+    
+    const [openSideMenu, setOpenSideMenu] = useState(false);
 
     // reference for lookupSection to scroll to, when click on nav link
-    const LookupRef = useRef();
+    const LookupScrollToRef = useRef();
+    const LookupInputRef = useRef();
 
-    // when click on nav link, scrolls to LookupRef
-    const scrollToRef = (ref) => window.scrollTo(0, ref.current.offsetTop)
+    // when click on nav link, scrolls to LookupScrollToRef
+    const scrollToRef = (ref) => {
+        
+        window.scrollTo(0, ref.current.offsetTop)
+        setOpenSideMenu(false)
+        LookupInputRef.current.focus();
+
+    }
         
     
     
-    const executeScroll = () => scrollToRef(LookupRef)
+    const executeScroll = () => scrollToRef(LookupScrollToRef)
 
     
     return (
     
         <>
 
-        <Header executeScroll={executeScroll} appState={props.appState} handleLogOutClick={props.handleLogOutClick}/>
+        <Header executeScroll={executeScroll} 
+                appState={props.appState} 
+                handleLogOutClick={props.handleLogOutClick}
+                openSideMenu={openSideMenu}
+                setOpenSideMenu={setOpenSideMenu}
+            />
 
         <NewsSection>
             
@@ -105,14 +119,14 @@ function Home(props){
         
         </NewsSection>
 
-        <LookupSection ref={LookupRef}/>
+        <LookupSection ref={{LookupScrollToRef: LookupScrollToRef, LookupInputRef: LookupInputRef}}/>
         
         </>
     );
 }
 
 
-export default props => <Home {...props} />;
+export default Home;
 
 
 //<Link key={index} to={'/blog/' + slugify(info.title) }>

@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import Logo from '../../assets/images/logoPlaceholder.jpg'
 
 import Burger from './burger'
-import Menu from './menu'
+import SideMenu from './sidemenu'
 
 
 
@@ -49,7 +49,7 @@ const HomeLink = styled(Link)`
 
 
 
-const Nav = styled.nav`
+const DesktopNav = styled.nav`
     
     @media only screen and (max-width: 850px){
     
@@ -113,33 +113,19 @@ const Nav = styled.nav`
 
 function Header(props) {
 
+    console.log("HEADER_PROPS", props)
 
-    const [openSideMenu, setOpenSideMenu] = useState(false);
+
+    
     const ref = React.useRef();
-    const navbar = React.createRef();
-    const MINIMUM_SCROLL = 80;
-    const TIMEOUT_DELAY = 400;
+    //const navbar = React.createRef();
     
-
     
-
     
-    //useDocumentScrollThrottled(callbackData => {
-        
-    //    const { previousScrollTop, currentScrollTop } = callbackData;
-    //    const isScrolledDown = previousScrollTop < currentScrollTop;
-    //    const isMinimumScrolled = currentScrollTop > MINIMUM_SCROLL;
-       
-        
-    //});
-
-
-
-
     function mouseDownHandler(){
         
-        setOpenSideMenu(false);
-        console.log("mouseDownEventTriggered & openSideMenu = " + openSideMenu);
+        props.setOpenSideMenu(false);
+        console.log("mouseDownEventTriggered & openSideMenu = " + props.openSideMenu);
     }
 
 
@@ -147,16 +133,18 @@ function Header(props) {
     
     useEffect(() => {
 
-        console.log("UseEffect Start, openSideMenu state is currently " + openSideMenu);
+        console.log("Header UseEffect Start, openSideMenu state is currently " + props.openSideMenu);
         
         //mousedown listener
         const listener = event => {
-          
-            if (!ref.current || ref.current.contains(event.target)) {
+
+            //if you click in the menu,  dont close it
+            if (ref.current.contains(event.target)) {
     
                 return;
             }
           
+            //if you click anywhere outside the side menu, close it.    
             mouseDownHandler();
         };
   
@@ -166,13 +154,13 @@ function Header(props) {
           
             console.log(window.innerWidth);
             
-            //closed sideMenu on orientation change
+            //closed sideMenu on orientation change, if it gets bigger than 850px
             if (window.innerWidth > 850){
-                setOpenSideMenu(false);
+                props.setOpenSideMenu(false);
             }
         }
   
-        
+        //set up event listeners
         window.addEventListener("resize", handleResize);
         window.addEventListener("orientationchange", handleResize);
         document.addEventListener('mousedown', listener);
@@ -182,7 +170,7 @@ function Header(props) {
           
           document.removeEventListener('mousedown', listener);
           console.log("cleanup");
-          console.log("cleanup done, openSideMenu = " + openSideMenu);
+          console.log("cleanup done, openSideMenu = " + props.openSideMenu);
         };
       },
       [ref, mouseDownHandler],
@@ -199,7 +187,7 @@ function Header(props) {
             </HomeLink>
             
             
-            <Nav ref={navbar} >
+            <DesktopNav>
                 <ul>
                 
                     
@@ -217,13 +205,13 @@ function Header(props) {
 
                 </ul>
 
-            </Nav>
+            </DesktopNav>
         
             
         
-            <div className="tester" ref={ref}>
-                <Burger openSideMenu={openSideMenu} setOpenSideMenu={setOpenSideMenu}/>
-                <Menu openSideMenu={openSideMenu} executeScroll={props.executeScroll} appState={props.appState} />
+            <div ref={ref}>
+                <Burger openSideMenu={props.openSideMenu} setOpenSideMenu={props.setOpenSideMenu}/>
+                <SideMenu openSideMenu={props.openSideMenu} executeScroll={props.executeScroll} appState={props.appState} />
             </div>
         
         
@@ -234,4 +222,4 @@ function Header(props) {
 
 
 
-export default props => <Header {...props}  />
+export default Header;

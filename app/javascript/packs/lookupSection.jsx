@@ -106,6 +106,8 @@ const Results = styled.div`
 
 function Look_Up_Section (props, ref) {
 
+  const {LookupScrollToRef, LookupInputRef} = ref;
+
   const [showCards, setShowCards] = React.useState( false )
   //const [results, setResults] = React.useState( {"one":{"name":"Annette Taddeo","firstName":"Annette","lastName":"Taddeo","image":"http://www.flsenate.gov/PublishedContent/Senators/2018-2020/Photos/s40_5331.jpg","id":"ocd-person/ea190b03-d1ca-4d75-89c7-dca745386db7","email":"taddeo.annette.web@flsenate.gov","chamber":"Senate","party":"Democrat","parent":"Florida Legislature","district":"40","fullDistrict":"Florida State Senate district 40"},"two":{"name":"Juan Alfonso Fernandez-Barquin","firstName":"","lastName":"","image":"https://www.myfloridahouse.gov//FileStores/Web/Imaging/Member/4709.jpg","id":"ocd-person/a8c88fee-1915-4907-ae37-5755c4bff446","email":"JuanF.Barquin@myfloridahouse.gov","chamber":"House","party":"Republican","parent":"Florida Legislature","district":"119","fullDistrict":"Florida State House district 119"}} );
   const [results, setResults] = React.useState( {"one": {}, "two": {} });
@@ -168,7 +170,7 @@ function Look_Up_Section (props, ref) {
         
       <Lookup_Section_Wrapper>
 
-        <Banner ref={ref}> Find Your State Representative </Banner>
+        <Banner ref={LookupScrollToRef}> Find Your State Representative </Banner>
         <SubBanner > ...and send them a messages </SubBanner>
         <LookupForm 
           setSearchButtonActive={setSearchButtonActive} 
@@ -191,6 +193,7 @@ function Look_Up_Section (props, ref) {
           formInfo={formInfo} 
           setFormInfo={setFormInfo} 
           setResults={setResults}
+          ref={LookupInputRef}
           
         />
 

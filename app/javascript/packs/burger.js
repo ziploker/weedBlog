@@ -20,4 +20,4 @@ const Burger = (props) => {
 
 
 
-export default props => <Burger {...props}/>;
+export default Burger;

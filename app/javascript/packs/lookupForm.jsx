@@ -168,7 +168,7 @@ const Span = styled.span`
 `;
 
 ////////////////////////////////////////////////////////// MAIN FUNCTION //////////
-function Lookup(props) {
+function Lookup(props, ref) {
 
    // to activate the input field while typing
    function activateField(e) {
@@ -387,7 +387,8 @@ function Lookup(props) {
                 className: "form-control",
                 name: "address",
                 onFocus: activateField,
-                onBlur: disableField
+                onBlur: disableField,
+                ref: ref
                 
               })}
               style={{
@@ -470,6 +471,6 @@ function Lookup(props) {
   )
 }
 
+const Rollup = React.forwardRef(Lookup);
 
-
-export default props => <Lookup {...props} />;
+export default Rollup;

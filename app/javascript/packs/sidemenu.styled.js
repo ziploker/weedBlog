@@ -20,15 +20,26 @@ const StyledMenu = styled.nav`
   
   transform: ${({ openSideMenu }) => openSideMenu ? 'translateX(0px)' : 'translateX(500px)'};
   //transform: ${({ openSideMenu }) => openSideMenu ? 'scale(0,1)' : 'scale(1,1)'};
+
+  ul{
+
+    list-style-type: none;
+  }
   
   @media (max-width: ${({ theme }) => theme.mobile}) {
     //width: 100%;
   }
 
+  li{
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+
   a {
     font-size: 2rem;
-    text-transform: uppercase;
-    padding: 2.5rem 0;
+    //text-transform: uppercase;
+    //padding: 2.5rem 0;
     font-weight: bold;
     letter-spacing: 0.1rem;
     //color: ${({ theme }) => theme.primaryDark};
@@ -49,4 +60,4 @@ const StyledMenu = styled.nav`
 `;
 
 
-export default props => <StyledMenu {...props} />;
+export default StyledMenu;

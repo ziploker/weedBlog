@@ -54,4 +54,4 @@ const StyledBurger = styled.button`
 `;
 
 
-export default props => <StyledBurger {...props} />;
+export default StyledBurger;
