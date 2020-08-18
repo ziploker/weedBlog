@@ -1,10 +1,6 @@
 import React, {useEffect, useState, useRef} from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 
-import {useParams} from 'react-router-dom'
-import { instanceOf } from 'prop-types';
-
-
 import {
     
     FacebookShareButton,
@@ -26,7 +22,8 @@ const StorySection = styled.section`
     //padding: 15px;
     background-color: white;
     display: grid;
-    grid-template-rows: auto;  
+    //grid-template-columns: minmax(250px, 1fr);
+    //grid-template-rows: auto;  
 
     grid-template-areas:
         "picture"
@@ -59,12 +56,14 @@ const StorySection = styled.section`
 `;
 
 
-const StoryImage = styled.img`
+const StoryImageWrapper = styled.div`
 
     width:100%;
-    height: 100%;
-    min-height: 400px;
+    height: 0px;
+    //min-height: 90px;
     grid-area: 1 /1 /3 /-1;
+    padding-top: 60%;
+    position: relative;
     
     
     @media screen and (min-width: 750px) and (max-width: 1111px){
@@ -76,21 +75,27 @@ const StoryImage = styled.img`
         justify-self: center;
 
     }
-    
+`;
 
-
-    
+const StoryImage = styled.img`
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 
 
 `;
 
-const StoryImageWrapper = styled.div`
 
-    
-   
+const StoryImageOverlayWrapper = styled.div`
+
     grid-area: 1 /1 /3 /-1;
+    width: 100%;
+    height: 0px;
+    padding-top: 60%;
     
-
+    position: relative;
     /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#ffffff+0,ffffff+100&0+67,1+100 */
     background: -moz-linear-gradient(top,  rgba(255,255,255,0) 0%, rgba(255,255,255,0) 67%, rgba(255,255,255,1) 100%); /* FF3.6-15 */
     background: -webkit-linear-gradient(top,  rgba(255,255,255,0) 0%,rgba(255,255,255,0) 67%,rgba(255,255,255,1) 100%); /* Chrome10-25,Safari5.1-6 */
@@ -98,15 +103,26 @@ const StoryImageWrapper = styled.div`
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */
     
     
+    
     @media screen and (min-width: 750px) and (max-width: 1111px){
 
 
         display: none;
     }
+    
+`;
 
+const StoryImageOverlay = styled.div`
 
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 
 `;
+
+
 
 
 const LeftWrapper = styled.div`
@@ -137,8 +153,6 @@ const StoryInfoWrapper = styled.div`
 
 
 `;
-
-
 
 const StoryShareButtons = styled.div`
 
@@ -175,6 +189,7 @@ const StoryTags = styled.div`
 
 `;
 
+
 const Tag = styled.h3`
 
     font-weight: 900;
@@ -196,14 +211,13 @@ const Tag = styled.h3`
 `;
 
 
-
 const StoryBody = styled.h1`
 
     
     font-weight: 700;
     grid-area: body;
     margin: 0px;
-    //padding: 0px 11px 11px 11px;
+    padding: 0px 15px 0px 15px;
     text-align: center;
     line-height: 1.2em;
     margin-bottom: 15px;
@@ -253,18 +267,16 @@ function Story(props){
     
     
     return (
-        
         <StorySection>
             
-            
-           
-            
-            <StoryImageWrapper/>
-
+            <StoryImageWrapper>
                 <StoryImage src={props.info ? props.info.url : null}  />
-
-
-            <StoryImageWrapper/>
+            </StoryImageWrapper>
+            
+            
+            <StoryImageOverlayWrapper>
+                <StoryImageOverlay/>
+            </StoryImageOverlayWrapper>
                 
             
             
