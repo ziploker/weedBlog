@@ -1,5 +1,6 @@
 import React, {useEffect, useState, useRef} from 'react';
 import styled, { ThemeProvider } from 'styled-components';
+import useFitText from "use-fit-text";
 
 import {
     
@@ -16,6 +17,7 @@ import {
 const StorySection = styled.section`
 
     max-width:450px;
+    
     
     border: 3px double ${props => props.theme.pink};
    
@@ -36,11 +38,14 @@ const StorySection = styled.section`
 
         max-width: 88%;
         width: 100%;
+        height: 110px;
+
         padding: 0px;
         display: grid;
         grid-gap: 10px;
         grid-template-columns: 110px 1fr;
-        grid-auto-rows: min-content;
+        //grid-auto-rows: min-content;
+        grid-template-rows: 70px 24px;
         justify-content: center;
         align-items: center;
         
@@ -48,11 +53,9 @@ const StorySection = styled.section`
             "picture body"
             "picture time"
         ;
-            
-            
-
-
     }
+
+   
 `;
 
 
@@ -67,12 +70,16 @@ const StoryImageWrapper = styled.div`
     
     
     @media screen and (min-width: 750px) and (max-width: 1111px){
-        width: 110px;
-        height: 90px;
+        width: 100%;
+        height: 100%;
+
         grid-area: picture;
-        padding-left: 10px;
+        
+        padding:0;
+        
         align-self: center;
         justify-self: center;
+        //border: 5px solid white;
 
     }
 `;
@@ -211,24 +218,39 @@ const Tag = styled.h3`
 `;
 
 
-const StoryBody = styled.h1`
+const StoryBody = styled.div`
 
     
-    font-weight: 700;
+    //font-weight: 700;
     grid-area: body;
-    margin: 0px;
-    padding: 0px 15px 0px 15px;
-    text-align: center;
-    line-height: 1.2em;
-    margin-bottom: 15px;
+    //margin: 0px;
+    //padding: 5px 9px 0px 9px;
+    //text-align: center;
+    //line-height: 1.2em;
+    //margin-bottom: 15px;
+
+    h1{
+        font-weight: 700;
+        padding: 0px 15px 0px 15px;
+        text-align: center;
+        line-height: 1.2em;
+        margin-bottom: 15px;
+    }
     
     @media screen and (min-width: 750px) and (max-width: 1111px){
 
-        margin: 0;
-        padding: 0 10px;
+        //margin: 0;
+        //padding: 5px 10px 0px 10px;
         //font-size: 1em;
-        text-align: left;
-        justify-self: start;
+        //text-align: left;
+        //justify-self: start;
+        
+        h1{
+            margin: 0;
+            padding: 5px 10px 0px 10px;
+            
+            
+    }
 
     }
 
@@ -264,6 +286,8 @@ const StoryInfo = styled.h3`
   
 
 function Story(props){
+
+    const { fontSize, ref } = useFitText();
     
     
     return (
@@ -300,9 +324,9 @@ function Story(props){
             
             
             
-            <StoryBody >
+            <StoryBody ref={ref} style={{ fontSize, height: 70 }}>
 
-                {props.info ? props.info.title :  null }
+                <h1>{props.info ? props.info.title :  null }</h1>
 
             </StoryBody>
             

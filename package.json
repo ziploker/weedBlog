@@ -26,7 +26,8 @@
     "react-slugify": "^2.0.1",
     "react-spinkit": "^3.0.0",
     "styled-components": "^5.1.0",
-    "turbolinks": "^5.2.0"
+    "turbolinks": "^5.2.0",
+    "use-fit-text": "^2.3.0"
   },
   "version": "0.1.0",
   "devDependencies": {
