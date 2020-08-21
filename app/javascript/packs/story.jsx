@@ -1,6 +1,7 @@
 import React, {useEffect, useState, useRef} from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 import useFitText from "use-fit-text";
+import slugify from 'react-slugify'
 
 import {
     
@@ -12,13 +13,34 @@ import {
     WhatsappIcon,
   
 } from "react-share";
-  
 
-const StorySection = styled.section`
+import {
+    
+    Link
+} from "react-router-dom";
+  
+const LinkWrapper = styled(Link)`
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
     max-width:450px;
+    width: 100%;
+
+    @media screen and (min-width: 750px) and (max-width: 1111px){
+
+        width: 88%;
+        max-width:100%;
+    }
+
+
+`;
+const StorySection = styled.section`
+
     
-    
+    width: 100%;
+    max-width:450px;
     border: 3px double ${props => props.theme.pink};
    
     //padding: 15px;
@@ -36,7 +58,7 @@ const StorySection = styled.section`
 
     @media screen and (min-width: 750px) and (max-width: 1111px){
 
-        max-width: 88%;
+        max-width: 100%;
         width: 100%;
         height: 110px;
 
@@ -173,6 +195,8 @@ const StoryShareButtons = styled.div`
 `;
 
 
+
+
 const StoryTags = styled.div`
 
     font-size: .7em;
@@ -291,61 +315,67 @@ function Story(props){
     
     
     return (
-        <StorySection>
-            
-            <StoryImageWrapper>
-                <StoryImage src={props.info ? props.info.url : null}  />
-            </StoryImageWrapper>
-            
-            
-            <StoryImageOverlayWrapper>
-                <StoryImageOverlay/>
-            </StoryImageOverlayWrapper>
+
+        <LinkWrapper to={'/blog/' + slugify(props.info.title) }>
+            <StorySection>
                 
-            
-            
-            
-            
-            
+                <StoryImageWrapper>
+                    <StoryImage src={props.info ? props.info.url : null}  />
+                </StoryImageWrapper>
                 
-            {/*}
-            <StoryShareButtons>
-                <FacebookShareButton children={<FacebookIcon size={25} round={false} borderRadius={17} />} url={"www.420.com"} style={{marginRight: "3px"}} />
-                <TwitterShareButton children={<TwitterIcon size={25} round={false} borderRadius={17}/>} url={"www.420.com"} style={{marginRight: "3px"}}/>
-                <WhatsappShareButton children={<WhatsappIcon size={25} round={false} borderRadius={17}/>} url={"www.420.com"} />
-            </StoryShareButtons>
-            */}
-            
-            <StoryTags>
-                <Tag>
-                    {props.info ? props.info.topic : null}
-                </Tag>
-            </StoryTags>
-            
-            
-            
-            <StoryBody ref={ref} style={{ fontSize, height: 70 }}>
-
-                <h1>{props.info ? props.info.title :  null }</h1>
-
-            </StoryBody>
-            
-
-            
-
-            <StoryInfo>
-
-                {props.info ? props.info.date : "nada"}
                 
-            </StoryInfo>
+                <StoryImageOverlayWrapper>
+                    <StoryImageOverlay/>
+                </StoryImageOverlayWrapper>
+                    
+                
+                
+                
+                
+                
+                    
+                {/*}
+                <StoryShareButtons>
+                    <FacebookShareButton children={<FacebookIcon size={25} round={false} borderRadius={17} />} url={"www.420.com"} style={{marginRight: "3px"}} />
+                    <TwitterShareButton children={<TwitterIcon size={25} round={false} borderRadius={17}/>} url={"www.420.com"} style={{marginRight: "3px"}}/>
+                    <WhatsappShareButton children={<WhatsappIcon size={25} round={false} borderRadius={17}/>} url={"www.420.com"} />
+                </StoryShareButtons>
+                */}
+                
+                <StoryTags>
+                    <Tag>
+                        {props.info ? props.info.topic : null}
+                    </Tag>
+                </StoryTags>
+                
+                
+                
+                <StoryBody ref={ref} style={{ fontSize, height: 70 }}>
 
-            
-            
-            
-            
-            
+                    
+                    
+                        <h1>{props.info ? props.info.title :  null }</h1>
+                    
 
-        </StorySection>
+                </StoryBody>
+                
+
+                
+
+                <StoryInfo>
+
+                    {props.info ? props.info.date : "nada"}
+                    
+                </StoryInfo>
+
+                
+                
+                
+                
+                
+
+                </StorySection>
+       </LinkWrapper>
     );
 }
 

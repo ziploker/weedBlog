@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import Story from '../packs/story.jsx'
 import Header from './header.jsx'
 import LookupSection from './lookupSection.jsx'
-import slugify from 'react-slugify'
+
 
 import {
     BrowserRouter as Router,
@@ -129,4 +129,3 @@ function Home(props){
 export default Home;
 
 
-//<Link key={index} to={'/blog/' + slugify(info.title) }>
