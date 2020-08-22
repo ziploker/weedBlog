@@ -316,7 +316,26 @@ function Story(props){
     
     return (
 
-        <LinkWrapper to={'/blog/' + slugify(props.info.title) }>
+        <LinkWrapper 
+        
+        
+            to={{
+                pathname: "/blog/" + slugify(props.info.title),
+                
+                state: { 
+                    body: props.info.body,
+                    created_at: props.info.created_at,
+                    date: props.info.date,
+                    keywords: props.info.keywords,
+                    title: props.info.title,
+                    topic: props.info.topic,
+                    imageUrl: props.info.url
+
+                
+                }
+            }}
+            
+        >
             <StorySection>
                 
                 <StoryImageWrapper>
