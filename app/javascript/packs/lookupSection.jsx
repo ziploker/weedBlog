@@ -1,4 +1,5 @@
 import React, {useEffect, useState, useRef} from 'react';
+import {Link, useLocation} from 'react-router-dom'
 import styled, { ThemeProvider } from 'styled-components';
 import LookupForm from '../packs/lookupForm.jsx'
 import ResultCardOne from './resultCardOne.jsx'
@@ -106,6 +107,9 @@ const Results = styled.div`
 
 function Look_Up_Section (props, ref) {
 
+  const locationFromHook = useLocation();
+
+
   const {LookupScrollToRef, LookupInputRef} = ref;
 
   const [showCards, setShowCards] = React.useState( false )
@@ -161,8 +165,20 @@ function Look_Up_Section (props, ref) {
       
   }
 
+  if (
     
+    locationFromHook.pathname === "/login" || 
+    locationFromHook.pathname === "/signup" ||
+    locationFromHook.pathname === "/forgot" ||
+    locationFromHook.pathname === "/edit" ||
+    locationFromHook.pathname === "/change") {
+
+        return null
+    }    
+  
   return (
+
+    
 
     <BottomHalf >
 

@@ -1,9 +1,9 @@
 import React, {useEffect, useState, useRef} from 'react';
 import styled from 'styled-components';
-
+import axios from 'axios';
 import Story from '../packs/story.jsx'
-import Header from './header.jsx'
-import LookupSection from './lookupSection.jsx'
+
+
 
 
 import {
@@ -55,7 +55,8 @@ const NewsWrapper = styled.div`
     }
 
     @media screen and (min-width: 1111px){
-        grid-template-columns:  minmax(245px, auto) minmax(245px, auto);
+        //grid-template-columns:  minmax(245px, auto) minmax(245px, auto);
+        grid-template-columns:  450px 450px;
         grid-gap: 20px;
         justify-content: center;
         //justify-items: center;
@@ -64,51 +65,107 @@ const NewsWrapper = styled.div`
 
 
 
+const PaginationBar = styled.div`
 
 
+
+`;
+localStorage.clear();
+console.log("LOCALSTORAGEVALUE_OUT", localStorage.getItem('page'))
 
 
 function Home(props){
 
     console.log("HOME_PROPS", props)
     
-    const [openSideMenu, setOpenSideMenu] = useState(false);
-
-    // reference for lookupSection to scroll to, when click on nav link
-    const LookupScrollToRef = useRef();
-    const LookupInputRef = useRef();
-
-    // when click on nav link, scrolls to LookupScrollToRef
-    const scrollToRef = (ref) => {
+    
+    function pageForward(){
         
-        window.scrollTo(0, ref.current.offsetTop)
-        setOpenSideMenu(false)
-        LookupInputRef.current.focus();
+        localStorage.setItem('page', Number(localStorage.getItem('page')) + 1 || 0)
+        const mode = process.env.NODE_ENV == "development" ? "http://127.0.0.1:3000" : "https://weedblog.herokuapp.com"
+        console.log("LOCALSTORAGEVALUE", localStorage.getItem('page'))
+        
+        axios.post( mode + "/" + localStorage.getItem('page'), {withCredentials: true})
+        .then(response => {
 
+           
+            if (response.data.stories === undefined || response.data.stories.length == 0){
+                localStorage.setItem('page', Number(localStorage.getItem('page')) - 1)
+                return
+            }
+            
+            
+            
+            console.log("theResults", response.data)
+
+            props.setAppState({
+
+                stories: response.data.stories
+            })
+                
+          
+      
+        })
+        .catch(error => {
+        
+            console.log("pageForward? error", error)
+
+           
+
+        })
+    
     }
+
+
+    function pageBack(){
         
+        if (Number(localStorage.getItem('page')) == 0 ){
+
+            return
+        }
+        
+        localStorage.setItem('page', Number(localStorage.getItem('page')) - 1 || 0)
+        const mode = process.env.NODE_ENV == "development" ? "http://127.0.0.1:3000" : "https://weedblog.herokuapp.com"
+        console.log("LOCALSTORAGEVALUE", localStorage.getItem('page'))
+        axios.post( mode + "/" + localStorage.getItem('page'), {withCredentials: true})
+        .then(response => {
+
+           
+                
+            console.log("theResults", response.data)
+
+            props.setAppState({
+
+                stories: response.data.stories
+            })
+                
+          
+      
+        })
+        .catch(error => {
+        
+            console.log("pageForward? error", error)
+
+           
+
+        })
     
+    }
     
-    const executeScroll = () => scrollToRef(LookupScrollToRef)
 
     
     return (
     
         <>
 
-        <Header executeScroll={executeScroll} 
-                appState={props.appState} 
-                handleLogOutClick={props.handleLogOutClick}
-                openSideMenu={openSideMenu}
-                setOpenSideMenu={setOpenSideMenu}
-            />
+        
 
         <NewsSection>
             
             <NewsWrapper>
         
-                {props.story.map((info, index) => (
-                    <Story key={index} info={info} />
+                {props.stories.map((info, index) => (
+                    <Story key={index} info={info} appState={props.appState} handleLogOutClick={props.handleLogOutClick}/>
                 ))}
             
             </NewsWrapper>  
@@ -119,7 +176,17 @@ function Home(props){
         
         </NewsSection>
 
-        <LookupSection ref={{LookupScrollToRef: LookupScrollToRef, LookupInputRef: LookupInputRef}}/>
+        <PaginationBar>
+
+            <button onClick={pageBack}>
+                PageBack
+            </button>
+
+            <button onClick={pageForward}>
+                PageForward
+            </button>
+
+        </PaginationBar>
         
         </>
     );

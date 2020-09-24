@@ -1,4 +1,6 @@
 import React, {useEffect, useState, useRef} from 'react';
+import {Link, useLocation} from 'react-router-dom'
+
 import styled, { ThemeProvider } from 'styled-components';
 
 const Footer_Wrapper = styled.div`
@@ -15,10 +17,22 @@ const Footer_Wrapper = styled.div`
 
 function Footer (props) {
 
+    const locationFromHook = useLocation();
 
-
-
-
+    
+    
+    
+    
+    if (
+    
+        locationFromHook.pathname === "/login" || 
+        locationFromHook.pathname === "/signup" ||
+        locationFromHook.pathname === "/forgot" ||
+        locationFromHook.pathname === "/edit" ||
+        locationFromHook.pathname === "/change") {
+    
+            return null
+        }    
     return (
 
         <Footer_Wrapper />

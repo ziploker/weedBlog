@@ -45,6 +45,6 @@ class StoriesController < ApplicationController
   private
     
     def event_params
-      params.require(:event).permit(:title, :keywords, :body, :image, :url, :topic)
+      params.require(:event).permit(:title, :slug, :keywords, :body, :image, :url, :topic)
     end
 end

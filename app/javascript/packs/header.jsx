@@ -1,5 +1,7 @@
 import React, {useEffect, useState} from 'react'
-import {Link} from 'react-router-dom'
+import {Link, useLocation} from 'react-router-dom'
+
+
 import useDocumentScrollThrottled from './useDocumentScrollThrottled.jsx'
 import styled from 'styled-components'
 import Logo from '../../assets/images/logoPlaceholder.jpg'
@@ -113,9 +115,10 @@ const DesktopNav = styled.nav`
 
 function Header(props) {
 
-    console.log("HEADER_PROPS", props)
+    console.log("HEADER_________________PROPS", location.pathname)
+    //console.log("HEADER_PROPS solo", location.pathname)
 
-
+    const locationFromHook = useLocation();
     
     const ref = React.useRef();
     //const navbar = React.createRef();
@@ -177,6 +180,17 @@ function Header(props) {
     );
 
 
+    if (
+    
+    locationFromHook.pathname === "/login" || 
+    locationFromHook.pathname === "/signup" ||
+    locationFromHook.pathname === "/forgot" ||
+    locationFromHook.pathname === "/edit" ||
+    locationFromHook.pathname === "/change") {
+
+        return null
+    }
+                    
       
     return (
         
@@ -191,12 +205,12 @@ function Header(props) {
                 <ul>
                 
                     
-                    <li key={1}><a href="#">News</a></li>
+                    <li key={1}><a href="/">News</a></li>
                     <li key={2}>
                     
                         <a onClick={props.executeScroll}>Representative Lookup</a>
                     </li>
-                    <li key={3}><a href="#">Store</a></li>
+                    <li key={3}><a href="/">Store</a></li>
                     
 
                     <li key={4}>{props.appState.loggedInStatus == "LOGGED_IN" ? [<Link key={"a"} to="/" onClick= {props.handleLogOutClick}> Logout | </Link>, <Link key={"b"} to="/edit">edit </Link>] :   [<Link key={"c"} to="/login"> Login |</Link>, <Link key={"d"} to="/signup"> Signup</Link>]  } </li>
@@ -218,6 +232,7 @@ function Header(props) {
         </HeaderWrapper>
     )
 }
+
 
 
 

@@ -25,7 +25,7 @@ const LinkWrapper = styled(Link)`
     justify-content: center;
     align-items: center;
 
-    max-width:450px;
+    //max-width:450px;
     width: 100%;
 
     @media screen and (min-width: 750px) and (max-width: 1111px){
@@ -322,17 +322,19 @@ function Story(props){
             to={{
                 pathname: "/blog/" + slugify(props.info.title),
                 
-                state: { 
-                    body: props.info.body,
-                    created_at: props.info.created_at,
-                    date: props.info.date,
-                    keywords: props.info.keywords,
-                    title: props.info.title,
-                    topic: props.info.topic,
-                    imageUrl: props.info.url
+                //state: { 
+                //    body: props.info.body,
+                //    created_at: props.info.created_at,
+                //    date: props.info.date,
+                //    keywords: props.info.keywords,
+                //    title: props.info.title,
+                //    topic: props.info.topic,
+                //    imageUrl: props.info.url,
+                //    appState: props.appState
+                //    //handleLogOutClick: props.handleLogOutClick
 
                 
-                }
+                //}
             }}
             
         >

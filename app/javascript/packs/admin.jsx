@@ -11,7 +11,7 @@ function Admin(props){
     
     return (
 
-        <div style={{marginTop: "25px"}}>
+        <div style={{marginTop: "50px"}}>
             
            
            <NewForm/>

@@ -3,6 +3,8 @@ class Story < ApplicationRecord
     has_one_attached :image
 
     validate :acceptable_image
+
+    has_many :comments, as: :commentable, dependent: :destroy
     
 
     
@@ -70,7 +72,7 @@ class Story < ApplicationRecord
 
         puts "created_at_date = " + self.created_at.to_s
 
-        newTime = self.created_at.localtime.strftime("%_m/%e/%Y %l:%M%P")
+        newTime = self.created_at.localtime.strftime("%b #{self.created_at.localtime.day.ordinalize}, %Y")
 
        
         puts "newTime = " + newTime.to_s

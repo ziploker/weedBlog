@@ -4,6 +4,8 @@ import PropTypes from 'prop-types'
 import $ from 'jquery';
 //import lilDownArrow from '../../../../'
 //import '../components/fix.js'
+import slugify from 'react-slugify'
+
 
 
 
@@ -53,6 +55,7 @@ function NewForm(props) {
 
     
     title: '',
+    slug: '',
     //nameIsFocused: false,
     keywords: '',
     topic: '',
@@ -85,6 +88,7 @@ function NewForm(props) {
      
      
      formData.append('event[title]', state.title);
+     formData.append('event[slug]', state.slug);
      formData.append('event[keywords]', state.keywords);
      formData.append('event[topic]', state.topic);
      formData.append('event[body]', state.body);
@@ -118,6 +122,7 @@ function NewForm(props) {
 
             //focussed: (props.focussed) || false,
             title: '',
+            slug: '',
             keywords: '',
             topic: '',
             body: '',
@@ -161,12 +166,25 @@ function NewForm(props) {
     console.log("valluuee = " + event.target.value)
     console.log("focus = " + event.target.tagger)
     
-    setState({ 
-      ...state,
-      [event.target.name]: v,
-      error: '' 
-    });
-    //return onChange(id, value);
+    
+    if (event.target.name == "title"){
+
+      setState({ 
+        ...state,
+        slug: slugify(v),
+        [event.target.name]: v,
+        error: '' 
+      });
+
+    }else{
+    
+      setState({ 
+        ...state,
+        [event.target.name]: v,
+        error: '' 
+      });
+      //return onChange(id, value);
+    }
   }
   
   
@@ -211,6 +229,23 @@ function NewForm(props) {
             onChange={handleChange} 
           />
         </div>
+
+        <div className="field" >
+        
+          <input type="text"
+            index={9}
+            
+            className="form-control"
+            name="title"
+            
+            placeholder="title of the story...."
+            
+            value={slugify(state.title)}
+            //onChange={handleChange} 
+            readOnly
+          />
+        </div>
+
 
         
         

@@ -4,10 +4,14 @@ import {
     BrowserRouter as Router,
     Switch,
     Route,
-    Link
+    Link,
+    withRouter,
+    useHistory,
+    useLocation
 } from "react-router-dom"
-
-import Letter from '../packs/letter.jsx'
+import Header from './header.jsx'
+import LookupSection from './lookupSection.jsx'
+import Article from '../packs/article.jsx'
 import Feedback from '../packs/feedback.jsx'
 import Home from '../packs/home.jsx'
 import Admin from '../packs/admin.jsx'
@@ -28,7 +32,7 @@ import GlobalStyles from "./global"
 
 ///////////////////////////////// MAIN APP STARTING POINT ///////////////
 function App(controllerProps){
-
+    
     
     console.log("APP_controllerProps", controllerProps)
     
@@ -37,9 +41,11 @@ function App(controllerProps){
         
         loggedInStatus: "NOT_LOGGED_IN",
         emailStatus: "EMAIL_NOT_VERIFIED",
-        user: {}
+        user: {},
+        stories: controllerProps.stories
         
     })
+    const [openSideMenu, setOpenSideMenu] = useState(false);
 
     
    
@@ -86,6 +92,22 @@ function App(controllerProps){
     }
 
     
+    // reference for lookupSection to scroll to, when click on nav link
+    const LookupScrollToRef = useRef();
+    const LookupInputRef = useRef();
+
+    // when click on nav link, scrolls to LookupScrollToRef
+    const scrollToRef = (ref) => {
+        
+        window.scrollTo(0, ref.current.offsetTop)
+        setOpenSideMenu(false)
+        LookupInputRef.current.focus();
+
+    }
+        
+    
+    
+    const executeScroll = () => scrollToRef(LookupScrollToRef)
     
     
     useEffect(() => {
@@ -141,20 +163,33 @@ function App(controllerProps){
                 
                 <GlobalStyles/>
                 
+                
+                    
+                    <Header 
+                        executeScroll={executeScroll} 
+                        appState={appState} 
+                        handleLogOutClick={handleLogOutClick}
+                        openSideMenu={openSideMenu}
+                        setOpenSideMenu={setOpenSideMenu}
+                    />
+                
+                
                 <Switch>
 
-                    <Route exact path="/" render={ () => <Home story={controllerProps.story} appState={appState} handleLogOutClick={handleLogOutClick}/>}/>
+                    <Route exact path="/" render={ () => <Home stories={appState.stories} appState={appState} setAppState={setAppState} handleLogOutClick={handleLogOutClick}/>}/>
                     <Route path="/login" render={ props => <Login {...props} handleSuccessfulAuth={handleSuccessfulAuth} />} />
                     <Route path="/signup" render={ props => <Signup {...props} handleSuccessfulAuth={handleSuccessfulAuth} />} />
                     <Route path="/forgot" render={ props => <Forgot {...props}  />} />                    <Route path="/forgot" render={ props => <Forgot {...props}  />} />
                     <Route exact path="/change_pw/:token" render={ props => <Change {...props}  />} />
                     <Route path="/edit" render={ props => <Edit {...props} user={appState.user}/>} />
                     <Route exact path="/ziploker" render={ props => <Admin {...props} loggedInStatus={appState.loggedInStatus}/>} />
-                    <Route path="/letter" component={Letter} />
+                    
                     <Route path="/feedback" component={Feedback} />
-                    <Route path="/blog/:id" component={Letter} />
+                    <Route exact path="/blog/:id" render = { props => <Article {...props} /> } />
                     
                 </Switch>
+
+                <LookupSection ref={{LookupScrollToRef: LookupScrollToRef, LookupInputRef: LookupInputRef}}/>
                 
                 <Footer/>
             
