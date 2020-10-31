@@ -52,8 +52,8 @@ function Login(props) {
     
     ////send info into backend to Log IN/////
     event.preventDefault();
-    const mode = process.env.NODE_ENV =="development" ? "http://127.0.0.1:3000" : "https://floridablaze.io"
-    axios.post(mode + "/sessions", {
+    //const mode = process.env.NODE_ENV =="development" ? "http://127.0.0.1:3000" : "https://floridablaze.io"
+    axios.post("/sessions", {
       
       user: { 
         email: state.email,
