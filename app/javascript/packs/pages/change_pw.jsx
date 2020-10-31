@@ -53,8 +53,8 @@ function Login(props) {
     
     ////send info into backend heyyohhhh/////
     event.preventDefault();
-    const mode = process.env.NODE_ENV =="development" ? "http://127.0.0.1:3000" : "https://www.floiridablaze.io"
-    axios.post(mode + "/registrations/"+ props.match.params.token +"/reset", {
+    //const mode = process.env.NODE_ENV =="development" ? "http://127.0.0.1:3000" : "https://www.floiridablaze.io"
+    axios.post("/registrations/"+ props.match.params.token +"/reset", {
       
       user: { 
         password: state.password,

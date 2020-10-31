@@ -49,8 +49,8 @@ function Login(props) {
     
     ////send info into backend heyyohhhh/////
     event.preventDefault();
-    const mode = process.env.NODE_ENV =="development" ? "http://127.0.0.1:3000" : "https://www.floiridablaze.io"
-    axios.post(mode + "/registrations/forgot", {
+    //const mode = process.env.NODE_ENV =="development" ? "http://127.0.0.1:3000" : "https://www.floiridablaze.io"
+    axios.post("/registrations/forgot", {
       
       user: { 
         email: state.email,

@@ -118,8 +118,8 @@ function Edit(props) {
     
     ////send info into backend heyyohhhh/////
     event.preventDefault();
-    const mode = process.env.NODE_ENV =="development" ? "http://127.0.0.1:3000" : "https://www.floiridablaze.io"
-    axios.put(mode + "/registrations/"+props.user.id, {
+    //const mode = process.env.NODE_ENV =="development" ? "http://127.0.0.1:3000" : "https://www.floiridablaze.io"
+    axios.put("/registrations/"+props.user.id, {
       
       user: { 
         first: state.first,
@@ -193,11 +193,11 @@ function Edit(props) {
       
       //get token for form submission
       const csrf = document.querySelector("meta[name='csrf-token']").getAttribute("content");  
-      const mode = process.env.NODE_ENV =="development" ? "http://127.0.0.1:3000" : "https://www.floiridablaze.io"
+      //const mode = process.env.NODE_ENV =="development" ? "http://127.0.0.1:3000" : "https://www.floiridablaze.io"
       
       $.ajax({
           
-        url: mode+'/registrations/'+state.id,
+        url: '/registrations/'+state.id,
         headers: {
           
           'X-CSRF-Token': csrf
@@ -320,8 +320,8 @@ function Edit(props) {
   ///////////////////////////////////  USE_EFFECT //////////////////////
   useEffect(() => {
     
-    const mode = process.env.NODE_ENV == "development" ? "http://127.0.0.1:3000" : "https://www.floiridablaze.io"
-    axios.get( mode + "/logged_in", {withCredentials: true})
+    //const mode = process.env.NODE_ENV == "development" ? "http://127.0.0.1:3000" : "https://www.floiridablaze.io"
+    axios.get("/logged_in", {withCredentials: true})
       .then(response => {
 
         if (response.data.logged_in && state.loggedInStatus == "NOT_LOGGED_IN"){

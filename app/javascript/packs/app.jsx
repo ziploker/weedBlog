@@ -81,9 +81,9 @@ function App(controllerProps){
     
     const handleLogOutClick = () => {
         
-        const mode = process.env.NODE_ENV =="development" ? "http://127.0.0.1:3000" : "https://www.floiridablaze.io"
+        //const mode = process.env.NODE_ENV =="development" ? "http://127.0.0.1:3000" : "https://www.floiridablaze.io"
         
-        axios.delete(mode + "/logout", {withCredentials : true})
+        axios.delete("/logout", {withCredentials : true})
             .then(response => {
                 setAppState({
                     ...appState,
@@ -117,9 +117,9 @@ function App(controllerProps){
     
     useEffect(() => {
 
-        const mode = process.env.NODE_ENV == "development" ? "http://127.0.0.1:3000" : "https://www.floiridablaze.io"
+        //const mode = process.env.NODE_ENV == "development" ? "http://127.0.0.1:3000" : "https://www.floiridablaze.io"
         
-        axios.get( mode + "/logged_in", {withCredentials: true})
+        axios.get("/logged_in", {withCredentials: true})
             .then(response => {
 
                 //Server says logged_in but appState says not logged in

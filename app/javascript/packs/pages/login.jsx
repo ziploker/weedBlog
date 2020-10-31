@@ -16,9 +16,9 @@ function Login(props) {
   const [state, setState] = React.useState({
     
     email: "",
-    emailFieldActive: false,
+    emailFieldActive: true,
     password: "",
-    passwordFieldActive: false,
+    passwordFieldActive: true,
     status: "",
     errors: {}
 

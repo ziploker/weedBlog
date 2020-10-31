@@ -82,10 +82,10 @@ function Home(props){
     function pageForward(){
         
         localStorage.setItem('page', Number(localStorage.getItem('page')) + 1 || 0)
-        const mode = process.env.NODE_ENV == "development" ? "http://127.0.0.1:3000" : "https://www.floiridablaze.io"
+        //const mode = process.env.NODE_ENV == "development" ? "http://127.0.0.1:3000" : "https://www.floiridablaze.io"
         console.log("LOCALSTORAGEVALUE", localStorage.getItem('page'))
         
-        axios.post( mode + "/" + localStorage.getItem('page'), {withCredentials: true})
+        axios.post("/" + localStorage.getItem('page'), {withCredentials: true})
         .then(response => {
 
            
@@ -125,9 +125,9 @@ function Home(props){
         }
         
         localStorage.setItem('page', Number(localStorage.getItem('page')) - 1 || 0)
-        const mode = process.env.NODE_ENV == "development" ? "http://127.0.0.1:3000" : "https://www.floiridablaze.io"
+        //const mode = process.env.NODE_ENV == "development" ? "http://127.0.0.1:3000" : "https://www.floiridablaze.io"
         console.log("LOCALSTORAGEVALUE", localStorage.getItem('page'))
-        axios.post( mode + "/" + localStorage.getItem('page'), {withCredentials: true})
+        axios.post("/" + localStorage.getItem('page'), {withCredentials: true})
         .then(response => {
 
            
