@@ -22,6 +22,7 @@ class SessionsController < ApplicationController
             if user.email_confirmed
                 
                 session[:user_id] = user.id
+                
                 render json:{
                     
                     status: "green",
@@ -70,5 +71,8 @@ class SessionsController < ApplicationController
             status: 200, 
             logged_out: true
         }
+    end
+
+    def login
     end
 end

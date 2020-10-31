@@ -32,9 +32,13 @@ Rails.application.routes.draw do
   put '/registrations/:id', to: 'registrations#update'
 
   post '/registrations/forgot', to: 'registrations#forgot'
+  post '/registrations/resend', to: 'registrations#resend'
   post '/registrations/:token/reset', to: 'registrations#reset', as: 'registrations_reset'
   post '/blog/get_article_info', to: 'landings#get_article_info'
   
+  get '/ziploker/edit/:id', to: 'stories#edit'
+  get '/ziploker', to: 'stories#new'
+  #get '/login', to: 'sessions#login'
   
   root to: 'landings#index'
 

@@ -29,6 +29,7 @@ const Form = styled.form`
   flex-direction: column;
   width: 100%;
   padding: 0 40px 0px 40px;
+  box-sizing: border-box;
 `;
 
 const FormItem = styled.div`
@@ -74,7 +75,7 @@ const Label = styled.label`
 
 const Input = styled.input`
   padding: 1rem;
-  
+  box-sizing: border-box;
   margin: 0px;
   width: 100%;
   height: 44px;

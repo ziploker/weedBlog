@@ -3,6 +3,7 @@ import { Link, Redirect } from "react-router-dom";
 import axios from 'axios';
 import logoImg from "../../../assets/images/logoPlaceholder.jpg";
 import redX from '../../../assets/images/redX.jpg'
+import greenCheck from '../../../assets/images/greenCheck.png'
 import tinyMan from '../../../assets/images/tinyMan.png'
 import lock from '../../../assets/images/lock.png'
 
@@ -167,7 +168,7 @@ function Login(props) {
         </Form>
         
         <ErrorWrapper>        
-          <RedX status={state.status} src={redX}/>
+        <RedX status={state.status} src={state.status === "pink" ? redX : greenCheck}/>
           {errorMessages}
         </ErrorWrapper>
         

@@ -22,6 +22,9 @@ import Forgot from "./pages/forgot"
 import Signup from './pages/signup'
 import Edit from './pages/edit'
 import Change from './pages/change_pw'
+import Resend from './pages/resend'
+
+import AdminEdit from '../packs/adminEdit'
 
 import axios from 'axios'
 
@@ -41,6 +44,7 @@ function App(controllerProps){
         
         loggedInStatus: "NOT_LOGGED_IN",
         emailStatus: "EMAIL_NOT_VERIFIED",
+        test: "a",
         user: {},
         stories: controllerProps.stories
         
@@ -82,6 +86,7 @@ function App(controllerProps){
         axios.delete(mode + "/logout", {withCredentials : true})
             .then(response => {
                 setAppState({
+                    ...appState,
                     loggedInStatus: "NOT_LOGGED_IN",
                     user: {}
                 })
@@ -118,41 +123,52 @@ function App(controllerProps){
             .then(response => {
 
                 //Server says logged_in but appState says not logged in
-                if (response.data.logged_in && appState.loggedInStatus == "NOT_LOGGED_IN"){
+                
                     
-                    setAppState({
-                        ...appState,
-                        loggedInStatus: "LOGGED_IN",
-                        user: response.data.user
-                    })
+                setAppState({
+                    ...appState,
+                    loggedInStatus: response.data.logged_in && appState.loggedInStatus == "NOT_LOGGED_IN" ? "LOGGED_IN": "NOT_LOGGED_IN",
+                    user: response.data.user,
+                    emailStatus: response.data.user && response.data.user.email_confirmed == true ? "EMAIL_VERIFIED" : "EMAIL_NOT_VERIFIED"
+                })
+                    
+                
                     
                 //Server says not logged in but appState says logged_in
-                }else if (!response.data.logged_in && appState.loggedInStatus == "LOGGED_IN"){
+                //}else if (!response.data.logged_in && appState.loggedInStatus == "LOGGED_IN"){
                     
-                    setAppState({
-                        ...appState,
-                        loggedInStatus: "NOT_LOGGED_IN",
-                        user: {}
-                    })
+                //    setAppState({
+                //        ...appState,
+                //        loggedInStatus: "NOT_LOGGED_IN",
+                //        user: {}
+                //    })
 
-                }
+                //    console.log("WTTFFF", "BBBBBBB")
+
+                
 
                 //Check if email has been confirmed
-                if (response.data.user && response.data.user.email_confirmed == true){
+                //if (response.data.user && response.data.user.email_confirmed == true){
                     
-                    setAppState({
-                        ...appState,
+                //    setAppState({
+                //        ...appState,
                        
-                        emailStatus: "EMAIL_VERIFIED"
-                    })
+              //          emailStatus: "EMAIL_VERIFIED"
+                //    })
+
+                //    console.log("WTTFFF", "cccccc")
                     
-                }
+               // }
+
+                
             
             })
             .catch(error => console.log("Logged in? error", error))
 
         
     },[]);
+
+    
     
     
     return (
@@ -165,13 +181,13 @@ function App(controllerProps){
                 
                 
                     
-                    <Header 
-                        executeScroll={executeScroll} 
-                        appState={appState} 
-                        handleLogOutClick={handleLogOutClick}
-                        openSideMenu={openSideMenu}
-                        setOpenSideMenu={setOpenSideMenu}
-                    />
+                <Header 
+                    executeScroll={executeScroll} 
+                    appState={appState} 
+                    handleLogOutClick={handleLogOutClick}
+                    openSideMenu={openSideMenu}
+                    setOpenSideMenu={setOpenSideMenu}
+                />
                 
                 
                 <Switch>
@@ -179,10 +195,10 @@ function App(controllerProps){
                     <Route exact path="/" render={ () => <Home stories={appState.stories} appState={appState} setAppState={setAppState} handleLogOutClick={handleLogOutClick}/>}/>
                     <Route path="/login" render={ props => <Login {...props} handleSuccessfulAuth={handleSuccessfulAuth} />} />
                     <Route path="/signup" render={ props => <Signup {...props} handleSuccessfulAuth={handleSuccessfulAuth} />} />
-                    <Route path="/forgot" render={ props => <Forgot {...props}  />} />                    <Route path="/forgot" render={ props => <Forgot {...props}  />} />
+                    <Route path="/forgot" render={ props => <Forgot {...props}  />} /> 
+                    <Route path="/resend" render={ props => <Resend {...props}  />} />                   
                     <Route exact path="/change_pw/:token" render={ props => <Change {...props}  />} />
                     <Route path="/edit" render={ props => <Edit {...props} user={appState.user}/>} />
-                    <Route exact path="/ziploker" render={ props => <Admin {...props} loggedInStatus={appState.loggedInStatus}/>} />
                     
                     <Route path="/feedback" component={Feedback} />
                     <Route exact path="/blog/:id" render = { props => <Article {...props} /> } />

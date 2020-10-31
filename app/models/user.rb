@@ -1,11 +1,13 @@
 class User < ApplicationRecord
 
    has_secure_password
+   has_one_attached :avatar
 
-   validates_presence_of :first
-   validates_presence_of :last
-   validates_presence_of :email
+   validates_presence_of :first, :on=> :create
+   validates_presence_of :last, :on=> :create
+   validates_presence_of :email, :on=> :create
    validates_uniqueness_of :email
+   
 
    validates :password, :presence => true,
                         :confirmation => true,
@@ -16,7 +18,11 @@ class User < ApplicationRecord
                         :allow_blank => true,
                         :on => :update
     
-    
+   validates :avatar, content_type: ['image/png', 'image/jpg', 'image/jpeg'],
+               dimension: { width: { max: 200 }, height: { max: 200 } }
+  
+   after_validation :getKeyFromBlobAndAddItToStoryRecord
+
    #before_save :downcase_fields
 
    #def downcase_fields
@@ -48,8 +54,30 @@ class User < ApplicationRecord
    end
    
    
-   
+   def getKeyFromBlobAndAddItToStoryRecord
+
+      puts "------------after_validation callback begin for user -------------------"
+
+      if self.avatar.attached?
+         url = self.avatar.service_url&.split("?")&.first
+      
+         puts "url = " + url
+         
+         
+         
+      
+         self.avatar_url = url
+
+      end
+
+
+     
+
+      puts "------------after_validation callback end -------------------"
+  end
     
 
+
+  
     
 end

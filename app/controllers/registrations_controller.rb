@@ -9,16 +9,130 @@ class RegistrationsController < ApplicationController
    
     ####################  SIGN_UP  ###############################
     def create
+
+        puts "in the create"
         
         sendgrid_api = Rails.application.credentials.dig(:SENDGRID_API)
         token = SecureRandom.urlsafe_base64.to_s
         
-        @user = User.new(user_params)
-        @user.confirm_token = token
+        #new_params = user_params.except[:oldPassword]
 
         
+        @user = User.new(user_params)
+        @user.confirm_token = token
         
+        if params[:user][:avatar]
+            puts "innnnnnnn"
+            # The data is a file upload coming from <input type="file" />
+            @user.avatar.attach(params[:user][:avatar])
+            # Generate a url for easy display on the front end 
+            ##@photo = url_for(@user.avatar)
+
+            ##puts "url is: " + photo
         
+        end
+
+        puts "errors: " + @user.errors.messages.to_s
+
+        if @user.save
+
+            # using SendGrid's Ruby Library
+            # https://github.com/sendgrid/sendgrid-ruby
+            
+            email = SendGrid::Mail.new
+            email.from = Email.new(email: 'admin@weedblog.com', name: "Weedblog Team")
+            
+            email.subject = "Welcome to weedBlog"
+
+            per = Personalization.new
+
+            per.add_to(Email.new(email: @user.email, name: @user.email))
+            #per.add_cc(Email.new(email: @user.email, name: 'cc'))
+            #per.add_bcc(Email.new(email: @user.email, name: 'bcc'))
+            per.add_substitution(Substitution.new(key: "user_name", value: @user.first))
+
+            per.add_substitution(Substitution.new(key: "reset_link", value: confirm_email_registration_url(@user.confirm_token)))
+
+            email.add_personalization(per)
+
+            #email.add_content(Content.new(type: 'text/plain', value: 'some text here user_name'))
+            email.add_content(Content.new(type: 'text/html', value: '
+                
+                <html>
+                    <body>
+                        <h1> Hi user_name,</h1>
+                        <p> Thank you for registering at weedBlog<br>
+                        Please click on the link below to activate your account<br><br>
+
+                        reset_link<br></p>
+
+                        <p>Thank you,<br>
+                        <em>-Weedblog Team</em></p>
+
+                    </body>
+                </html>'))
+                    
+                    
+                
+
+            #email.template_id = "6ede18bb-2eba-4958-8a57-43a58a559a0a"
+            sg = SendGrid::API.new(api_key: sendgrid_api)
+
+            response = sg.client.mail._('send').post(request_body: email.to_json)
+
+            puts response.status_code.to_s
+            puts response.body.to_s
+            puts response.headers.to_s
+            
+            
+            session["user_id"] = @user.id
+            
+            render json: {
+
+                
+                status: "green",
+                user: @user,
+                error: {auth: ["Success!!! click the link in the email we sent you."]}
+            }
+        
+        else
+            
+            if @user.errors.messages
+                render json: {
+                
+                    status: "pink",
+                    error: {auth: [@user.errors.full_messages[0]]}
+                
+                }
+            else
+                render json: {
+                    
+                    status: "pink",
+                    error: {auth: ["something went wrong"]}
+                
+                }
+            end
+        end
+    end
+
+
+
+    def resend
+
+        puts "in the resend"
+        
+        sendgrid_api = Rails.application.credentials.dig(:SENDGRID_API)
+        token = SecureRandom.urlsafe_base64.to_s
+        
+        #new_params = user_params.except[:oldPassword]
+
+        @user = User.find_by(email: params[:user][:email].downcase)
+        
+        @user.confirm_token = token
+        
+       
+
+        puts "errors: " + @user.errors.messages.to_s
 
         if @user.save
 
@@ -134,12 +248,18 @@ class RegistrationsController < ApplicationController
             .try(:authenticate, params["user"][:oldPassword])
 
         if @user.present?
+
+            puts "user present"
             
             if @user.email_confirmed
+
+                puts "email has been confirmed"
             
                 
                 #if email is being updated, send confirmation to new email
                 if @user.email.downcase != params["user"][:email].downcase
+
+                    puts 'email is diffetent'
 
                     @user.email_confirmed = false
                     token = SecureRandom.urlsafe_base64.to_s
@@ -218,7 +338,8 @@ class RegistrationsController < ApplicationController
                 
                 
                 
-                if @user.update(user_params)
+
+                if @user.update(user_params.except(:oldPassword))
                 
                     render json:{
                         status: "green",
@@ -411,7 +532,7 @@ class RegistrationsController < ApplicationController
 
        
         
-        params.require(:user).permit(:first, :last, :email, :password_digest, :password, :password_confirmation, :email_confirmed, :confirm_token)
+        params.require(:user).permit(:first, :last, :email, :password_digest, :password, :password_confirmation, :email_confirmed, :confirm_token, :avatar_url, :avatar, :nick)
     end
 
 end

@@ -41,11 +41,11 @@ a, a:active, a:focus{
   
   body {
     
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Roboto', 'sans-serif', 'serif';
     overflow-x: hidden;
     
     /*overflow-y: scroll;*/
-    padding: 0px 10px 0px;
+    //padding: 0px 10px 0px;
     font-size: calc(14px + (24 - 14) * ((100vw - 300px) / (1600 - 300)));
     line-height: calc(1.3em + (1.5 - 1.2) * ((100vw - 300px)/(1600 - 300)));
     background-color: #f4f4f4;

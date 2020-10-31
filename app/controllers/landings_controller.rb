@@ -1,12 +1,13 @@
 class LandingsController < ApplicationController
 
     include Rails.application.routes.url_helpers
+    include CurrentUserConcern
 
     STORIES_PER_PAGE = 4
 
     def index
 
-
+        @path = params[:path]
         #@story = Story.order("created_at").last
 
         @page = params.fetch(:page, 0).to_i
@@ -66,14 +67,26 @@ class LandingsController < ApplicationController
         @article_info = Story.find_by(slug: params["data"]["slug"])
         @comments = @article_info.comments.as_json(include: [:comments])
         puts @article_info.inspect
-        render json: {
+
+        if @current_user
+            
+            render json: {
 
 
-            article: @article_info,
-            comments: @comments
-        }
+                article: @article_info,
+                comments: @comments,
+                user: @current_user
+            }
+
+        else
+
+            render json: {
 
 
+                article: @article_info,
+                comments: @comments
+            }
+        end
     end
 
 

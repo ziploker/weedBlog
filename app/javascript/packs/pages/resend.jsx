@@ -3,26 +3,25 @@ import { Link, Redirect } from "react-router-dom";
 import axios from 'axios';
 import logoImg from "../../../assets/images/logoPlaceholder.jpg";
 import redX from '../../../assets/images/redX.jpg'
+import greenCheck from '../../../assets/images/greenCheck.png'
 import tinyMan from '../../../assets/images/tinyMan.png'
 import lock from '../../../assets/images/lock.png'
 
 import { Card, Logo, Form, Input, Button, ErrorMsg, RedX, LoginWrapper, 
   InputIcon, LogoWrapper, H2, FormItem, Label, ErrorWrapper} from './AuthForm';
 
-
 ///////////////////////////////////  LOG_IN_PAGE //////////////////////////////
-function Login(props) {
+function Resend(props) {
   
   const [state, setState] = React.useState({
     
     email: "",
     emailFieldActive: false,
-    password: "",
-    passwordFieldActive: false,
     status: "",
     errors: {}
 
   })
+
 
   // to activate the input field while typing
   function activateField(e) {
@@ -45,25 +44,23 @@ function Login(props) {
 
 
   
-
-  
   ///////////////////////////////////  HANDLE_SUBMIT ///////////////////////////
   function handleSubmit(event){
     
-    ////send info into backend to Log IN/////
+    ////send info into backend heyyohhhh/////
     event.preventDefault();
     const mode = process.env.NODE_ENV =="development" ? "http://127.0.0.1:3000" : "https://weedblog.herokuapp.com"
-    axios.post(mode + "/sessions", {
+    axios.post(mode + "/registrations/resend", {
       
       user: { 
         email: state.email,
-        password: state.password
+        
       }
     },
     {withCredentials: true})
     .then(response => {
       
-      console.log("Log in submit Response", response)
+      console.log("Forgot PW Response", response)
       
       if (response.data.status == "green"){
 
@@ -73,9 +70,7 @@ function Login(props) {
           errors: response.data.error,
         });
         
-        props.handleSuccessfulAuth(response.data)
-        
-        props.history.push("/")
+        //props.history.push("/")
       
       }else{
         
@@ -103,14 +98,10 @@ function Login(props) {
 
     const value = event.target.value;
 
-    console.log("name", event.target.name)
-    console.log("value", value)
     setState({
       ...state,
       [event.target.name]: value
     });
-
-    //activateField(event);
   }
 
 
@@ -143,75 +134,50 @@ function Login(props) {
 
 
   /////////////////////////////////// JSX /////////////////////////////////////////
-  
-  
   return (
-
-    
-    
     <LoginWrapper>
       
       <Card>
         
         <LogoWrapper>
-          <a href="/">
+          <Link to="/">
             <Logo src={logoImg} />
-          </a>   
-          <H2>Log in to your account</H2>
+          </Link>   
+          <H2>Reset your password</H2>
         </LogoWrapper>
         
+        
         <Form onSubmit = {handleSubmit}>
-          
+        
           <FormItem >
-            
             <Label className={state.emailFieldActive ? "field-active" : ""}>email</Label>
             <InputIcon style={{backgroundImage: `url(${tinyMan})`}}></InputIcon>
-            
             <Input 
               name="email" 
               type="email" 
               
               value={state.email} 
-              onChange={handleChange}
+              onChange={handleChange} 
               onFocus={activateField}
               onBlur={disableField}
               required/>
           </FormItem>
 
-
-          <FormItem >
-            
-            <Label className={state.passwordFieldActive ? "field-active" : ""}>password</Label>
-            <InputIcon style={{backgroundImage: `url(${lock})`}}></InputIcon>
-            
-            <Input 
-              name="password" 
-              type="password" 
-              value={state.password} 
-              onChange={handleChange}
-              onFocus={activateField}
-              onBlur={disableField} 
-              required/>
-          </FormItem>
-          
-          <Button type="submit">Log In</Button>
+          <Button type="submit">Reset</Button>
         
         </Form>
         
         <ErrorWrapper>        
-          <RedX status={state.status} src={redX}/>
+        <RedX status={state.status} src={state.status === "pink" ? redX : greenCheck}/>
           {errorMessages}
         </ErrorWrapper>
-
         
       </Card>
       
-      <a style={{fontSize: ".5em", textDecoration: "underline"}} href="/signup">Dont have an account? </a>
-      <a style={{fontSize: ".5em", textDecoration: "underline"}} href="/forgot">Forgot password?? </a>
-      <a style={{fontSize: ".5em", textDecoration: "underline"}} href="/resend">Resend Email </a>
-      
+      <Link style={{fontSize: ".5em", textDecoration: "underline"}} to="/login">Already have an account?</Link>
+
     </LoginWrapper>
   );
 }
 
-export default props => <Login {...props}/>;
+export default props => <Resend {...props}/>;

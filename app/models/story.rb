@@ -171,17 +171,19 @@ class Story < ApplicationRecord
     def getKeyFromBlobAndAddItToStoryRecord
 
         puts "------------after_validation callback begin -------------------"
-
-        url = self.image.service_url&.split("?")&.first
         
-        puts "self = " + self.title
+        
+        if self.image.attached?
+            url = self.image.service_url&.split("?")&.first
+        
+            puts "self = " + self.title
         
         
         
        
-        self.url = url
+            self.url = url
 
-        
+        end
 
 
        

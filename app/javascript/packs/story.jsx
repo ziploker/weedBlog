@@ -86,6 +86,7 @@ const StoryImageWrapper = styled.div`
     width:100%;
     height: 0px;
     //min-height: 90px;
+    //max-height: 300px;
     grid-area: 1 /1 /3 /-1;
     padding-top: 60%;
     position: relative;

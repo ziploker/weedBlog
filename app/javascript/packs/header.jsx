@@ -60,7 +60,7 @@ const DesktopNav = styled.nav`
     }   
     //transform: translate(-30px,-30px);
     //opacity: 0;
-    //height: 100%;
+    height: 100%;
 
     display: flex;
     
@@ -73,7 +73,7 @@ const DesktopNav = styled.nav`
         
             font-weight: 500;
             font-size: 12px;
-            
+            line-height: 45px;
             color: ${props => props.theme.white};
             
             text-decoration: none;
@@ -109,8 +109,26 @@ const DesktopNav = styled.nav`
 `;
 
 
+const SmallProfilePicPlaceholder = styled.div`
 
+    width: 35px;
+    height: 35px;
+    display: inline-block;
+    margin: 0 auto;
+    vertical-align: middle;
 
+`;
+const SmallProfilePic = styled.img`
+
+    width: 45px;
+    height: 45px;
+    display: inline-block;
+    margin: 0 auto;
+    vertical-align: middle;
+    border-radius: 50px;
+    border: 1px gray solid;
+
+`;
 
 
 function Header(props) {
@@ -179,7 +197,7 @@ function Header(props) {
       [ref, mouseDownHandler],
     );
 
-
+    console.log("locationFromHook.pathname", locationFromHook.pathname)
     if (
     
     locationFromHook.pathname === "/login" || 
@@ -215,7 +233,11 @@ function Header(props) {
 
                     <li key={4}>{props.appState.loggedInStatus == "LOGGED_IN" ? [<Link key={"a"} to="/" onClick= {props.handleLogOutClick}> Logout | </Link>, <Link key={"b"} to="/edit">edit </Link>] :   [<Link key={"c"} to="/login"> Login |</Link>, <Link key={"d"} to="/signup"> Signup</Link>]  } </li>
                     
-                    
+                    <li key={5}>
+
+                        {props.appState.loggedInStatus == "LOGGED_IN" ? <SmallProfilePic src={props.appState.user.avatar_url}/> : <SmallProfilePicPlaceholder/>}
+
+                    </li>
 
                 </ul>
 

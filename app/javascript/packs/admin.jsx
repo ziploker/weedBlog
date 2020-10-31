@@ -15,7 +15,9 @@ function Admin(props){
             
            
            <NewForm/>
-        
+           
+           {props.loggedInStatus}
+
         </div>
         
     );
