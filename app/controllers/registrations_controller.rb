@@ -40,9 +40,9 @@ class RegistrationsController < ApplicationController
             # https://github.com/sendgrid/sendgrid-ruby
             
             email = SendGrid::Mail.new
-            email.from = Email.new(email: 'admin@weedblog.com', name: "Weedblog Team")
+            email.from = Email.new(email: 'admin@floridablaze.io', name: "Floridablaze Team")
             
-            email.subject = "Welcome to weedBlog"
+            email.subject = "Welcome to Floridablaze.io"
 
             per = Personalization.new
 
@@ -61,13 +61,13 @@ class RegistrationsController < ApplicationController
                 <html>
                     <body>
                         <h1> Hi user_name,</h1>
-                        <p> Thank you for registering at weedBlog<br>
+                        <p> Thank you for registering at Floridablaze.io<br>
                         Please click on the link below to activate your account<br><br>
 
                         reset_link<br></p>
 
                         <p>Thank you,<br>
-                        <em>-Weedblog Team</em></p>
+                        <em>-Floridablaze Team</em></p>
 
                     </body>
                 </html>'))
@@ -140,9 +140,9 @@ class RegistrationsController < ApplicationController
             # https://github.com/sendgrid/sendgrid-ruby
             
             email = SendGrid::Mail.new
-            email.from = Email.new(email: 'admin@weedblog.com', name: "Weedblog Team")
+            email.from = Email.new(email: 'admin@Floridablaze.io', name: "Floridablaze Team")
             
-            email.subject = "Welcome to weedBlog"
+            email.subject = "Welcome to Floridablaze.io"
 
             per = Personalization.new
 
@@ -161,13 +161,13 @@ class RegistrationsController < ApplicationController
                 <html>
                     <body>
                         <h1> Hi user_name,</h1>
-                        <p> Thank you for registering at weedBlog<br>
+                        <p> Thank you for registering at Floridablaze.io<br>
                         Please click on the link below to activate your account<br><br>
 
                         reset_link<br></p>
 
                         <p>Thank you,<br>
-                        <em>-Weedblog Team</em></p>
+                        <em>-Floridablaze Team</em></p>
 
                     </body>
                 </html>'))
@@ -279,9 +279,9 @@ class RegistrationsController < ApplicationController
                     
                     sendgrid_api = Rails.application.credentials.dig(:SENDGRID_API)
                     email = SendGrid::Mail.new
-                    email.from = Email.new(email: 'admin@weedblog.com', name: "Weedblog Team")
+                    email.from = Email.new(email: 'admin@Floridablaze.io', name: "Floridablaze Team")
                     
-                    email.subject = "**weedBlog email change request"
+                    email.subject = "**Floridablaze.io email change request"
 
                     per = Personalization.new
 
@@ -300,7 +300,7 @@ class RegistrationsController < ApplicationController
                         <html>
                             <body>
                                 <h1> Hi user_name,</h1>
-                                <p> Thank you for updating your email at weedBlog<br>
+                                <p> Thank you for updating your email at Floridablaze<br>
                                 Please click on the link below to finalize the email change<br><br>
 
                                 reset_link<br></p>
@@ -408,7 +408,7 @@ class RegistrationsController < ApplicationController
             theLink = ""
             
             if Rails.env.production?
-                host = "https://weedblog.heroku.com"
+                host = "https://www.floridablaze.io"
             else
                 host = "127.0.0.1:3000"
             end
@@ -418,9 +418,9 @@ class RegistrationsController < ApplicationController
             sendgrid_api = Rails.application.credentials.dig(:SENDGRID_API)
             
             email = SendGrid::Mail.new
-            email.from = Email.new(email: 'admin@weedblog.com', name: "Weedblog Team")
+            email.from = Email.new(email: 'admin@Floridablaze.io', name: "Floridablaze Team")
             
-            email.subject = "** WeedBlog password reset **"
+            email.subject = "** Floridablaze password reset **"
 
             per = Personalization.new
 
@@ -439,12 +439,12 @@ class RegistrationsController < ApplicationController
                 <html>
                     <body>
                         <h1> Hi user_name,</h1>
-                        <p> To change your weedBlog password please click on the link below.<br><br>
+                        <p> To change your Floridablaze password please click on the link below.<br><br>
 
                         reset_link<br></p>
 
                         <p>Thank you,<br>
-                        <em>-Weedblog Team</em></p>
+                        <em>-Floridablaze Team</em></p>
 
                     </body>
                 </html>'))

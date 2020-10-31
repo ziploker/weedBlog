@@ -81,7 +81,7 @@ function App(controllerProps){
     
     const handleLogOutClick = () => {
         
-        const mode = process.env.NODE_ENV =="development" ? "http://127.0.0.1:3000" : "https://weedblog.herokuapp.com"
+        const mode = process.env.NODE_ENV =="development" ? "http://127.0.0.1:3000" : "https://www.floiridablaze.io"
         
         axios.delete(mode + "/logout", {withCredentials : true})
             .then(response => {
@@ -117,7 +117,7 @@ function App(controllerProps){
     
     useEffect(() => {
 
-        const mode = process.env.NODE_ENV == "development" ? "http://127.0.0.1:3000" : "https://weedblog.herokuapp.com"
+        const mode = process.env.NODE_ENV == "development" ? "http://127.0.0.1:3000" : "https://www.floiridablaze.io"
         
         axios.get( mode + "/logged_in", {withCredentials: true})
             .then(response => {

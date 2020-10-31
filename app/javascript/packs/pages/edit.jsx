@@ -118,7 +118,7 @@ function Edit(props) {
     
     ////send info into backend heyyohhhh/////
     event.preventDefault();
-    const mode = process.env.NODE_ENV =="development" ? "http://127.0.0.1:3000" : "https://weedblog.herokuapp.com"
+    const mode = process.env.NODE_ENV =="development" ? "http://127.0.0.1:3000" : "https://www.floiridablaze.io"
     axios.put(mode + "/registrations/"+props.user.id, {
       
       user: { 
@@ -193,7 +193,7 @@ function Edit(props) {
       
       //get token for form submission
       const csrf = document.querySelector("meta[name='csrf-token']").getAttribute("content");  
-      const mode = process.env.NODE_ENV =="development" ? "http://127.0.0.1:3000" : "https://weedblog.herokuapp.com"
+      const mode = process.env.NODE_ENV =="development" ? "http://127.0.0.1:3000" : "https://www.floiridablaze.io"
       
       $.ajax({
           
@@ -320,7 +320,7 @@ function Edit(props) {
   ///////////////////////////////////  USE_EFFECT //////////////////////
   useEffect(() => {
     
-    const mode = process.env.NODE_ENV == "development" ? "http://127.0.0.1:3000" : "https://weedblog.herokuapp.com"
+    const mode = process.env.NODE_ENV == "development" ? "http://127.0.0.1:3000" : "https://www.floiridablaze.io"
     axios.get( mode + "/logged_in", {withCredentials: true})
       .then(response => {
 
