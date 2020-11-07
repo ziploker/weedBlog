@@ -33,7 +33,7 @@ class RegistrationsController < ApplicationController
         mailgun_api = Rails.application.credentials.dig(:MAILGUN_API)
         token = SecureRandom.urlsafe_base64.to_s
         # First, instantiate the Mailgun Client with your API key
-        mg_client = Mailgun::Client.new "#{mailgun_api}"
+        mg_client = Mailgun::Client.new mailgun_api
         
         #new_params = user_params.except[:oldPassword]
 
@@ -192,7 +192,7 @@ class RegistrationsController < ApplicationController
         ###sendgrid_api = Rails.application.credentials.dig(:SENDGRID_API)
         mailgun_api = Rails.application.credentials.dig(:MAILGUN_API)
         
-        mg_client = Mailgun::Client.new "#{mailgun_api}"
+        mg_client = Mailgun::Client.new mailgun_api
         
         token = SecureRandom.urlsafe_base64.to_s
         
