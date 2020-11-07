@@ -19,7 +19,7 @@ class RegistrationsController < ApplicationController
 
     ################################################################
 
-    SENDGRID_API
+    #SENDGRID_API
     #sets @current_user if session[:id] exists
     include CurrentUserConcern
 
