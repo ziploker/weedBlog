@@ -1,8 +1,25 @@
 class RegistrationsController < ApplicationController
 
-    require 'sendgrid-ruby'
-    include SendGrid
+    #require 'sendgrid-ruby'
+    #include SendGrid
 
+
+    
+
+    require 'mailgun-ruby'
+
+    #############################################################
+
+    
+
+    
+
+   
+
+
+    ################################################################
+
+    SENDGRID_API
     #sets @current_user if session[:id] exists
     include CurrentUserConcern
 
@@ -12,8 +29,11 @@ class RegistrationsController < ApplicationController
 
         puts "in the create"
         
-        sendgrid_api = Rails.application.credentials.dig(:SENDGRID_API)
+        ###sendgrid_api = Rails.application.credentials.dig(:SENDGRID_API)
+        mailgun_api = Rails.application.credentials.dig(:MAILGUN_API)
         token = SecureRandom.urlsafe_base64.to_s
+        # First, instantiate the Mailgun Client with your API key
+        mg_client = Mailgun::Client.new mailgun_api
         
         #new_params = user_params.except[:oldPassword]
 
@@ -36,13 +56,50 @@ class RegistrationsController < ApplicationController
 
         if @user.save
 
+
+            # Define your message parameters
+            message_params =  { 
+                
+                from: 'admin@mg.floiridablaze.io',
+                to:   @user.email,
+                "h:List-Unsubscribe": "<mailto:admin@floridablaze.io?subject=unsubscribe>",
+                "h:Reply-To": "FlordaBlaze Staff <admin@floridablaze.io>",
+                subject: 'Welcome to floridablaze.io',
+                html:    "
+                
+                    <html>
+                        <body>
+                            <h1> Hi #{@user.first},</h1>
+                            
+                            <p> Thank you for registering at Floridablaze<br>
+                            Please navigate to the link below to activate your account<br><br>
+
+                            #{confirm_email_registration_url(@user.confirm_token)}<br></p>
+
+                            <p>Thank you,<br>
+
+                            
+                            <em>-Floridablaze Team</em></p><br><br><br>
+
+                            If You wish to unsubscribe click <a href=%unsubscribe_url%>HERE</a>
+
+                        </body>
+                    </html>"
+
+            }
+
+            
+            
+            
+            
+=begin            
             # using SendGrid's Ruby Library
             # https://github.com/sendgrid/sendgrid-ruby
             
             email = SendGrid::Mail.new
             email.from = Email.new(email: 'admin@floridablaze.io', name: "Floridablaze Team")
             
-            email.subject = "Welcome to Floridablaze.io"
+            email.subject = "Welcome to floridablaze.io"
 
             per = Personalization.new
 
@@ -85,6 +142,14 @@ class RegistrationsController < ApplicationController
             puts response.headers.to_s
             
             
+
+=end
+            # Send your message through the client
+            
+            mg_client.send_message 'mg.floridablaze.io', message_params
+
+            result = mg_client.get("mg.floridablaze.io/events", {:event => 'delivered'})
+            
             session["user_id"] = @user.id
             
             render json: {
@@ -92,7 +157,8 @@ class RegistrationsController < ApplicationController
                 
                 status: "green",
                 user: @user,
-                error: {auth: ["Success!!! click the link in the email we sent you."]}
+                error: {auth: ["Success!!! click the link in the email we sent you."]},
+                mgResult: result
             }
         
         else
@@ -101,14 +167,16 @@ class RegistrationsController < ApplicationController
                 render json: {
                 
                     status: "pink",
-                    error: {auth: [@user.errors.full_messages[0]]}
+                    error: {auth: [@user.errors.full_messages[0]]},
+                    mgResult: result
                 
                 }
             else
                 render json: {
                     
                     status: "pink",
-                    error: {auth: ["something went wrong"]}
+                    error: {auth: ["something went wrong"]},
+                    mgResult: result
                 
                 }
             end
@@ -121,11 +189,13 @@ class RegistrationsController < ApplicationController
 
         puts "in the resend"
         
-        sendgrid_api = Rails.application.credentials.dig(:SENDGRID_API)
+        ###sendgrid_api = Rails.application.credentials.dig(:SENDGRID_API)
+        mailgun_api = Rails.application.credentials.dig(:MAILGUN_API)
+        
+        mg_client = Mailgun::Client.new mailgun_api
+        
         token = SecureRandom.urlsafe_base64.to_s
         
-        #new_params = user_params.except[:oldPassword]
-
         @user = User.find_by(email: params[:user][:email].downcase)
         
         @user.confirm_token = token
@@ -138,11 +208,11 @@ class RegistrationsController < ApplicationController
 
             # using SendGrid's Ruby Library
             # https://github.com/sendgrid/sendgrid-ruby
-            
+=begin            
             email = SendGrid::Mail.new
-            email.from = Email.new(email: 'admin@Floridablaze.io', name: "Floridablaze Team")
+            email.from = Email.new(email: 'admin@floridablaze.io', name: "Floridablaze Team")
             
-            email.subject = "Welcome to Floridablaze.io"
+            email.subject = "Welcome to floridablaze.io"
 
             per = Personalization.new
 
@@ -184,7 +254,36 @@ class RegistrationsController < ApplicationController
             puts response.body.to_s
             puts response.headers.to_s
             
-            
+=end
+
+
+
+            message_params =  { from: 'admin@mg.floiridablaze.io',
+                to:   @user.email,
+                subject: 'Welcome to floridablaze.io',
+                html:    "
+                
+                <html>
+                        <body>
+                            <h1> Hi #{@user.first},</h1>
+                            
+                            <p> Thank you for registering at Floridablaze<br>
+                            Please navigate to the link below to activate your account<br><br>
+
+                            #{confirm_email_registration_url(@user.confirm_token)}<br></p>
+
+                            <p>Thank you,<br>
+
+                            
+                            <em>-Floridablaze Team</em></p><br><br><br>
+
+                            If You wish to unsubscribe click <a href=%unsubscribe_url%>HERE</a>
+
+                        </body>
+                    </html>"
+            }
+
+
             session["user_id"] = @user.id
             
             render json: {
@@ -279,9 +378,9 @@ class RegistrationsController < ApplicationController
                     
                     sendgrid_api = Rails.application.credentials.dig(:SENDGRID_API)
                     email = SendGrid::Mail.new
-                    email.from = Email.new(email: 'admin@Floridablaze.io', name: "Floridablaze Team")
+                    email.from = Email.new(email: 'admin@floridablaze.io', name: "Floridablaze Team")
                     
-                    email.subject = "**Floridablaze.io email change request"
+                    email.subject = "**floridablaze email change request"
 
                     per = Personalization.new
 
@@ -420,7 +519,7 @@ class RegistrationsController < ApplicationController
             email = SendGrid::Mail.new
             email.from = Email.new(email: 'admin@Floridablaze.io', name: "Floridablaze Team")
             
-            email.subject = "** Floridablaze password reset **"
+            email.subject = "** floridablaze password reset **"
 
             per = Personalization.new
 

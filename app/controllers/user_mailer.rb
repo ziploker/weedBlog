@@ -1,5 +1,5 @@
 class UserMailer < ActionMailer::Base
-    
+=begin
    require 'sendgrid-ruby'
    include SendGrid
    
@@ -25,5 +25,5 @@ class UserMailer < ActionMailer::Base
       #@user = user
       #mail(:to => user.email, :subject => "Registration Confirmation")
 end
-
+=end
 end

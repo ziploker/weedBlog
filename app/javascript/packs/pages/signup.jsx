@@ -338,7 +338,7 @@ function Signup(props) {
           
           <ProfilePicWrapper>
               <ProfilePic src={state.avatar.length != 0 ? state.avatar : dummy_avatar}/>
-              <LabelForFile for="avatar">&#128393;</LabelForFile>
+              <LabelForFile htmlFor="avatar">&#128393;</LabelForFile>
           </ProfilePicWrapper> 
           
           

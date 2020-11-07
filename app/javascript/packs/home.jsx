@@ -13,6 +13,20 @@ import {
     Link
 } from "react-router-dom";
 
+const Cover = styled.div`
+
+    height: 100vh;
+    width: 100vw;
+    color: green;
+    h1{
+
+        line-height: 100vh;
+        margin: 0 auto;
+    }
+
+
+
+`;
 
 
 const NewsSection = styled.div`
@@ -157,36 +171,34 @@ function Home(props){
     return (
     
         <>
-
-        
-
-        <NewsSection>
+           
+            <NewsSection>
+                
+                <NewsWrapper>
             
-            <NewsWrapper>
-        
-                {props.stories.map((info, index) => (
-                    <Story key={index} info={info} appState={props.appState} handleLogOutClick={props.handleLogOutClick}/>
-                ))}
+                    {props.stories.map((info, index) => (
+                        <Story key={index} info={info} appState={props.appState} handleLogOutClick={props.handleLogOutClick}/>
+                    ))}
+                
+                </NewsWrapper>  
+                
+                <NewsAds>
+
+                </NewsAds>
             
-            </NewsWrapper>  
-            
-            <NewsAds>
+            </NewsSection>
 
-            </NewsAds>
-        
-        </NewsSection>
+            <PaginationBar>
 
-        <PaginationBar>
+                <button onClick={pageBack}>
+                    PageBack
+                </button>
 
-            <button onClick={pageBack}>
-                PageBack
-            </button>
+                <button onClick={pageForward}>
+                    PageForward
+                </button>
 
-            <button onClick={pageForward}>
-                PageForward
-            </button>
-
-        </PaginationBar>
+            </PaginationBar>
         
         </>
     );

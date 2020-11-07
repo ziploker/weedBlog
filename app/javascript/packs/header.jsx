@@ -151,23 +151,38 @@ function Header(props) {
 
 
 
-    
+    let listener;
     useEffect(() => {
 
         console.log("Header UseEffect Start, openSideMenu state is currently " + props.openSideMenu);
         
         //mousedown listener
-        const listener = event => {
 
-            //if you click in the menu,  dont close it
-            if (ref.current.contains(event.target)) {
+        if (
     
+            locationFromHook.pathname === "/login" || 
+            locationFromHook.pathname === "/signup" ||
+            locationFromHook.pathname === "/forgot" ||
+            locationFromHook.pathname === "/edit" ||
+            locationFromHook.pathname === "/change") {
+        
                 return;
+            }else{
+                listener = event => {
+
+                    //if you click in the menu,  dont close it
+                    if (ref.current.contains(event.target)) {
+            
+                        return;
+                    }
+                  
+                    //if you click anywhere outside the side menu, close it.    
+                    mouseDownHandler();
+                };
+
+
             }
-          
-            //if you click anywhere outside the side menu, close it.    
-            mouseDownHandler();
-        };
+       
   
         
         //resize and/or orientationchange listener
