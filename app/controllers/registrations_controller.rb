@@ -262,6 +262,8 @@ class RegistrationsController < ApplicationController
 
             message_params =  { from: 'admin@mg.floiridablaze.io',
                 to:   @user.email,
+                "h:List-Unsubscribe": "<mailto:admin@floridablaze.io?subject=unsubscribe>",
+                "h:Reply-To": "FlordaBlaze Staff <admin@floridablaze.io>",
                 subject: 'Welcome to floridablaze.io',
                 html:    "
                 
