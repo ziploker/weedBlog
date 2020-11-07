@@ -287,6 +287,9 @@ class RegistrationsController < ApplicationController
                     </html>"
             }
 
+            mg_client.send_message 'mg.floridablaze.io', message_params
+
+            result = mg_client.get("mg.floridablaze.io/events", {:event => 'delivered'})
 
             session["user_id"] = @user.id
             
@@ -295,7 +298,8 @@ class RegistrationsController < ApplicationController
                 
                 status: "green",
                 user: @user,
-                error: {auth: ["Success!!! click the link in the email we sent you."]}
+                error: {auth: ["Success!!! click the link in the email we sent you."]},
+                mgResult: result
             }
         
         else
@@ -304,14 +308,16 @@ class RegistrationsController < ApplicationController
                 render json: {
                 
                     status: "pink",
-                    error: {auth: [@user.errors.full_messages[0]]}
+                    error: {auth: [@user.errors.full_messages[0]]},
+                    mgResult: result
                 
                 }
             else
                 render json: {
                     
                     status: "pink",
-                    error: {auth: ["something went wrong"]}
+                    error: {auth: ["something went wrong"]},
+                    mgResult: result
                 
                 }
             end
