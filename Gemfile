@@ -14,7 +14,7 @@ gem 'solargraph'
 gem 'rack-cors'
 gem 'bcrypt', '~> 3.1.11'
 gem 'hash_dot'
-gem 'image_processing', '~> 1.2'
+gem 'image_processing', '~> 1.12'
 gem 'httparty'
 gem "aws-sdk-s3", require: false
 gem 'pry', '~> 0.10.3'
